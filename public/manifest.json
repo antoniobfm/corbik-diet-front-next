@@ -1,0 +1,23 @@
+{
+  "name": "Corbik",
+  "short_name": "Corbik",
+  "description": "A simply readable Hacker News app.",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#317EFB",
+  "background_color": "#0A0A0B",
+  "start_url": "/",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/icons/favicon_192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/favicon_192x192.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -8,8 +8,25 @@
     "start": "next start"
   },
   "dependencies": {
+    "@types/react-icons": "^3.0.0",
+    "axios": "^0.20.0",
+    "date-fns": "^2.16.1",
     "next": "9.5.5",
+    "next-pwa": "^3.1.5",
     "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "react-day-picker": "^7.4.8",
+    "react-dom": "16.13.1",
+    "react-icons": "^3.11.0",
+    "react-loading-skeleton": "^2.1.1",
+    "styled-components": "^5.2.0",
+    "swr": "^0.3.5"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/node": "^14.11.8",
+    "@types/react": "^16.9.52",
+    "@types/styled-components": "^5.1.4",
+    "babel-plugin-styled-components": "^1.11.1",
+    "typescript": "^4.0.3"
   }
 }
