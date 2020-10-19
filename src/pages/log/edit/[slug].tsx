@@ -63,10 +63,10 @@ export default function Edit(food: string) {
    
   useEffect(() => {
     if (logData) {
-      setFats(toFixedNumber(parseFloat(logData.quantity_amount) * logData.fats / logData.quantity_amount, 2, 10));
-      setCarbs(toFixedNumber(parseFloat(logData.quantity_amount) * logData.carbohydrates / logData.quantity_amount, 2, 10));
-      setProts(toFixedNumber(parseFloat(logData.quantity_amount) * logData.proteins / logData.quantity_amount, 2, 10));
-      setCalories(toFixedNumber(parseFloat(logData.quantity_amount) * logData.calories / logData.quantity_amount, 2, 10));
+      setFats(toFixedNumber(parseFloat(amount) * logData.fats / logData.quantity_amount, 2, 10));
+      setCarbs(toFixedNumber(parseFloat(amount) * logData.carbohydrates / logData.quantity_amount, 2, 10));
+      setProts(toFixedNumber(parseFloat(amount) * logData.proteins / logData.quantity_amount, 2, 10));
+      setCalories(toFixedNumber(parseFloat(amount) * logData.calories / logData.quantity_amount, 2, 10));
     }
   }, [logData, amount]);
 
