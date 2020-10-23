@@ -15,6 +15,8 @@ export const Foods = styled.div`
   border-radius: 6px;
   background: #181A1B;
 
+  overflow-y: scroll;
+
   display: flex;
   flex-direction: column;
 `;
@@ -58,6 +60,7 @@ export const Food = styled.div`
   }
 
   .name-maker {
+    position: relative;
     padding-left: 16px;
   }
 
