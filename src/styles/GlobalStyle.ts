@@ -4,6 +4,11 @@ export default createGlobalStyle`
   * {
     margin: 0;
     padding: 0;
+
+    
+  --carbs-color: #EB5757;
+  --protein-color: #2D9CDB;
+  --fat-color: #F2C94C;
   }
 
   body {

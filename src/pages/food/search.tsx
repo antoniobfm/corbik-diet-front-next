@@ -6,9 +6,20 @@ import { useCallback, useEffect, useState } from "react";
 
 export default function Search() {
 	const [searchResult, setSearchResult] = useState<any[]>([]);
+	const [initialLoad, setInitialLoad] = useState<any[]>([]);
   const [searchInput, setSearchInput] = useState('');
 
   const router = useRouter();
+
+  useEffect(() => {
+    async function initialLoad() {
+      const {data} = await api.get(`/food-library/`);
+      console.log(data);
+      setInitialLoad(data);
+    }
+
+    initialLoad();
+  }, []);
 
   useEffect(() => {
     async function loadFood() {
@@ -35,7 +46,7 @@ export default function Search() {
         <h1>Log Food</h1>
       </Header>
       <Foods>
-        {searchResult.map(result => 
+        {searchInput ? (searchResult && searchResult.map(result => 
           <Link key={result.id} href={`/food/${result.id}`}>
             <a>
               <Food>
@@ -52,7 +63,24 @@ export default function Search() {
               </Food>
             </a>
           </Link>
-        )}
+        )) : (initialLoad && initialLoad.map(result => 
+          <Link key={result.id} href={`/food/${result.id}`}>
+            <a>
+              <Food>
+                <div className="name-maker-and-quantity">
+                  <div className="name-maker">
+                    <h6>{result.brand}</h6>
+                    <h4>{result.name}</h4>
+                  </div>
+                  <h5>{result.quantity_amount}g</h5>
+                </div>
+                <div className="macros">
+                  <h5>C{result.carbohydrates}   P{result.proteins}   F{result.fats}</h5>
+                </div>
+              </Food>
+            </a>
+          </Link>
+        ))}
         {/*<Link href={`/food/red`}>
           <a>
             <Food>

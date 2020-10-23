@@ -1,34 +1,80 @@
+import Button from "@/components/Button";
 import { useAuth } from "@/hooks/auth";
 import { CreateButton } from "@/styles/pages/food/create";
 import { Container, CreateAccount, LoginContainer } from "@/styles/pages/login";
 import { useCallback, useRef } from "react";
+import { FormHandles } from '@unform/core';
+import { Form } from '@unform/web';
+import Input from "@/components/Input";
+import * as Yup from 'yup';
+import getValidationErrors from "@/utils/getValidationErrors";
+
+interface LoginFormData {
+  email: string;
+  password: string;
+}
 
 export default function Login() {
   const {signIn} = useAuth();
+  const formRef = useRef<FormHandles>(null);
 
-  const email = useRef<HTMLInputElement>();
-  const password = useRef<HTMLInputElement>();
-
-  const handleSignIn = useCallback(() => {
-    signIn({email: email.current.value, password: password.current.value});
-  }, [])
-
+  const handleSignIn = useCallback(
+    async (data: LoginFormData) => {
+      try {
+        formRef.current?.setErrors({});
+  
+        const schema = Yup.object().shape({
+          email: Yup.string()
+            .required('Email is required')
+            .email('Email is invalid'),
+          password: Yup.string().required('Password is required'),
+        });
+  
+        await schema.validate(data, {
+          abortEarly: false,
+        });
+  
+        const {
+          email,
+          password,
+        } = data;
+  
+        signIn({email, password});
+  
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err);
+          console.log(errors);
+          formRef.current?.setErrors(errors);
+  
+          return;
+        }
+      }
+    },
+    [],
+  );
   return (
     <Container>
       <LoginContainer>
         <h2>Login</h2>
         <div>
-          <div className="form__field__container">
-            <input ref={email} type="email" className="form__field" placeholder=" " name="email" id='email' required />
-            <label htmlFor="email" className="form__label">E-mail</label>
-          </div>
-
-          <div className="form__field__container">
-            <input ref={password} type="password" className="form__field" placeholder=" " name="password" id='password' required />
-            <label htmlFor="password" className="form__label">Password</label>
-          </div>
+          <Form
+            ref={formRef}
+            onSubmit={handleSignIn}
+          >
+            <Input
+              name="email"
+              labelName="Email"
+              type="input"
+            />
+            <Input
+              name="password"
+              labelName="Password"
+              type="password"
+            />
+          <Button type="submit" style={{width: '100%'}}>LOGIN</Button>
+          </Form>
         </div>
-        <CreateButton style={{width: '100%'}} onClick={handleSignIn}>LOGIN</CreateButton>
         <h5>Forgot password</h5>
       </LoginContainer>
       <CreateAccount>

@@ -127,7 +127,6 @@ export const ProtectRoute = ({ children }) => {
 	const { isAuthenticated, loading } = useAuth();
   if (loading || (!isAuthenticated && window.location.pathname !== '/login' && window.location.pathname !== '/')){
     return <Login />; 
-    return <div className="blurred__background" />; 
   } else if (isAuthenticated && window.location.pathname !== '/login') {
 		console.log('tru');
 	}
