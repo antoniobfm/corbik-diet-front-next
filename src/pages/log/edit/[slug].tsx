@@ -4,7 +4,7 @@ import api from "@/services/api";
 import { Details, Header, Menu } from "@/styles/pages/food/food";
 import { CreateButton, Floating } from "@/styles/pages/food/search";
 import { Calories, Macro, Macros } from "@/styles/pages/Home";
-import { Container, EditButton, Icon, StaticMenu } from "@/styles/pages/log/edit/edit";
+import { Container, EditButton, Icon, StaticMenu, ConfirmDeletion } from "@/styles/pages/log/edit/edit";
 import addZeroBefore from "@/utils/addZeroBefore";
 import toFixedNumber from "@/utils/formatNumbers";
 import { useRouter } from "next/router";
@@ -31,6 +31,8 @@ interface ILog {
 export default function Edit(food: string) {
   const router = useRouter();
 
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
   const [amount, setAmount] = useState('');
   const [carbs, setCarbs] = useState<number | null>(0);
   const [prots, setProts] = useState<number | null>(0);
@@ -42,6 +44,12 @@ export default function Edit(food: string) {
   const { user, loading } = useAuth();
 
   const logId = router.query.slug;
+
+  const handleConfirmation = useCallback((e) => {
+    e.preventDefault();
+
+    setShowConfirmation(!showConfirmation);
+  }, [showConfirmation]);
   
   const handleData = useCallback((data: any) => {
     data = data.data;
@@ -117,6 +125,7 @@ export default function Edit(food: string) {
   }, [logData, carbs, prots, fats, calories, date, amount]);
 
   return (
+    <>
     <Container>
       <Header>
         <div>
@@ -169,10 +178,24 @@ export default function Edit(food: string) {
           </StaticMenu>
       </Details>
       <div className="delete">
-        <button type="button" onClick={handleDelete}>
+        <button type="button" onClick={handleConfirmation}>
             <Icon />
         </button>
       </div>
     </Container>
+    {showConfirmation && 
+      <ConfirmDeletion>
+        <button type="button" onClick={handleConfirmation}/>
+        <div>
+          <h2>Confirm deletion</h2>
+          <div>
+            <button type="button" onClick={handleConfirmation} className="button--cancel">CANCEL</button>
+            <button type="button" onClick={handleDelete} className="button--confirm--deletion">CONFIRM</button>
+          </div>
+        </div>
+        <button type="button" onClick={handleConfirmation}/>
+      </ConfirmDeletion>
+    }
+    </>
   );
 }

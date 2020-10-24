@@ -56,6 +56,7 @@ var byProperty = function(prop) {
 
 export default function Home() {
   const [logData, setLogData] = useState<IDayResume | null>(null);
+  const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const day = new Date().getTime();
 
@@ -69,6 +70,12 @@ export default function Home() {
 
     router.push(`/?when=${day.getTime()}`)
   }, []);
+
+  const handleCalendar = useCallback((e) => {
+    e.preventDefault();
+
+    setShowCalendar(!showCalendar);
+  }, [showCalendar]);
 
   useEffect(() => {
     async function loadDay() {
@@ -173,7 +180,7 @@ export default function Home() {
       {!isAuthenticated && <LoginModal />}
       <Container>
         <Header>
-          <h1>{isToday(selectedDate) ? 'Today' : format(selectedDate, 'MMM, dd')}</h1>
+          <button type="button" onClick={e => handleCalendar(e)}>{isToday(selectedDate) ? 'Today' : format(selectedDate, 'MMM, dd')}</button>
         </Header>
         <Macros>
           <Macro macro="carb">
@@ -247,17 +254,22 @@ export default function Home() {
         </Logs>
         
       </Container>
-      <Calendar>
-        <DayPicker
-          onDayClick={handleDateChange}
-          selectedDays={selectedDate}
-        />
-      </Calendar>
       <Link href="/settings">
         <a>
-          <h4 style={{opacity: 0.5, fontWeight: 400, textAlign: 'center', paddingBottom: 40}}>Settings</h4>
+          <h4 style={{opacity: 0.5, fontWeight: 400, textAlign: 'center', paddingTop: 40, paddingBottom: 40}}>Settings</h4>
         </a>
       </Link>
+
+      {showCalendar &&
+      <Calendar>
+        <button type="button" onClick={e => handleCalendar(e)}/>
+          <DayPicker
+            onDayClick={handleDateChange}
+            selectedDays={selectedDate}
+          />
+        <button type="button" onClick={e => handleCalendar(e)}/>
+      </Calendar>
+      }
     </>
   )
 }

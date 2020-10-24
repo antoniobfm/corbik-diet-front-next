@@ -110,3 +110,67 @@ export const StaticMenu = styled.div`
     }
   }
 `;
+
+export const ConfirmDeletion = styled.div`
+  background-color: rgba(0, 0, 0, 0.8);
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: 5;
+  top: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+
+  > button {
+    flex: 1;
+    width: 100%; 
+    background: transparent;
+    outline: none;
+    border: none;
+  }
+
+  > div {
+    background: #0A0A0B;
+    border: 1px solid #222425;
+    box-sizing: border-box;
+    border-radius: 6px;
+
+    width: 90vw;
+
+    padding: 14px 16px;
+
+    h2 {
+      text-align: center;
+      padding-bottom: 30px;
+    }
+    
+    > div {
+      flex: 1;
+      display: flex;
+      justify-content: space-between;
+  
+      .button--cancel {
+        flex: 1;
+        height: 54px;
+        background: none;
+        outline: none;
+        border: none;
+        color: #FFFFFF; 
+      }
+
+      .button--confirm--deletion {
+        flex: 1;
+        height: 54px;
+        background: linear-gradient(111.07deg, #EB5757 0%, rgba(235, 87, 87, 0.5) 100%), #0A0A0B;
+        border: 1px solid #EB5757;
+        border-radius: 6px;
+        color: #FAD1D1;
+      }
+
+    }
+  }
+`;

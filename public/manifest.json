@@ -1,8 +1,8 @@
 {
   "name": "Corbik",
   "short_name": "Corbik",
-  "description": "A simply readable Hacker News app.",
-  "display": "standalone",
+  "description": "Corbik the stonks lifestyle",
+  "display": "fullscreen",
   "orientation": "portrait",
   "theme_color": "#317EFB",
   "background_color": "#0A0A0B",

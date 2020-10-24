@@ -12,6 +12,15 @@ export const Container = styled.div`
 
 export const Header = styled.header`
   padding: 21px 14px 28px;
+
+  button {
+    background: none;
+    outline: none;
+    border: none;
+    font-size: 31px;
+    color: white;
+    font-weight: 600;
+  }
 `;
 
 export const Macros = styled.div`
@@ -185,9 +194,29 @@ export const Log = styled.div`
 `;
 
 export const Calendar = styled.aside`
-  margin-top: 24px;
-  margin-bottom: 24px;
-  max-width: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: 5;
+  top: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+
+  padding-top: 24px;
+  padding-bottom: 24px;
+
+  > button {
+    flex: 1;
+    width: 100%; 
+    background: transparent;
+    outline: none;
+    border: none;
+  }
 
   .DayPicker {
     background: #0A0A0B;
@@ -281,7 +310,7 @@ export const Calendar = styled.aside`
   }
 
   abbr {
-    font-color: white;
+    color: white;
     opacity: 0.25;
   }
 `;

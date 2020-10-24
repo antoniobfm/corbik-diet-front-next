@@ -9,18 +9,18 @@ interface ContainerProps {
 
 const toastTypeVariations = {
   info: css`
-		background: ${shade(0.4, '#2D9CDB99')};
-		color:  white;
+		background: #2D9CDB99;
+		color:  rgba(255, 255, 255, 0.95);
 	`,
 
   success: css`
-		background: ${shade(0.4, '#1C7D4599')};
-		color: white;
+		background: #1C7D4599;
+		color: rgba(255, 255, 255, 0.95);
 	`,
 
   error: css`
-		background: ${shade(0.4, '#EB575799')};
-		color: white;
+		background: #EB575799;
+		color: rgba(255, 255, 255, 0.95);
 	`,
 };
 
@@ -30,7 +30,7 @@ export const Container = styled(motion.div) <ContainerProps>`
   text-align: center;
   box-sizing: border-box;
 	position: relative;
-	padding: 16px 16px 16px 16px;
+	padding: 0;
 	/* margin: 30px;
 	border-radius: 10px; */
 	box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
@@ -38,6 +38,8 @@ export const Container = styled(motion.div) <ContainerProps>`
 	display: flex;
 
   strong {
+		font-size: 14px;
+		line-height: 40px;
     margin: 0;
     padding: 0;
   }
