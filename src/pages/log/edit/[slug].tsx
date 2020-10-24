@@ -1,4 +1,5 @@
 import { useAuth } from "@/hooks/auth";
+import { useToast } from "@/hooks/toast";
 import api from "@/services/api";
 import { Details, Header, Menu } from "@/styles/pages/food/food";
 import { CreateButton, Floating } from "@/styles/pages/food/search";
@@ -71,11 +72,18 @@ export default function Edit(food: string) {
   }, [logData, amount]);
 
   const showSkeleton = isValidating || loading;
+  const { addToast } = useToast();
 
   const handleDelete = useCallback((e) => {
     e.preventDefault()
     async function editFood() {
       await api.delete(`/food/log/specific/${logData.id}`);
+
+      addToast({
+        type: 'success',
+        title: 'Deleted log with success',
+      });
+
       router.push(`/`);
     }
 
@@ -97,6 +105,11 @@ export default function Edit(food: string) {
         
         await api.put(`/food/log`, log);
         
+        addToast({
+          type: 'success',
+          title: 'Modified your log with success',
+        });
+
         router.push(`/`);
       }
 

@@ -10,6 +10,7 @@ import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import Input from "@/components/Input";
 import Button from "@/components/Button";
+import { useToast } from "@/hooks/toast";
 
 interface ProfileFormData {
 	name: string;
@@ -28,6 +29,7 @@ interface TargetsFormData {
 
 export default function Settings() {
   const router = useRouter();
+  const { addToast } = useToast();
 
   const formRef = useRef<FormHandles>(null);
   const formTargetsRef = useRef<FormHandles>(null);
@@ -67,14 +69,22 @@ export default function Settings() {
         const response = await api.put('/profile/targets', formData);
   
         updateUser(response.data);
-  
-        router.reload();
+
+        addToast({
+          type: 'success',
+          title: `Modified your targets with success`
+        });
   
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
   
           formTargetsRef.current?.setErrors(errors);
+
+          addToast({
+            type: 'error',
+            title: `Something went wrong`
+          });
   
           return;
         }
@@ -136,13 +146,21 @@ const handleSubmit = useCallback(
 
       updateUser(response.data);
 
-      router.reload();
+      addToast({
+        type: 'success',
+        title: `Modified your profile with success`
+      });
 
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
         const errors = getValidationErrors(err);
-        console.log(errors);
+
         formRef.current?.setErrors(errors);
+        
+        addToast({
+          type: 'error',
+          title: `Something went wrong`
+        });
 
         return;
       }

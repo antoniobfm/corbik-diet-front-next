@@ -1,9 +1,26 @@
+import Input from "@/components/Input";
 import api from "@/services/api";
 import { Container, FormContainer, Header, Icon, Menu, CreateButton } from "@/styles/pages/food/create";
 import { Floating } from "@/styles/pages/food/search";
+import { Form } from "@unform/web";
+import { FormHandles } from '@unform/core';
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback, useRef, useState } from "react";
+import getValidationErrors from "@/utils/getValidationErrors";
+import * as Yup from 'yup';
+import { useToast } from "@/hooks/toast";
+
+interface IFoodFormData {
+  name: string;
+  brand: string;
+  carbohydrates: string;
+  proteins: string;
+  fats: string;
+  calories: string;
+  quantity_amount: string;
+  quantity_type: string;
+}
 
 interface IFood {
   name: string;
@@ -17,102 +34,148 @@ interface IFood {
 }
 
 export default function Create() {
-  const [name, setName] = useState('');
-  const [brand, setBrand] = useState('');
-  const [carbs, setCarbs] = useState('');
-  const [prots, setProts] = useState('');
-  const [fats, setFats] = useState('');
-  const [calories, setCalories] = useState('');
-  const [amount, setAmount] = useState('');
-  const [unit, setUnit] = useState('');
-  
   const router = useRouter();
+  const formRef = useRef<FormHandles>(null);
+  const { addToast } = useToast();
 
-  const handleSubmit = useCallback((e) => {
-    e.preventDefault();
-    async function createFood() {
+  const handleSubmit = useCallback(
+    async (data: IFoodFormData) => {
+      try {
+        formRef.current?.setErrors({});
+
+        const schema = Yup.object().shape({
+          name: Yup.string().required('Email is required'),
+          brand: Yup.string().required('Password is required'),
+          carbohydrates: Yup.string().required('Password is required'),
+          proteins: Yup.string().required('Password is required'),
+          fats: Yup.string().required('Password is required'),
+          calories: Yup.string().required('Password is required'),
+          quantity_amount: Yup.string().required('Password is required'),
+          quantity_type: Yup.string(),
+        });
+
+        await schema.validate(data, {
+          abortEarly: false,
+        });
+
         const food: IFood = {
-          name: name,
-          brand: brand,
-          carbohydrates: parseFloat(carbs),
-          proteins: parseFloat(prots),
-          fats: parseFloat(fats),
-          calories: parseFloat(calories),
-          quantity_amount: parseFloat(amount),
+          name: data.name,
+          brand: data.brand,
+          carbohydrates: parseFloat(data.carbohydrates),
+          proteins: parseFloat(data.proteins),
+          fats: parseFloat(data.fats),
+          calories: parseFloat(data.calories),
+          quantity_amount: parseFloat(data.quantity_amount),
           quantity_type: `grams`,
         };
 
-        const {data} = await api.post(`/food-library`, food);
+        const response = await api.post(`/food-library`, food);
 
-        router.push(`/food/${data.id}`);
+        addToast({
+          type: 'success',
+          title: `Added ${data.name} to your library`,
+        });
+
+        router.push(`/food/${response.data.id}`);
+
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err);
+
+          formRef.current?.setErrors(errors);
+
+          addToast({
+            type: 'error',
+            title: `Something went wrong`
+          });
+
+          return;
+        }
       }
-
-    createFood();
-  }, [name, carbs, prots, fats, calories, amount, unit]);
+    },
+    [],
+  );
 
   return (
     <Container>
       <Header>
         <h1>Create Food</h1>
       </Header>
-      <FormContainer>
-        <div className="form__field__container">
-          <input onChange={e => setName(e.target.value)} type="input" className="form__field" placeholder=" " name="name" id='name' required />
-          <label htmlFor="name" className="form__label">Name</label>
-        </div>
-        
-        <div className="form__field__container">
-          <input onChange={e => setBrand(e.target.value)} type="input" className="form__field" placeholder=" " name="name" id='name' required />
-          <label htmlFor="name" className="form__label">Brand</label>
-        </div>
-        
-        <div className="form__macros">
-          <div className="form__field__container macro">
-            <input onChange={e => setCarbs(e.target.value)} type="number" className="form__field" placeholder=" " name="name" id='name' required />
-            <label htmlFor="name" className="form__label">Carbohydrates</label>
+      <Form
+        ref={formRef}
+        onSubmit={handleSubmit}
+      >
+        <FormContainer>
+          <Input
+            name="name"
+            labelName="Name"
+            type="input"
+          />
+          <Input
+            name="brand"
+            labelName="Brand"
+            type="input"
+          />
+
+
+          <div className="form__macros">
+            <div className="macro">
+              <Input
+                name="carbohydrates"
+                labelName="Carbohydrates"
+                type="input"
+              />
+            </div>
+            <div className="macro">
+              <Input
+                name="proteins"
+                labelName="Proteins"
+                type="input"
+              />
+            </div>
+            <div className="macro">
+              <Input
+                name="fats"
+                labelName="Fats"
+                type="input"
+              />
+            </div>
           </div>
-          
-          <div className="form__field__container macro">
-            <input onChange={e => setProts(e.target.value)} type="number" className="form__field" placeholder=" " name="name" id='name' required />
-            <label htmlFor="name" className="form__label">Proteins</label>
+
+          <Input
+            name="calories"
+            labelName="Calories"
+            type="input"
+          />
+          <div className="form__quantity">
+            <Input
+              name="quantity_amount"
+              labelName="Amount"
+              type="input"
+            />
+            <Input
+              name="quantity_type"
+              labelName="Unit"
+              type="input"
+              defaultValue="Grams"
+            />
           </div>
-          
-          <div className="form__field__container macro">
-            <input onChange={e => setFats(e.target.value)} type="number" className="form__field" placeholder=" " name="name" id='name' required />
-            <label htmlFor="name" className="form__label">Fats</label>
-          </div>
-        </div>
-        
-        <div className="form__field__container">
-          <input onChange={e => setCalories(e.target.value)} type="number" className="form__field" placeholder=" " name="name" id='name' required />
-          <label htmlFor="name" className="form__label">Calories</label>
-        </div>
-        
-        <div className="form__quantity">
-          <div className="form__field__container">
-            <input onChange={e => setAmount(e.target.value)} type="number" className="form__field" placeholder=" " name="name" id='name' required />
-            <label htmlFor="name" className="form__label">Amount</label>
-          </div>
-          
-          <div className="form__field__container">
-            <input type="input" className="form__field" placeholder=" " name="name" id='name' required />
-            <label htmlFor="name" className="form__label">Unit</label>
-          </div>
-        </div>
-      </FormContainer>
-    
-      <Floating>
-        <Menu>
-          <div className="back">
-            <span onClick={() => router.back()}>
+
+        </FormContainer>
+
+        <Floating>
+          <Menu>
+            <div className="back">
+              <span onClick={() => router.back()}>
                 <div className="icon">
                   <Icon size={16} />
                 </div>
               </span>
-          </div>
-          <CreateButton onClick={handleSubmit}>CREATE</CreateButton>
-        </Menu>
-      </Floating>
+            </div>
+            <CreateButton type="submit">CREATE</CreateButton>
+          </Menu>
+        </Floating>
+      </Form>
     </Container>
   )
 }

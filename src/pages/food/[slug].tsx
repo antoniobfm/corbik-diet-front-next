@@ -1,4 +1,5 @@
 import { useAuth } from "@/hooks/auth";
+import { useToast } from "@/hooks/toast";
 import api from "@/services/api";
 import { Container, Details, Header, Menu } from "@/styles/pages/food/food";
 import { CreateButton, Floating } from "@/styles/pages/food/search";
@@ -37,13 +38,14 @@ export default function Food({ slug }: FoodProps) {
 
   const router = useRouter();
 
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
 
   const foodId = router.query.slug;
 
+  const { addToast } = useToast();
+  
   console.log(foodId);
 
-  
   const handleData = useCallback((data: any) => {
     data = data.data;
     setFoodData(data);
@@ -82,6 +84,11 @@ export default function Food({ slug }: FoodProps) {
         console.log(food);
         
         await api.post(`/food/log`, food);
+
+				addToast({
+					type: 'success',
+					title: 'Logged with success',
+				});
 
         router.push(`/`);
       }
