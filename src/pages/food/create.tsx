@@ -123,21 +123,21 @@ export default function Create() {
               <Input
                 name="carbohydrates"
                 labelName="Carbohydrates"
-                type="input"
+                type="number"
               />
             </div>
             <div className="macro">
               <Input
                 name="proteins"
                 labelName="Proteins"
-                type="input"
+                type="number"
               />
             </div>
             <div className="macro">
               <Input
                 name="fats"
                 labelName="Fats"
-                type="input"
+                type="number"
               />
             </div>
           </div>
@@ -145,13 +145,13 @@ export default function Create() {
           <Input
             name="calories"
             labelName="Calories"
-            type="input"
+            type="number"
           />
           <div className="form__quantity">
             <Input
               name="quantity_amount"
               labelName="Amount"
-              type="input"
+              type="number"
             />
             <Input
               name="quantity_type"
