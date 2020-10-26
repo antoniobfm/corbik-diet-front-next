@@ -144,7 +144,13 @@ export default function Food({ slug }: FoodProps) {
       <Floating>
         <Menu>
           <div className="amount">
-            <input type="number" placeholder="Amount" defaultValue={amount} onChange={e => setAmount(e.target.value)} />
+            <input 
+              type="number" 
+              placeholder="Amount" 
+              defaultValue={amount} 
+              onChange={e => setAmount(e.target.value)}
+              step="0.01"
+              />
           </div>
           <div className="unit">
             <select name="select">

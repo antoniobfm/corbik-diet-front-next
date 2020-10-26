@@ -186,7 +186,8 @@ const handleSubmit = useCallback(
             <Input
               name="carbohydrates"
               labelName="Carbohydrates"
-              type="input"
+              type="number"
+              step="0.01"
             />
           </div>
           
@@ -194,7 +195,8 @@ const handleSubmit = useCallback(
             <Input
               name="proteins"
               labelName="Proteins"
-              type="input"
+              type="number"
+              step="0.01"
             />
           </div>
 
@@ -202,14 +204,16 @@ const handleSubmit = useCallback(
             <Input
               name="fats"
               labelName="Fats"
-              type="input"
+              type="number"
+              step="0.01"
             />
           </div>
         </div>
         <Input
           name="calories"
           labelName="Calories"
-          type="input"
+          type="number"
+          step="0.01"
         />
         <Button type="submit" style={{width: '100%'}}>SAVE</Button>
         </Form>

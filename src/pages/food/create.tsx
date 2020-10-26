@@ -124,6 +124,7 @@ export default function Create() {
                 name="carbohydrates"
                 labelName="Carbohydrates"
                 type="number"
+                step="0.01"
               />
             </div>
             <div className="macro">
@@ -131,6 +132,7 @@ export default function Create() {
                 name="proteins"
                 labelName="Proteins"
                 type="number"
+                step="0.01"
               />
             </div>
             <div className="macro">
@@ -138,6 +140,7 @@ export default function Create() {
                 name="fats"
                 labelName="Fats"
                 type="number"
+                step="0.01"
               />
             </div>
           </div>
@@ -146,12 +149,14 @@ export default function Create() {
             name="calories"
             labelName="Calories"
             type="number"
+            step="0.01"
           />
           <div className="form__quantity">
             <Input
               name="quantity_amount"
               labelName="Amount"
               type="number"
+              step="0.01"
             />
             <Input
               name="quantity_type"
