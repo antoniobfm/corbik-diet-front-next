@@ -8,9 +8,8 @@ let urls = {
 const api = Axios.create({
     baseURL: urls[process.env.NODE_ENV],
     headers: {
-        'Accept': 'application/json',
         'Content-Type': 'application/json'
-    },
+		},
     withCredentials: true,
 });
 
