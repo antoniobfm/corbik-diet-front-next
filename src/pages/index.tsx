@@ -113,7 +113,7 @@ export default function Home() {
 
         handleData(data);
       } catch (err) {
-        signOut();
+				console.log('err');
       }
     }
 
