@@ -7,8 +7,10 @@ import React, {
 	useContext,
 	useEffect,
 } from 'react';
+import Cookies from 'js-cookie';
 
 import api from '../services/api';
+import next from 'next';
 
 interface User {
 	id: string;
@@ -23,7 +25,6 @@ interface User {
 }
 
 interface AuthState {
-	token: string;
 	user: User;
 }
 
@@ -47,23 +48,27 @@ const AuthProvider: React.FC = ({ children }) => {
 	const [loading, setLoading] = useState(true)
 	const [data, setData] = useState<AuthState>({} as AuthState);
 
+	const router = useRouter();
+
 	useEffect(() => {
-		async function loadUserFromLocalStorage() {
-			const token = localStorage.getItem('@Corbik:token');
-			const user = localStorage.getItem('@Corbik:user');
-
-			if (token && user) {
-				api.defaults.headers.authorization = `Bearer ${token}`;
-
-				setData({ token, user: JSON.parse(user) });
+		async function loadUserFromLocalStorageOrGetFromServer() {
+			const user = localStorage.getItem('@Corbik:User');
+			if (user) {
+				setData({ user: JSON.parse(user) });
+			} else {
+				try { 
+					const response = await api.get('/profile');
+					localStorage.setItem('@Corbik:User', JSON.stringify(response.data));
+					setData({ user: response.data });
+				} catch (err) {
+					next();
+				}
 			}
-
 			setLoading(false);
 		}
-		loadUserFromLocalStorage();
+		
+		loadUserFromLocalStorageOrGetFromServer();
 	}, [])
-
-	const router = useRouter();
 
 	const signIn = useCallback(async ({ email, password }) => {
 		const response = await api.post('sessions', {
@@ -71,34 +76,36 @@ const AuthProvider: React.FC = ({ children }) => {
 			password,
 		});
 
-		const { token, user } = response.data;
-		console.log(token, user);
+		const { user } = response.data;
 
-		localStorage.setItem('@Corbik:token', token);
-		localStorage.setItem('@Corbik:user', JSON.stringify(user));
 
-		api.defaults.headers.authorization = `Bearer ${token}`;
+		localStorage.setItem('@Corbik:User', JSON.stringify(user));
 
-		setData({ token, user });
+		setData({ user });
 		router.reload();
 	}, []);
 
-	const signOut = useCallback(() => {
-		localStorage.removeItem('@Corbik:token');
-		localStorage.removeItem('@Corbik:token');
+	const signOut = useCallback(async () => {
+		try {
+		await api.post('/sessions/logout');
+
+		localStorage.removeItem('@Corbik:User');
 
 		setData({} as AuthState);
+		} catch ({message}: Error) {
+			localStorage.removeItem('@Corbik:User');
+			router.reload();
+		}
 	}, []);
 
 	const updateUser = useCallback(
 		(user: User) => {
-			localStorage.setItem('@Corbik:user', JSON.stringify(user));
+			localStorage.setItem('@Corbik:User', JSON.stringify(user));
 			setData({
-				token: data.token,
 				user,
 			});
 		},
-		[setData, data.token],
+		[setData],
 	);
 	return (
 		<AuthContext.Provider
@@ -125,10 +132,10 @@ export const ProtectRoute = ({ children }) => {
 
 	const router = useRouter();
 	const { isAuthenticated, loading } = useAuth();
-  if (loading || (!isAuthenticated && window.location.pathname !== '/login' && window.location.pathname !== '/')){
-    return <Login />; 
-  } else if (isAuthenticated && window.location.pathname !== '/login') {
+	if (loading || (!isAuthenticated && window.location.pathname !== '/login' && window.location.pathname !== '/')) {
+		return <Login />;
+	} else if (isAuthenticated && window.location.pathname !== '/login') {
 		console.log('tru');
 	}
-  return children;
+	return children;
 };
