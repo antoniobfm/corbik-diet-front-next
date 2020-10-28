@@ -13,7 +13,7 @@ import useSWR from 'swr';
 import Skeleton from 'react-loading-skeleton';
 import toFixedNumber from '@/utils/formatNumbers';
 
-const LoginModal = dynamic(() => import('@/components/LoginModal'), 
+const LoginModal = dynamic(() => import('@/components/LoginModal'),
 { loading: () => <div className="blurred__background"><h1>Loading</h1></div>})
 
 interface ILog {
@@ -83,7 +83,7 @@ export default function Home() {
       return setLoading(false);
     }
 
-    const formatLogs: ILog[] = data.logs.map(item => 
+    const formatLogs: ILog[] = data.logs.map(item =>
       {
       return {
       ...item,
@@ -153,7 +153,7 @@ export default function Home() {
         <Logs>
           <h2>Logs</h2>
           <div>
-            {!loading ? logData && logData.logs && logData.logs.map(log => 
+            {!loading ? logData && logData.logs && logData.logs.map(log =>
             <Link key={log.id} href={`/log/edit/${log.id}`}>
               <a>
                 <Log>
@@ -170,7 +170,7 @@ export default function Home() {
                 </Log>
               </a>
             </Link>
-            ) : 
+            ) :
             <Skeleton count={4} duration={2} height={64} width='92.5%' style={{marginLeft: 16, marginRight: 16}}/>
             }
             {/*<Link href={`/log/edit/1`}>
@@ -196,7 +196,7 @@ export default function Home() {
             </Link>
           </div>
         </Logs>
-        
+
       </Container>
       <Link href="/settings">
         <a>

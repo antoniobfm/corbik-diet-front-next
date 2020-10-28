@@ -40,52 +40,52 @@ export default function Settings() {
     async (data: TargetsFormData) => {
       try {
         formTargetsRef.current?.setErrors({});
-  
+
         const schema = Yup.object().shape({
           carbohydrates: Yup.string().required('Carbohydrates amount required'),
           proteins: Yup.string().required('Proteins amount required'),
           fats: Yup.string().required('Fats amount required'),
           calories: Yup.string().required('Calories amount required'),
         });
-  
+
         await schema.validate(data, {
           abortEarly: false,
         });
-  
+
         const {
           carbohydrates,
           proteins,
           fats,
           calories
         } = data;
-  
+
         const formData = {
           carbohydrates: parseInt(carbohydrates, 10),
           proteins:  parseInt(proteins, 10),
           fats:  parseInt(fats, 10),
           calories:  parseInt(calories, 10)
         };
-  
+
         const response = await api.put('/profile/targets', formData);
-  
+
         updateUser(response.data);
 
         addToast({
           type: 'success',
           title: `Modified your targets with success`
         });
-  
+
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
-  
+
           formTargetsRef.current?.setErrors(errors);
 
           addToast({
             type: 'error',
             title: `Something went wrong`
           });
-  
+
           return;
         }
       }
@@ -156,7 +156,7 @@ const handleSubmit = useCallback(
         const errors = getValidationErrors(err);
 
         formRef.current?.setErrors(errors);
-        
+
         addToast({
           type: 'error',
           title: `Something went wrong`
@@ -190,7 +190,7 @@ const handleSubmit = useCallback(
               step="0.01"
             />
           </div>
-          
+
           <div className="macro">
             <Input
               name="proteins"
@@ -256,7 +256,7 @@ const handleSubmit = useCallback(
 						type="password"
 					/>
           <Button style={{width: '100%'}} type="submit">SAVE</Button>
-        </Form> 
+        </Form>
       </div>
       <button type="button" onClick={signOut}>
         Logout

@@ -1,20 +1,25 @@
-import AppProvider from "@/hooks";
-import { ProtectRoute } from "@/hooks/auth";
-import { AnimatePresence } from "framer-motion";
-import { SkeletonTheme } from "react-loading-skeleton";
-import GlobalStyle from "../styles/GlobalStyle";
+import React from 'react'
 
-export default function MyApp({ Component, pageProps }) {
-  return (
-    <AppProvider>
-    <GlobalStyle />
-      <ProtectRoute>
-        <SkeletonTheme color="#0A0A0B" highlightColor="#181A1B">
-          <AnimatePresence>
-            <Component {...pageProps} />
-          </AnimatePresence>
-        </SkeletonTheme>
-      </ProtectRoute>
-    </AppProvider>
-  );
+import AppProvider from '@/hooks'
+import { ProtectRoute } from '@/hooks/auth'
+import { AnimatePresence } from 'framer-motion'
+import { SkeletonTheme } from 'react-loading-skeleton'
+import GlobalStyle from '../styles/GlobalStyle'
+import { AppProps } from 'next/dist/next-server/lib/router/router'
+
+const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
+	return (
+		<AppProvider>
+			<GlobalStyle />
+			<ProtectRoute>
+				<SkeletonTheme color="#0A0A0B" highlightColor="#181A1B">
+					<AnimatePresence>
+						<Component {...pageProps} />
+					</AnimatePresence>
+				</SkeletonTheme>
+			</ProtectRoute>
+		</AppProvider>
+	)
 }
+
+export default MyApp

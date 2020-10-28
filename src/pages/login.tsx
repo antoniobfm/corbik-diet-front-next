@@ -22,31 +22,31 @@ export default function Login() {
     async (data: LoginFormData) => {
       try {
         formRef.current?.setErrors({});
-  
+
         const schema = Yup.object().shape({
           email: Yup.string()
             .required('Email is required')
             .email('Email is invalid'),
           password: Yup.string().required('Password is required'),
         });
-  
+
         await schema.validate(data, {
           abortEarly: false,
         });
-  
+
         const {
           email,
           password,
-        } = data;
-  
+				} = data;
+
         signIn({email, password});
-  
+
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
           console.log(errors);
           formRef.current?.setErrors(errors);
-  
+
           return;
         }
       }
