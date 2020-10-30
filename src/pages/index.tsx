@@ -6,7 +6,7 @@ import { useCallback, useEffect, useState } from 'react';
 import api from '@/services/api';
 import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
-import { isToday, format, formatISO } from 'date-fns';
+import { isToday, format, formatISO, setHours } from 'date-fns';
 import { useAuth } from '@/hooks/auth';
 import Skeleton from 'react-loading-skeleton';
 
@@ -46,7 +46,7 @@ export default function Home() {
   const [logData, setLogData] = useState<IDayResume | null>(null);
   const [loading, setLoading] = useState(true);
   const [showCalendar, setShowCalendar] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date>(setHours(new Date(), 12));
 
   const { isAuthenticated, user, signOut } = useAuth();
   if(!isAuthenticated) return <LoginModal />;
