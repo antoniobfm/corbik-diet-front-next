@@ -4,14 +4,11 @@ import Link from 'next/link';
 import { Calendar, Calories, Container, Header, Log, Logs, Macro, Macros } from "@/styles/pages/Home";
 import { useCallback, useEffect, useState } from 'react';
 import api from '@/services/api';
-import addZeroBefore from '@/utils/addZeroBefore';
-import DayPicker, { DayModifiers } from 'react-day-picker';
+import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
-import { isToday, format } from 'date-fns';
+import { isToday, format, formatISO } from 'date-fns';
 import { useAuth } from '@/hooks/auth';
-import useSWR from 'swr';
 import Skeleton from 'react-loading-skeleton';
-import toFixedNumber from '@/utils/formatNumbers';
 
 const LoginModal = dynamic(() => import('@/components/LoginModal'),
 { loading: () => <div className="blurred__background"><h1>Loading</h1></div>})
@@ -26,8 +23,8 @@ interface ILog {
 	quantity_amount: string;
 	quantity_type: string;
 
-  hour?: string | number;
-  minute?: string | number;
+  hour: string | number;
+  minute: string | number;
 
 	food_id: string;
   user_id: string;
@@ -44,19 +41,8 @@ interface IDayResume {
 	logs: ILog[] | undefined;
 }
 
-var byProperty = function(prop) {
-  return function(a,b) {
-      if (typeof a[prop] == "number") {
-          return (a[prop] - b[prop]);
-      } else {
-          return ((a[prop] < b[prop]) ? -1 : ((a[prop] > b[prop]) ? 1 : 0));
-      }
-  };
-};
 
 export default function Home() {
-  const router = useRouter();
-
   const [logData, setLogData] = useState<IDayResume | null>(null);
   const [loading, setLoading] = useState(true);
   const [showCalendar, setShowCalendar] = useState(false);
@@ -77,41 +63,24 @@ export default function Home() {
 
   const handleData = useCallback((data) => {
     setLoading(true);
-    console.log(data);
+
     if (!data) {
       setLogData(null);
       return setLoading(false);
     }
 
-    const formatLogs: ILog[] = data.logs.map(item =>
-      {
-      return {
-      ...item,
-      hour: addZeroBefore(new Date(item.when).getHours()),
-      minute: addZeroBefore(new Date(item.when).getMinutes()),
-      }
-    });
-
-    const sortIt = formatLogs.sort(byProperty("when"));
-
-    const formatDay: IDayResume = {
-      carbohydrates: data.carbohydrates,
-      proteins: data.proteins,
-      fats: data.fats,
-      calories: data.calories,
-      logs: sortIt
-    }
-
-    setLogData(formatDay);
+    setLogData(data);
     setLoading(false);
   }, [logData]);
 
   useEffect(() => {
     async function loadData() {
       try {
-        const {data} = await api.get('/food/log/' + selectedDate.getTime(), {withCredentials: true});
+				console.log(formatISO(selectedDate));
+				const when = formatISO(selectedDate);
+				const response = await api.post('/food/log/day', { when });
 
-        handleData(data);
+        handleData(response.data);
       } catch (err) {
 				console.log('err');
       }
@@ -173,22 +142,6 @@ export default function Home() {
             ) :
             <Skeleton count={4} duration={2} height={64} width='92.5%' style={{marginLeft: 16, marginRight: 16}}/>
             }
-            {/*<Link href={`/log/edit/1`}>
-              <a>
-                <Log>
-                  <div className="when">
-                    <h5>20:00</h5>
-                  </div>
-                  <div className="name-and-quantity">
-                    <h4>Banana</h4>
-                    <h5>120g</h5>
-                  </div>
-                  <div className="macros">
-                    <h5>C26   P0.3   F0.6</h5>
-                  </div>
-                </Log>
-              </a>
-            </Link> */}
           </div>
           <div className="add-log">
             <Link href={`/food/search`}>
