@@ -5,12 +5,15 @@ export default createGlobalStyle`
     margin: 0;
     padding: 0;
 
-    
+
   --carbs-color: #EB5757;
   --protein-color: #2D9CDB;
   --fat-color: #F2C94C;
-  }
 
+	::-webkit-scrollbar {
+		display: none;
+	}
+  }
   body {
     background: #0A0A0B;
     color: rgba(255, 255, 255, 0.95);
@@ -22,10 +25,10 @@ export default createGlobalStyle`
     height: 100vh;
     position: fixed;
     z-index: 10;
-    
+
     background-color: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(5px);
-    
+
     display: flex;
     flex-direction: column;
     align-items: stretch;
