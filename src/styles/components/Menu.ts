@@ -25,6 +25,7 @@ export const Container = styled.div`
 
 		svg {
 			color: #D5F6E3;
+			opacity: 0.8;
 		}
 	}
 `;
