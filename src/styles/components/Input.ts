@@ -1,14 +1,12 @@
 import styled, { css } from 'styled-components';
 
-import { lighten } from 'polished';
-
 interface ContainerProps {
 	isFocused: boolean;
 	isFilled: boolean;
 	isErrored: boolean;
 }
 
-export const Container = styled.div<ContainerProps>`  
+export const Container = styled.div<ContainerProps>`
 	height: 56px;
 	border-radius: 6px;
 

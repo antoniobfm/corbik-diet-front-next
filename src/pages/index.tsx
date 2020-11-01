@@ -9,6 +9,7 @@ import 'react-day-picker/lib/style.css';
 import { isToday, format, formatISO, setHours } from 'date-fns';
 import { useAuth } from '@/hooks/auth';
 import Skeleton from 'react-loading-skeleton';
+import Menu from '@/components/Menu';
 
 const LoginModal = dynamic(() => import('@/components/LoginModal'),
 { loading: () => <div className="blurred__background"><h1>Loading</h1></div>})
@@ -91,6 +92,7 @@ export default function Home() {
 
   return (
     <>
+			<Menu currentRoute="Diet" />
       <Container>
         <Header>
           <button type="button" onClick={e => handleCalendar(e)}>{isToday(selectedDate) ? 'Today' : format(selectedDate, 'MMM, dd')}</button>
