@@ -65,7 +65,7 @@ export const StaticMenu = styled.div`
       height: 55px;
       border-top-left-radius: 6px;
       border-bottom-left-radius: 6px;
-    
+
       display: flex;
       align-items: center;
       flex-direction: row;
@@ -102,7 +102,7 @@ export const StaticMenu = styled.div`
         font-size: 16px;
 
         opacity: 0.5;
-        
+
         -moz-appearance: none;
         -webkit-appearance: none;
         appearance: none;
@@ -127,7 +127,7 @@ export const ConfirmDeletion = styled.div`
 
   > button {
     flex: 1;
-    width: 100%; 
+    width: 100%;
     background: transparent;
     outline: none;
     border: none;
@@ -147,19 +147,19 @@ export const ConfirmDeletion = styled.div`
       text-align: center;
       padding-bottom: 30px;
     }
-    
+
     > div {
       flex: 1;
       display: flex;
       justify-content: space-between;
-  
+
       .button--cancel {
         flex: 1;
         height: 54px;
         background: none;
         outline: none;
         border: none;
-        color: #FFFFFF; 
+        color: #FFFFFF;
       }
 
       .button--confirm--deletion {

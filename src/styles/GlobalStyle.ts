@@ -9,10 +9,6 @@ export default createGlobalStyle`
   --carbs-color: #EB5757;
   --protein-color: #2D9CDB;
   --fat-color: #F2C94C;
-
-	::-webkit-scrollbar {
-		display: none;
-	}
   }
   body {
     background: #0A0A0B;

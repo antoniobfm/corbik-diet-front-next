@@ -56,7 +56,7 @@ const AuthProvider: React.FC = ({ children }) => {
 			if (user) {
 				setData({ user: JSON.parse(user) });
 			} else {
-				try { 
+				try {
 					const response = await api.get('/profile');
 					localStorage.setItem('@Corbik:User', JSON.stringify(response.data));
 					setData({ user: response.data });
@@ -66,7 +66,7 @@ const AuthProvider: React.FC = ({ children }) => {
 			}
 			setLoading(false);
 		}
-		
+
 		loadUserFromLocalStorageOrGetFromServer();
 	}, [])
 

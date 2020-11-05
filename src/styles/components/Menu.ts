@@ -6,11 +6,10 @@ interface Props {
 
 export const Container = styled.div`
 	position: fixed;
-	margin-top: calc(100vh - 48px);
-	top: 0;
+	bottom: 0;
 	z-index: 4;
 
-	width: 100%;
+	width: 100vw;
 	height:	48px;
 	background: #0B0B0C;
 	border-top: 1px solid #222425;

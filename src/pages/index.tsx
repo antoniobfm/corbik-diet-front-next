@@ -77,7 +77,6 @@ export default function Home() {
   useEffect(() => {
     async function loadData() {
       try {
-				console.log(formatISO(selectedDate));
 				const when = formatISO(selectedDate);
 				const response = await api.post('/food/log/day', { when });
 

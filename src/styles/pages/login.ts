@@ -12,7 +12,7 @@ export const LoginContainer = styled.main`
   margin: 0 16px;
   padding: 0 16px 24px;
 
-  
+
   display: flex;
   flex-direction: column;
 

@@ -2,7 +2,7 @@ import { FiChevronLeft } from 'react-icons/fi';
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  
+
 `;
 
 export const Header = styled.header`
@@ -25,7 +25,7 @@ export const Menu = styled.div`
   border-radius: 6px;
 
   background: linear-gradient(91.23deg, rgba(255, 255, 255, 0.03) 0%, rgba(24, 26, 27, 0) 100%), #181A1B;
-  
+
   .back {
     width: 18%;
 

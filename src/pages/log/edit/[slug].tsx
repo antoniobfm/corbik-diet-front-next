@@ -40,7 +40,7 @@ export default function Edit(food: string) {
   const [calories, setCalories] = useState<number | null>(0);
 
   const [date, setDate] = useState<Date>(new Date());
-  
+
   const { user, loading } = useAuth();
 
   const logId = router.query.slug;
@@ -50,7 +50,7 @@ export default function Edit(food: string) {
 
     setShowConfirmation(!showConfirmation);
   }, [showConfirmation]);
-  
+
   const handleData = useCallback((data: any) => {
     data = data.data;
     setFats(toFixedNumber(parseFloat(data.quantity_amount) * data.fats / data.quantity_amount, 2, 10));
@@ -62,14 +62,14 @@ export default function Edit(food: string) {
   }, []);
 
   const { data: { data: logData } = {}, isValidating } = useSWR(
-    `/food/log/specific/${logId}`, 
+    `/food/log/specific/${logId}`,
     api.get, {
       onSuccess: (data, key, config) => {
         handleData(data);
       }
    });
 
-   
+
   useEffect(() => {
     if (logData) {
       setFats(toFixedNumber(parseFloat(amount) * logData.fats / logData.quantity_amount, 2, 10));
@@ -110,9 +110,9 @@ export default function Edit(food: string) {
           calories: calories,
           when: date,
         };
-        
+
         await api.put(`/food/log`, log);
-        
+
         addToast({
           type: 'success',
           title: 'Modified your log with success',
@@ -158,20 +158,20 @@ export default function Edit(food: string) {
         <progress id="calories" value={calories && calories} max={user && user.calories}>30%</progress>
       </Calories>
       <Details>
-        <input 
-          type="datetime-local" 
-          value={`${new Date(date).getFullYear()}-${addZeroBefore(new Date(date).getMonth() + 1)}-${addZeroBefore(new Date(date).getDate())}T${addZeroBefore(new Date(date).getHours())}:${addZeroBefore(new Date(date).getMinutes())}`} 
+        <input
+          type="datetime-local"
+          value={`${new Date(date).getFullYear()}-${addZeroBefore(new Date(date).getMonth() + 1)}-${addZeroBefore(new Date(date).getDate())}T${addZeroBefore(new Date(date).getHours())}:${addZeroBefore(new Date(date).getMinutes())}`}
           onChange={e => setDate(new Date(e.target.value))} />
-      
+
           <StaticMenu>
             <div>
               <div className="amount">
-                <input 
-                  type="number" 
-                  placeholder="Amount" 
-                  defaultValue={amount} 
+                <input
+                  type="number"
+                  placeholder="Amount"
+                  defaultValue={amount}
                   onChange={e => setAmount(e.target.value)}
-                  step="0.01" 
+                  step="0.01"
                   />
               </div>
               <div className="unit">
@@ -189,7 +189,7 @@ export default function Edit(food: string) {
         </button>
       </div>
     </Container>
-    {showConfirmation && 
+    {showConfirmation &&
       <ConfirmDeletion>
         <button type="button" onClick={handleConfirmation}/>
         <div>

@@ -25,7 +25,7 @@ export default function Search() {
     async function loadFood() {
       if(searchInput && searchInput.length >= 3) {
         const {data} = await api.get(`/food-library/${searchInput}`);
-        
+
         console.log(data);
 
         setSearchResult(data);
@@ -46,7 +46,7 @@ export default function Search() {
         <h1>Log Food</h1>
       </Header>
       <Foods>
-        {searchInput ? (searchResult && searchResult.map(result => 
+        {searchInput ? (searchResult && searchResult.map(result =>
           <Link key={result.id} href={`/food/${result.id}`}>
             <a>
               <Food>
@@ -63,7 +63,7 @@ export default function Search() {
               </Food>
             </a>
           </Link>
-        )) : (initialLoad && initialLoad.map(result => 
+        )) : (initialLoad && initialLoad.map(result =>
           <Link key={result.id} href={`/food/${result.id}`}>
             <a>
               <Food>
@@ -104,8 +104,8 @@ export default function Search() {
             <div className="icon">
               <Icon size={16} />
             </div>
-            <input 
-              type="text" 
+            <input
+              type="text"
               placeholder="Search"
 				      onChange={e => setSearchInput(e.target.value)}
             />

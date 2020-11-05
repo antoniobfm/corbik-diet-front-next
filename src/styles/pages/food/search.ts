@@ -2,7 +2,7 @@ import { FiSearch } from 'react-icons/fi';
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  
+
 `;
 
 export const Header = styled.header`
@@ -95,7 +95,7 @@ export const Menu = styled.div`
     height: 56px;
     border-radius: 6px;
     background: linear-gradient(92.01deg, rgba(255, 255, 255, 0.03) 0%, rgba(24, 26, 27, 0) 62.45%), #181A1B;
-  
+
     display: flex;
     align-items: center;
     flex-direction: row;

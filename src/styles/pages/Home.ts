@@ -41,7 +41,7 @@ export const Macro = styled.div<Macros>`
   flex: 1 0 28%;
   max-width: 28%;
   height: 63px;
-  
+
   color: ${props => colors[`${props.macro}`]};
 
   display: flex;
@@ -86,7 +86,7 @@ export const Calories = styled.div`
   padding: 0 16px 24px;
 
   color: #27AE60;
-  
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -145,7 +145,7 @@ export const Logs = styled.div`
   .add-log {
     padding: 16px 16px 0 0;
     align-self: flex-end;
-    
+
     a {
       font-size: 13px;
       opacity: 0.5;
@@ -212,7 +212,7 @@ export const Calendar = styled.aside`
 
   > button {
     flex: 1;
-    width: 100%; 
+    width: 100%;
     background: transparent;
     outline: none;
     border: none;
@@ -232,7 +232,7 @@ export const Calendar = styled.aside`
   .DayPicker-Month {
     width: 100%;
   }
-  
+
   .DayPicker-Month {
     margin: 0;
     border-collapse: separate;
@@ -253,7 +253,7 @@ export const Calendar = styled.aside`
       margin: 16px 13px 0 16px;
     }
   }
-  
+
   .DayPicker-NavBar {
     position: absolute;
     right: 0;

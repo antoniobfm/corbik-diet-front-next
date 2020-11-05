@@ -55,7 +55,7 @@ export default function Input({
 			isFilled={isFilled}
 			isFocused={isFocused}
 		>
-			<input 
+			<input
 				onFocus={handleInputFocus}
 				onBlur={handleInputBlur}
 				defaultValue={defaultValue}

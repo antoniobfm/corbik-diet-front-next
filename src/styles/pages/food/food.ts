@@ -1,14 +1,14 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  
+
 `;
 
 export const Header = styled.header`
   padding: 21px 14px;
 
   h1 {
-    
+
   }
 
   h3 {
@@ -54,7 +54,7 @@ export const Menu = styled.div`
     border-top-left-radius: 6px;
     border-bottom-left-radius: 6px;
     background: linear-gradient(92.01deg, rgba(255, 255, 255, 0.03) 0%, rgba(24, 26, 27, 0) 62.45%), #181A1B;
-  
+
     display: flex;
     align-items: center;
     flex-direction: row;
@@ -91,7 +91,7 @@ export const Menu = styled.div`
       font-size: 16px;
 
       opacity: 0.5;
-      
+
       -moz-appearance: none;
       -webkit-appearance: none;
       appearance: none;

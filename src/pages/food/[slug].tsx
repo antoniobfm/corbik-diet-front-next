@@ -43,7 +43,7 @@ export default function Food({ slug }: FoodProps) {
   const foodId = router.query.slug;
 
   const { addToast } = useToast();
-  
+
   console.log(foodId);
 
   const handleData = useCallback((data: any) => {
@@ -56,9 +56,9 @@ export default function Food({ slug }: FoodProps) {
     setProts(toFixedNumber(parseFloat(data.quantity_amount) * data.proteins / data.quantity_amount, 2, 10));
     setCalories(toFixedNumber(parseFloat(data.quantity_amount) * data.calories / data.quantity_amount, 2, 10));
   }, []);
-  
+
   const { data: { data: foodDataG } = {}, isValidating } = useSWR(
-    `/food-library/food/${foodId}`, 
+    `/food-library/food/${foodId}`,
     api.get, {
       refreshInterval: 30000,
       onSuccess: (data, key, config) => {
@@ -82,7 +82,7 @@ export default function Food({ slug }: FoodProps) {
         };
 
         console.log(food);
-        
+
         await api.post(`/food/log`, food);
 
 				addToast({
@@ -135,19 +135,19 @@ export default function Food({ slug }: FoodProps) {
         <progress id="calories" value={calories && calories} max={user && user.calories}>30%</progress>
       </Calories>
       <Details>
-        <input 
-          type="datetime-local" 
-          defaultValue={`${new Date(date).getFullYear()}-${addZeroBefore(new Date(date).getMonth() + 1)}-${addZeroBefore(new Date(date).getDate())}T${addZeroBefore(new Date(date).getHours())}:${addZeroBefore(new Date(date).getMinutes())}`} 
+        <input
+          type="datetime-local"
+          defaultValue={`${new Date(date).getFullYear()}-${addZeroBefore(new Date(date).getMonth() + 1)}-${addZeroBefore(new Date(date).getDate())}T${addZeroBefore(new Date(date).getHours())}:${addZeroBefore(new Date(date).getMinutes())}`}
           onChange={e => setDate(new Date(e.target.value))} />
       </Details>
-      
+
       <Floating>
         <Menu>
           <div className="amount">
-            <input 
-              type="number" 
-              placeholder="Amount" 
-              defaultValue={amount} 
+            <input
+              type="number"
+              placeholder="Amount"
+              defaultValue={amount}
               onChange={e => setAmount(e.target.value)}
               step="0.01"
               />

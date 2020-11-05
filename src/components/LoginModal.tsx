@@ -15,7 +15,7 @@ export default function LoginModal() {
     signIn({email: email.current.value, password: password.current.value});
     router.push('/');
   }, []);
-  
+
   return (
     <div className="blurred__background">
       <Container>
