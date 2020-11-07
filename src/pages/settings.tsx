@@ -28,7 +28,6 @@ interface TargetsFormData {
 }
 
 export default function Settings() {
-  const router = useRouter();
   const { addToast } = useToast();
 
   const formRef = useRef<FormHandles>(null);
