@@ -103,6 +103,9 @@ export default createGlobalStyle`
       :nth-child(2) {
       margin: 0 8px;
     }
+      :nth-child(3) {
+      margin: 0 8px 0 0;
+    }
     }
   }
 

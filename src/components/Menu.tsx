@@ -15,18 +15,25 @@ const Menu = ({ currentRoute }: IMenuProps) => {
 			<Button type="button" onClick={() => {}} isSelected={'Home' === currentRoute}>
 				<IoIosHome />
 			</Button>
-			<Button type="button" onClick={() => {}} isSelected={'Body' === currentRoute}>
+			<Button type="button" onClick={() => router.push('/body')} isSelected={'body' === currentRoute}>
 				<IoIosBody />
 			</Button>
-			<Button type="button" onClick={() => {}} isSelected={'Diet' === currentRoute}>
+			<Button type="button" onClick={() => router.push('/')} isSelected={'Diet' === currentRoute}>
 				<IoIosRestaurant />
 			</Button>
 			<Button type="button" onClick={() => {}} isSelected={'Lifting' === currentRoute}>
 				<IoIosFitness />
 			</Button>
-			<Button type="button" onClick={() => router.push('/food/search')} isSelected={'Add' === currentRoute} id="add">
-				<IoIosAdd />
-			</Button>
+			{'Diet' === currentRoute &&
+				<Button type="button" onClick={() => router.push('/food/search')} isSelected={false} id="add">
+					<IoIosAdd />
+				</Button>
+			}
+			{'body' === currentRoute &&
+				<Button type="button" onClick={() => router.push('/body/log/add')} isSelected={false} id="add">
+					<IoIosAdd />
+				</Button>
+			}
 		</Container>
   )
 }
