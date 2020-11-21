@@ -1,4 +1,5 @@
 import Input from "@/components/Input";
+import WholePageTransition from "@/components/WholePageTransition";
 import { useAuth } from "@/hooks/auth";
 import { useToast } from "@/hooks/toast";
 import api from "@/services/api";
@@ -125,6 +126,7 @@ export default function Edit(body: string) {
 
 	return (
 		<>
+		<WholePageTransition>
 			<Container>
 				<Header>
 					<div>
@@ -240,6 +242,7 @@ export default function Edit(body: string) {
 					</button>
 				</div>
 			</Container>
+		</WholePageTransition>
 			{showConfirmation &&
 				<ConfirmDeletion>
 					<button type="button" onClick={handleConfirmation} />

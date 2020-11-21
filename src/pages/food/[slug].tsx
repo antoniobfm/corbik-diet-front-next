@@ -1,3 +1,4 @@
+import WholePageTransition from "@/components/WholePageTransition";
 import { useAuth } from "@/hooks/auth";
 import { useToast } from "@/hooks/toast";
 import api from "@/services/api";
@@ -105,6 +106,7 @@ export default function Food({ slug }: FoodProps) {
 
   if (foodId) {
   return (
+		<WholePageTransition>
     <Container>
       <Header>
         <h1>{foodData.name}</h1>
@@ -161,6 +163,7 @@ export default function Food({ slug }: FoodProps) {
         </Menu>
       </Floating>
     </Container>
+		</WholePageTransition>
   );
   } else {
     return <p>Carregando...</p>;

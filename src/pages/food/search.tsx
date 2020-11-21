@@ -1,3 +1,4 @@
+import WholePageTransition from "@/components/WholePageTransition";
 import api from "@/services/api";
 import { Container, CreateButton, Floating, Food, Foods, Header, Icon, Menu } from "@/styles/pages/food/search";
 import Link from "next/link";
@@ -41,6 +42,7 @@ export default function Search() {
   }, []);
 
   return (
+		<WholePageTransition>
     <Container>
       <Header>
         <h1>Log Food</h1>
@@ -114,5 +116,6 @@ export default function Search() {
         </Menu>
       </Floating>
     </Container>
+		</WholePageTransition>
   )
 }

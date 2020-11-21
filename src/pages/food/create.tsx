@@ -10,6 +10,7 @@ import { useCallback, useRef, useState } from "react";
 import getValidationErrors from "@/utils/getValidationErrors";
 import * as Yup from 'yup';
 import { useToast } from "@/hooks/toast";
+import WholePageTransition from "@/components/WholePageTransition";
 
 interface IFoodFormData {
   name: string;
@@ -97,6 +98,7 @@ export default function Create() {
   );
 
   return (
+		<WholePageTransition>
     <Container>
       <Header>
         <h1>Create Food</h1>
@@ -182,5 +184,6 @@ export default function Create() {
         </Floating>
       </Form>
     </Container>
+		</WholePageTransition>
   )
 }

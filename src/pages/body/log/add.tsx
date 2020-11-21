@@ -11,6 +11,7 @@ import getValidationErrors from "@/utils/getValidationErrors";
 import * as Yup from 'yup';
 import { useToast } from "@/hooks/toast";
 import addZeroBefore from "@/utils/addZeroBefore";
+import WholePageTransition from "@/components/WholePageTransition";
 
 interface IBodyFormData {
 	weight: number;
@@ -82,6 +83,7 @@ export default function Create() {
   );
 
   return (
+		<WholePageTransition>
     <Container>
       <Header>
         <h1>Log Body</h1>
@@ -157,5 +159,6 @@ export default function Create() {
         </Floating>
       </Form>
     </Container>
+		</WholePageTransition>
   )
 }

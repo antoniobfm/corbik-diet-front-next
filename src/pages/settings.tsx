@@ -11,6 +11,7 @@ import { Form } from '@unform/web';
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import { useToast } from "@/hooks/toast";
+import WholePageTransition from "@/components/WholePageTransition";
 
 interface ProfileFormData {
 	name: string;
@@ -169,6 +170,7 @@ const handleSubmit = useCallback(
 );
 
   return (
+		<WholePageTransition>
     <Container>
       <Header>
         <h1>Settings</h1>
@@ -261,5 +263,6 @@ const handleSubmit = useCallback(
         Logout
       </button>
     </Container>
+		</WholePageTransition>
   )
 }
