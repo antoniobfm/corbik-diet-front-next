@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
 interface Props {
@@ -11,8 +12,9 @@ export const Container = styled.div`
 
 	width: 100vw;
 	height:	48px;
-	background: #0B0B0C;
-	border-top: 1px solid #222425;
+	background: rgba(11, 11, 12, 0.6);
+	border-top: 1px solid rgba(34, 36, 37, 0.6);
+	backdrop-filter: blur(6px);
 
 	display: flex;
 	flex-direction: row;
@@ -36,8 +38,10 @@ export const Button = styled.button<Props>`
 	background: none;
 	border: none;
 	outline: none;
+	transition: 5s all;
 
 	svg {
+		transition: 5s all;
 		color: ${props => props.isSelected ? '#f2f2f2' : '#808080'};
 		font-size: 1.125rem;
 	}

@@ -72,7 +72,12 @@ export default createGlobalStyle`
   button {
     font-family: Poppins, Arial, Helvetica, sans-serif;
   }
-
+	body:not(.user-is-tabbing) button:focus,
+body:not(.user-is-tabbing) input:focus,
+body:not(.user-is-tabbing) select:focus,
+body:not(.user-is-tabbing) textarea:focus {
+  outline: none;
+}
   input[type="datetime-local"] {
     color: #f2f2f2;
     border: none;

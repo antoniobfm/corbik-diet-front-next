@@ -1,3 +1,4 @@
+import WholePageTransition from "@/components/WholePageTransition";
 import { useAuth } from "@/hooks/auth";
 import { useToast } from "@/hooks/toast";
 import api from "@/services/api";
@@ -125,70 +126,72 @@ export default function Edit(food: string) {
   }, [logData, carbs, prots, fats, calories, date, amount]);
 
   return (
-    <>
-    <Container>
-      <Header>
-        <div>
-          <h1>{logData ? logData.name : <Skeleton height={30} width={200} />}</h1>
-        </div>
-        <h3>{logData ? logData.brand : <Skeleton height={20} width={90} />}</h3>
-      </Header>
-      <Macros>
-        <Macro macro="carb">
-          <h3>Carbs</h3>
-          <span>{carbs && carbs}</span>
-          <progress id="carbs" value={carbs && carbs} max={user && user.carbohydrates}>30%</progress>
-        </Macro>
-        <Macro macro="protein">
-          <h3>Protein</h3>
-          <span>{prots && prots}</span>
-          <progress id="prots" value={prots && prots} max={user && user.proteins}>30%</progress>
-        </Macro>
-        <Macro macro="fat">
-          <h3>Fat</h3>
-          <span>{fats && fats}</span>
-          <progress id="fats" value={fats && fats} max={user && user.fats}>30%</progress>
-        </Macro>
-      </Macros>
-      <Calories>
-        <div>
-          <h3>Calories</h3>
-          <span>{calories && calories}</span>
-        </div>
-        <progress id="calories" value={calories && calories} max={user && user.calories}>30%</progress>
-      </Calories>
-      <Details>
-        <input
-          type="datetime-local"
-          value={`${new Date(date).getFullYear()}-${addZeroBefore(new Date(date).getMonth() + 1)}-${addZeroBefore(new Date(date).getDate())}T${addZeroBefore(new Date(date).getHours())}:${addZeroBefore(new Date(date).getMinutes())}`}
-          onChange={e => setDate(new Date(e.target.value))} />
+		<>
+    <WholePageTransition>
+			<Container>
+				<Header>
+					<div>
+						<h1>{logData ? logData.name : <Skeleton height={30} width={200} />}</h1>
+					</div>
+					<h3>{logData ? logData.brand : <Skeleton height={20} width={90} />}</h3>
+				</Header>
+				<Macros>
+					<Macro macro="carb">
+						<h3>Carbs</h3>
+						<span>{carbs && carbs}</span>
+						<progress id="carbs" value={carbs && carbs} max={user && user.carbohydrates}>30%</progress>
+					</Macro>
+					<Macro macro="protein">
+						<h3>Protein</h3>
+						<span>{prots && prots}</span>
+						<progress id="prots" value={prots && prots} max={user && user.proteins}>30%</progress>
+					</Macro>
+					<Macro macro="fat">
+						<h3>Fat</h3>
+						<span>{fats && fats}</span>
+						<progress id="fats" value={fats && fats} max={user && user.fats}>30%</progress>
+					</Macro>
+				</Macros>
+				<Calories>
+					<div>
+						<h3>Calories</h3>
+						<span>{calories && calories}</span>
+					</div>
+					<progress id="calories" value={calories && calories} max={user && user.calories}>30%</progress>
+				</Calories>
+				<Details>
+					<input
+						type="datetime-local"
+						value={`${new Date(date).getFullYear()}-${addZeroBefore(new Date(date).getMonth() + 1)}-${addZeroBefore(new Date(date).getDate())}T${addZeroBefore(new Date(date).getHours())}:${addZeroBefore(new Date(date).getMinutes())}`}
+						onChange={e => setDate(new Date(e.target.value))} />
 
-          <StaticMenu>
-            <div>
-              <div className="amount">
-                <input
-                  type="number"
-                  placeholder="Amount"
-                  defaultValue={amount}
-                  onChange={e => setAmount(e.target.value)}
-                  step="0.01"
-                  />
-              </div>
-              <div className="unit">
-                <select name="select">
-                  <option value="gram">Grams</option>
-                </select>
-              </div>
-              <EditButton onClick={handleEdit}>EDIT</EditButton>
-            </div>
-          </StaticMenu>
-      </Details>
-      <div className="delete">
-        <button type="button" onClick={handleConfirmation}>
-            <Icon />
-        </button>
-      </div>
-    </Container>
+						<StaticMenu>
+							<div>
+								<div className="amount">
+									<input
+										type="number"
+										placeholder="Amount"
+										defaultValue={amount}
+										onChange={e => setAmount(e.target.value)}
+										step="0.01"
+										/>
+								</div>
+								<div className="unit">
+									<select name="select">
+										<option value="gram">Grams</option>
+									</select>
+								</div>
+								<EditButton onClick={handleEdit}>EDIT</EditButton>
+							</div>
+						</StaticMenu>
+				</Details>
+				<div className="delete">
+					<button type="button" onClick={handleConfirmation}>
+							<Icon />
+					</button>
+				</div>
+			</Container>
+		</WholePageTransition>
     {showConfirmation &&
       <ConfirmDeletion>
         <button type="button" onClick={handleConfirmation}/>

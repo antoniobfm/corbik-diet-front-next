@@ -8,6 +8,10 @@ export const Container = styled.div`
   --carbs-color: #EB5757;
   --protein-color: #2D9CDB;
   --fat-color: #F2C94C;
+
+	::-webkit-scrollbar {
+		display: none;
+	}
 `;
 
 export const Header = styled.header`
