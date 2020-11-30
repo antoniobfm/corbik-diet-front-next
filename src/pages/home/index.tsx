@@ -1,15 +1,16 @@
 import dynamic from 'next/dynamic'
 import Link from 'next/link';
-import { Calendar, Calories, Container, Header, Log, Logs, Macro, Macros } from "@/styles/pages/Home";
+import { Container } from "@/styles/pages/home/home";
 import { useCallback, useEffect, useState } from 'react';
 import api from '@/services/api';
-import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
-import { isToday, format, formatISO, setHours } from 'date-fns';
+import { formatISO, setHours } from 'date-fns';
 import { useAuth } from '@/hooks/auth';
 import Skeleton from 'react-loading-skeleton';
 import Menu from '@/components/Menu';
 import WholePageTransition from '@/components/WholePageTransition';
+import {Line, Pie} from 'react-chartjs-2';
+import { ChartLineOptions } from 'chart.js';
 
 const LoginModal = dynamic(() => import('@/components/LoginModal'),
 	{ loading: () => <div className="blurred__background"><h1>Loading</h1></div> })
@@ -35,16 +36,13 @@ interface ILog {
 }
 
 interface IDayResume {
-	carbohydrates: string;
-	proteins: string;
-	fats: string;
-	calories: string;
-	logs: ILog[] | undefined;
+	day: Date;
+	calories: number;
 }
 
 
 export default function Home() {
-	const [logData, setLogData] = useState<IDayResume | null>(null);
+	const [logData, setLogData] = useState<IDayResume[]>(null);
 	const [loading, setLoading] = useState(true);
 	const [showCalendar, setShowCalendar] = useState(false);
 	const [selectedDate, setSelectedDate] = useState<Date>(setHours(new Date(), 12));
@@ -77,8 +75,7 @@ export default function Home() {
 	useEffect(() => {
 		async function loadData() {
 			try {
-				const when = formatISO(selectedDate);
-				const response = await api.post('/food/log/day', { when });
+				const response = await api.get('/food/log/30days');
 
 				handleData(response.data);
 			} catch (err) {
@@ -89,69 +86,69 @@ export default function Home() {
 		loadData();
 	}, [selectedDate]);
 
+	const data = {
+		labels: [
+			'Red',
+			'Blue',
+			'Yellow'
+		],
+		datasets: [{
+			data: [300, 50, 100],
+			backgroundColor: [
+			'#EB5757',
+			'#2D9CDB',
+			'#F2C94C'
+			],
+			hoverBackgroundColor: [
+			'#EB5757',
+			'#2D9CDB',
+			'#F2C94C'
+			]
+		}]
+	};
+
+	const data2 = {
+		labels: logData && logData.map(item => item.day),
+		datasets: [
+			{
+				label: 'Calories',
+				fill: false,
+				lineTension: 0.1,
+				backgroundColor: 'rgba(39, 174, 96,0.4)',
+				borderColor: 'rgba(39, 174, 96,1)',
+				borderCapStyle: 'butt',
+				borderDash: [],
+				borderDashOffset: 0.0,
+				borderJoinStyle: 'miter',
+				pointBorderColor: 'rgba(39, 174, 96,1)',
+				pointBackgroundColor: '#fff',
+				pointBorderWidth: 1,
+				pointHoverRadius: 5,
+				pointHoverBackgroundColor: 'rgba(39, 174, 96,1)',
+				pointHoverBorderColor: 'rgba(220,220,220,1)',
+				pointHoverBorderWidth: 2,
+				pointRadius: 1,
+				pointHitRadius: 10,
+				data: logData && logData.map(item => item.calories)
+			}
+		]
+	};
+
+	const options = {
+		legend: {
+			display: false,
+				labels: {
+				}
+		},
+	}
+
 	return (
 		<>
 			<Menu currentRoute="Home" />
 			<WholePageTransition>
 			<Container>
-				<Header>
-					<button type="button" onClick={e => handleCalendar(e)}>{isToday(selectedDate) ? 'Today' : format(selectedDate, 'MMM, dd')}</button>
-				</Header>
-				<Macros>
-					<Macro macro="carb">
-						<h3>Carbs</h3>
-						<span>{!loading && logData ? logData.carbohydrates : `0`}<span>/{user && parseInt(user.carbohydrates)}</span></span>
-						<progress id="carbs" value={logData ? logData.carbohydrates : `0`} max={user && user.carbohydrates}>30%</progress>
-					</Macro>
-					<Macro macro="protein">
-						<h3>Protein</h3>
-						<span>{!loading && logData ? logData.proteins : `0`}<span>/{user && parseInt(user.proteins)}</span></span>
-						<progress id="carbs" value={logData ? logData.proteins : `0`} max={user && user.proteins}>30%</progress>
-					</Macro>
-					<Macro macro="fat">
-						<h3>Fat</h3>
-						<span>{!loading && logData ? logData.fats : `0`}<span>/{user && parseInt(user.fats)}</span></span>
-						<progress id="carbs" value={logData ? logData.fats : `0`} max={user && user.fats}>30%</progress>
-					</Macro>
-				</Macros>
-				<Calories>
-					<div>
-						<h3>Calories</h3>
-						<span>{!loading && logData ? logData.calories : `0`}<span>/{user && parseInt(user.calories)}</span></span>
-					</div>
-					<progress id="carbs" value={logData ? logData.calories : `0`} max={user && user.calories}>30%</progress>
-				</Calories>
-				<Logs>
-					<h2>Logs</h2>
-					<div>
-						{!loading ? logData && logData.logs && logData.logs.map(log =>
-							<Link key={log.id} href={`/log/edit/${log.id}`}>
-								<a>
-									<Log>
-										<div className="when">
-											<h5>{log.hour}:{log.minute}</h5>
-										</div>
-										<div className="name-and-quantity">
-											<h4>{log.name}</h4>
-											<h5>{log.quantity_amount}g</h5>
-										</div>
-										<div className="macros">
-											<h5>C{log.carbohydrates}   P{log.proteins}   F{log.fats}</h5>
-										</div>
-									</Log>
-								</a>
-							</Link>
-						) :
-							<Skeleton count={4} duration={2} height={64} width='92.5%' style={{ marginLeft: 16, marginRight: 16 }} />
-						}
-					</div>
-					<div className="add-log">
-						<Link href={`/food/search`}>
-							<a>ADD LOG</a>
-						</Link>
-					</div>
-				</Logs>
-
+				<h1>Cole so testando</h1>
+        <Line data={data2} options={options} />
 			</Container>
 			</WholePageTransition>
 			<Link href="/settings">
@@ -159,17 +156,6 @@ export default function Home() {
 					<h4 style={{ opacity: 0.5, fontWeight: 400, textAlign: 'center', paddingTop: 40, paddingBottom: 40 }}>Settings</h4>
 				</a>
 			</Link>
-
-			{showCalendar &&
-				<Calendar>
-					<button type="button" onClick={e => handleCalendar(e)} />
-					<DayPicker
-						onDayClick={handleDateChange}
-						selectedDays={selectedDate}
-					/>
-					<button type="button" onClick={e => handleCalendar(e)} />
-				</Calendar>
-			}
 		</>
 	)
 }
