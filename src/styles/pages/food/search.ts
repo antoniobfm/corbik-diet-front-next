@@ -19,6 +19,10 @@ export const Foods = styled.div`
 
   display: flex;
   flex-direction: column;
+
+	::-webkit-scrollbar {
+		display: none;
+	}
 `;
 
 export const Food = styled.div`

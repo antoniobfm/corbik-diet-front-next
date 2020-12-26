@@ -4,13 +4,11 @@ import { Container } from "@/styles/pages/home/home";
 import { useCallback, useEffect, useState } from 'react';
 import api from '@/services/api';
 import 'react-day-picker/lib/style.css';
-import { formatISO, setHours } from 'date-fns';
+import { setHours } from 'date-fns';
 import { useAuth } from '@/hooks/auth';
-import Skeleton from 'react-loading-skeleton';
 import Menu from '@/components/Menu';
 import WholePageTransition from '@/components/WholePageTransition';
-import {Line, Pie} from 'react-chartjs-2';
-import { ChartLineOptions } from 'chart.js';
+import { Line } from 'react-chartjs-2';
 
 const LoginModal = dynamic(() => import('@/components/LoginModal'),
 	{ loading: () => <div className="blurred__background"><h1>Loading</h1></div> })

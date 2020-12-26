@@ -7,6 +7,7 @@ interface ContainerProps {
 }
 
 export const Container = styled.div<ContainerProps>`
+	flex: 1;
 	height: 56px;
 	border-radius: 6px;
 

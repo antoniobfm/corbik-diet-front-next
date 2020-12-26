@@ -1,12 +1,10 @@
-import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic'
 import Link from 'next/link';
-import { Calendar, Calories, Container, Header, Log, Logs, Macro, Macros } from "@/styles/pages/Home";
+import { Calories, Container, Header, Log, Logs, Macro, Macros } from "@/styles/pages/Home";
 import { useCallback, useEffect, useState } from 'react';
 import api from '@/services/api';
-import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
-import { isToday, format, formatISO, setHours } from 'date-fns';
+import { formatISO, setHours } from 'date-fns';
 import { useAuth } from '@/hooks/auth';
 import Skeleton from 'react-loading-skeleton';
 import Menu from '@/components/Menu';

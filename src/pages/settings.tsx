@@ -2,14 +2,13 @@ import { useAuth } from "@/hooks/auth";
 import api from "@/services/api";
 import { Header } from "@/styles/pages/Home";
 import { Container } from "@/styles/pages/settings";
-import { useRouter } from "next/router";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef } from "react";
 import getValidationErrors from '../utils/getValidationErrors';
 import * as Yup from 'yup';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
-import Input from "@/components/Input";
-import Button from "@/components/Button";
+import Input from "@/components/FormComponents/Input";
+import Button from "@/components/FormComponents/Button";
 import { useToast } from "@/hooks/toast";
 import WholePageTransition from "@/components/WholePageTransition";
 
@@ -182,33 +181,25 @@ const handleSubmit = useCallback(
 					onSubmit={handleSubmitTargets}
 				>
         <h3>Targets</h3>
-        <div className="form__macros">
-          <div className="macro">
-            <Input
-              name="carbohydrates"
-              labelName="Carbohydrates"
-              type="number"
-              step="0.01"
-            />
-          </div>
-
-          <div className="macro">
-            <Input
-              name="proteins"
-              labelName="Proteins"
-              type="number"
-              step="0.01"
-            />
-          </div>
-
-          <div className="macro">
-            <Input
-              name="fats"
-              labelName="Fats"
-              type="number"
-              step="0.01"
-            />
-          </div>
+        <div className="form__three__columns">
+					<Input
+						name="carbohydrates"
+						labelName="Carbohydrates"
+						type="number"
+						step="0.01"
+					/>
+					<Input
+						name="proteins"
+						labelName="Proteins"
+						type="number"
+						step="0.01"
+					/>
+					<Input
+						name="fats"
+						labelName="Fats"
+						type="number"
+						step="0.01"
+					/>
         </div>
         <Input
           name="calories"

@@ -1,11 +1,11 @@
-import Button from "@/components/Button";
+import Button from "@/components/FormComponents/Button";
 import { useAuth } from "@/hooks/auth";
 import { CreateButton } from "@/styles/pages/food/create";
 import { Container, CreateAccount, LoginContainer } from "@/styles/pages/login";
 import { useCallback, useRef } from "react";
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
-import Input from "@/components/Input";
+import Input from "@/components/FormComponents/Input";
 import * as Yup from 'yup';
 import getValidationErrors from "@/utils/getValidationErrors";
 
@@ -15,7 +15,7 @@ interface LoginFormData {
 }
 
 export default function Login() {
-  const {signIn} = useAuth();
+  const {signIn, loading} = useAuth();
   const formRef = useRef<FormHandles>(null);
 
   const handleSignIn = useCallback(
@@ -73,7 +73,7 @@ export default function Login() {
               labelName="Password"
               type="password"
             />
-          <Button type="submit" style={{width: '100%'}}>LOGIN</Button>
+          <Button type="submit" style={{width: '100%'}}>{loading ? 'LOADING' : 'SIGN IN'}</Button>
           </Form>
         </div>
         <h5>Forgot password</h5>

@@ -43,9 +43,8 @@ export const Icon = styled(FiTrash)`
 export const StaticMenu = styled.div`
   position: absolute;
   bottom: 0;
-  background-color: red;
   height: 56px;
-  margin: 24px 16px;
+  margin: 24px 0;
   width: calc(100% - 32px);
 
   background-color: #181A1B;

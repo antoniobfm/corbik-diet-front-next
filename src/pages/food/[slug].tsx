@@ -1,3 +1,4 @@
+import Input from "@/components/FormComponents/Input";
 import WholePageTransition from "@/components/WholePageTransition";
 import { useAuth } from "@/hooks/auth";
 import { useToast } from "@/hooks/toast";
@@ -7,6 +8,7 @@ import { CreateButton, Floating } from "@/styles/pages/food/search";
 import { Calories, Macro, Macros } from "@/styles/pages/Home";
 import addZeroBefore from "@/utils/addZeroBefore";
 import toFixedNumber from "@/utils/formatNumbers";
+import { Form } from "@unform/web";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import useSWR from "swr";
@@ -137,10 +139,15 @@ export default function Food({ slug }: FoodProps) {
         <progress id="calories" value={calories && calories} max={user && user.calories}>30%</progress>
       </Calories>
       <Details>
-        <input
-          type="datetime-local"
-          defaultValue={`${new Date(date).getFullYear()}-${addZeroBefore(new Date(date).getMonth() + 1)}-${addZeroBefore(new Date(date).getDate())}T${addZeroBefore(new Date(date).getHours())}:${addZeroBefore(new Date(date).getMinutes())}`}
-          onChange={e => setDate(new Date(e.target.value))} />
+				<Form onSubmit={() => {}}>
+					<Input
+						name="when"
+						labelName="Date"
+						type="datetime-local"
+						value={`${date && new Date(date).getFullYear()}-${addZeroBefore(new Date(date).getMonth() + 1)}-${addZeroBefore(new Date(date).getDate())}T${addZeroBefore(new Date(date).getHours())}:${addZeroBefore(new Date(date).getMinutes())}`}
+						defaultValue={`${new Date(date).getFullYear()}-${addZeroBefore(new Date(date).getMonth() + 1)}-${addZeroBefore(new Date(date).getDate())}T${addZeroBefore(new Date(date).getHours())}:${addZeroBefore(new Date(date).getMinutes())}`}
+						onChange={e => setDate(new Date(e.target.value))} />
+				</Form>
       </Details>
 
       <Floating>
@@ -166,6 +173,6 @@ export default function Food({ slug }: FoodProps) {
 		</WholePageTransition>
   );
   } else {
-    return <p>Carregando...</p>;
+    return <p>Loading...</p>;
   }
 }

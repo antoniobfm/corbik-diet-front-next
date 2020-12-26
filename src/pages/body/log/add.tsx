@@ -1,10 +1,9 @@
-import Input from "@/components/Input";
+import Input from "@/components/FormComponents/Input";
 import api from "@/services/api";
 import { Container, FormContainer, Header, Icon, Menu, CreateButton } from "@/styles/pages/food/create";
 import { Floating } from "@/styles/pages/food/search";
 import { Form } from "@unform/web";
 import { FormHandles } from '@unform/core';
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback, useRef, useState } from "react";
 import getValidationErrors from "@/utils/getValidationErrors";
@@ -139,7 +138,9 @@ export default function Create() {
             </div>
           </div>
 
-					<input
+					<Input
+					name="when"
+					labelName="When"
           type="datetime-local"
           value={`${new Date(date).getFullYear()}-${addZeroBefore(new Date(date).getMonth() + 1)}-${addZeroBefore(new Date(date).getDate())}T${addZeroBefore(new Date(date).getHours())}:${addZeroBefore(new Date(date).getMinutes())}`}
           onChange={e => setDate(new Date(e.target.value))} />

@@ -1,21 +1,21 @@
-import Input from "@/components/Input";
+import Button from "@/components/FormComponents/Button";
+import Input from "@/components/FormComponents/Input";
 import WholePageTransition from "@/components/WholePageTransition";
 import { useAuth } from "@/hooks/auth";
 import { useToast } from "@/hooks/toast";
 import api from "@/services/api";
-import { FormContainer } from "@/styles/pages/food/create";
-import { Details, Header, Menu } from "@/styles/pages/food/food";
-import { CreateButton, Floating } from "@/styles/pages/food/search";
+import { Details, Header } from "@/styles/pages/food/food";
 import { Calories, Macro, Macros } from "@/styles/pages/Home";
-import { Container, EditButton, Icon, StaticMenu, ConfirmDeletion } from "@/styles/pages/log/edit/edit";
+import { Container, Icon, ConfirmDeletion } from "@/styles/pages/log/edit/edit";
 import addZeroBefore from "@/utils/addZeroBefore";
-import toFixedNumber from "@/utils/formatNumbers";
+import getValidationErrors from "@/utils/getValidationErrors";
 import { FormHandles } from "@unform/core";
 import { Form } from "@unform/web";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import Skeleton from 'react-loading-skeleton';
 import useSWR from "swr";
+import * as Yup from 'yup';
 
 interface ILog {
 	id: string;
@@ -30,16 +30,25 @@ interface ILog {
 	updated_at: Date;
 }
 
+interface IBodyFormData {
+	weight: string;
+	muscle: string;
+	fat: string;
+	water: string;
+	bones: string;
+}
+
 export default function Edit(body: string) {
 	const router = useRouter();
 	const formRef = useRef<FormHandles>(null);
 
 	const [showConfirmation, setShowConfirmation] = useState(false);
 
-	const [muscle, setMuscle] = useState<string | null>(0);
-	const [water, setWater] = useState<string | null>(0);
-	const [fat, setFat] = useState<string | null>(0);
-	const [weight, setWeight] = useState<string | null>(0);
+	const [muscle, setMuscle] = useState<string | null>();
+	const [water, setWater] = useState<string | null>();
+	const [fat, setFat] = useState<string | null>();
+	const [weight, setWeight] = useState<string | null>();
+	const [bones, setBones] = useState<string | null>();
 
 	const [date, setDate] = useState<Date>(new Date());
 
@@ -59,6 +68,7 @@ export default function Edit(body: string) {
 		setMuscle(data.muscle);
 		setWater(data.water);
 		setWeight(data.weight);
+		setBones(data.bones);
 		setDate(new Date(data.when));
 	}, []);
 
@@ -99,30 +109,56 @@ export default function Edit(body: string) {
 		editFood();
 	}, [logData]);
 
-	// const handleEdit = useCallback((e) => {
-	// 	e.preventDefault()
-	// 	async function editFood() {
-	// 		const log = {
-	// 			id: logData.id,
-	// 			muscle: muscle,
-	// 			water: water,
-	// 			fat: fat,
-	// 			weight: weight,
-	// 			when: date,
-	// 		};
+	const handleEdit = useCallback(async (data: IBodyFormData) => {
+		try {
+			formRef.current?.setErrors({});
 
-	// 		await api.put(`/food/log`, log);
+			const schema = Yup.object().shape({
+				weight: Yup.string().required('Password is required'),
+				muscle: Yup.string().required('Password is required'),
+				water: Yup.string().required('Password is required'),
+				fat: Yup.string().required('Password is required'),
+				bones: Yup.string().required('Password is required'),
+				when: Yup.string().required('Password is required'),
+			});
 
-	// 		addToast({
-	// 			type: 'success',
-	// 			title: 'Modified your log with success',
-	// 		});
+			await schema.validate(data, {
+				abortEarly: false,
+			});
 
-	// 		router.push(`/`);
-	// 	}
+			const body = {
+				log_id: logData.id,
+				weight: parseFloat(data.weight),
+				muscle: parseFloat(data.muscle),
+				water: parseFloat(data.water),
+				fat: parseFloat(data.fat),
+				bones: parseFloat(data.bones),
+				when: date,
+			};
 
-	// 	editFood();
-	// }, [logData, muscle, water, fat, weight, date, amount]);
+		await api.put(`/body`, body);
+
+		addToast({
+			type: 'success',
+			title: 'Modified your log with success',
+		});
+
+		router.push(`/body`);
+	} catch (err) {
+		if (err instanceof Yup.ValidationError) {
+			const errors = getValidationErrors(err);
+
+			formRef.current?.setErrors(errors);
+
+			addToast({
+				type: 'error',
+				title: `Something went wrong`
+			});
+
+			return;
+		}
+	}
+	}, [logData, muscle, water, fat, weight, bones, date]);
 
 	return (
 		<>
@@ -137,12 +173,12 @@ export default function Edit(body: string) {
 					<Macro macro="carb">
 						<h3>Muscle</h3>
 						<span>{muscle && muscle}</span>
-						<progress id="muscle" value={muscle && muscle} max={user && user.carbohydrates}>30%</progress>
+						<progress id="muscle" value={muscle && muscle} max={user && user.muscle}>30%</progress>
 					</Macro>
 					<Macro macro="protein">
 						<h3>Protein</h3>
 						<span>{water && water}</span>
-						<progress id="water" value={water && water} max={user && user.proteins}>30%</progress>
+						<progress id="water" value={water && water} max={user && user.water}>30%</progress>
 					</Macro>
 					<Macro macro="fat">
 						<h3>Fat</h3>
@@ -160,9 +196,8 @@ export default function Edit(body: string) {
 				<Details>
 					<Form
 						ref={formRef}
-						onSubmit={() => {}}
-					>
-						<FormContainer>
+						onSubmit={handleEdit}
+						initialData={{weight, muscle, water, fat, bones}}>
 							<Input
 								name="when"
 								labelName="When"
@@ -176,65 +211,38 @@ export default function Edit(body: string) {
 								type="number"
 								step="0.01"
 							/>
-							<div className="form__macros">
-								<div className="macro">
-									<Input
-										name="muscle"
-										labelName="Muscle"
-										placeholder="%"
-										type="number"
-										step="0.01"
-									/>
-								</div>
-								<div className="macro">
-									<Input
-										name="water"
-										labelName="Water"
-										placeholder="%"
-										type="number"
-										step="0.01"
-									/>
-								</div>
-								<div className="macro">
-									<Input
-										name="fat"
-										labelName="Fat"
-										placeholder="%"
-										type="number"
-										step="0.01"
-									/>
-								</div>
-								<div className="macro">
-									<Input
-										name="bones"
-										labelName="Bones"
-										placeholder="%"
-										type="number"
-										step="0.01"
-									/>
-								</div>
+							<div className="form__four__columns">
+								<Input
+									name="muscle"
+									labelName="Muscle"
+									placeholder="%"
+									type="number"
+									step="0.01"
+								/>
+								<Input
+									name="water"
+									labelName="Water"
+									placeholder="%"
+									type="number"
+									step="0.01"
+								/>
+								<Input
+									name="fat"
+									labelName="Fat"
+									placeholder="%"
+									type="number"
+									step="0.01"
+								/>
+								<Input
+									name="bones"
+									labelName="Bones"
+									placeholder="%"
+									type="number"
+									step="0.01"
+								/>
 							</div>
-						</FormContainer>
+						<Button type="submit" style={{width: '100%'}}>EDIT</Button>
 					</Form>
-					{/* <StaticMenu>
-            <div>
-              <div className="amount">
-                <input
-                  type="number"
-                  placeholder="Amount"
-                  defaultValue={amount}
-                  onChange={e => setAmount(e.target.value)}
-                  step="0.01"
-                  />
-              </div>
-              <div className="unit">
-                <select name="select">
-                  <option value="gram">Grams</option>
-                </select>
-              </div>
-              <EditButton onClick={handleEdit}>EDIT</EditButton>
-            </div>
-          </StaticMenu> */}
 				</Details>
 				<div className="delete">
 					<button type="button" onClick={handleConfirmation}>

@@ -7,10 +7,8 @@ import React, {
 	useContext,
 	useEffect,
 } from 'react';
-import Cookies from 'js-cookie';
 
 import api from '../services/api';
-import next from 'next';
 
 interface User {
 	id: string;
@@ -22,6 +20,12 @@ interface User {
 	proteins: string;
 	fats: string;
 	calories: string;
+
+	weight: string;
+	water: string;
+	muscle: string;
+	fat: string;
+	bones: string;
 }
 
 interface AuthState {
@@ -61,7 +65,7 @@ const AuthProvider: React.FC = ({ children }) => {
 					localStorage.setItem('@Corbik:User', JSON.stringify(response.data));
 					setData({ user: response.data });
 				} catch (err) {
-					next();
+					return;
 				}
 			}
 			setLoading(false);
@@ -71,6 +75,7 @@ const AuthProvider: React.FC = ({ children }) => {
 	}, [])
 
 	const signIn = useCallback(async ({ email, password }) => {
+		setLoading(true);
 		const response = await api.post('sessions', {
 			email,
 			password,
@@ -82,6 +87,7 @@ const AuthProvider: React.FC = ({ children }) => {
 		localStorage.setItem('@Corbik:User', JSON.stringify(user));
 
 		setData({ user });
+		setLoading(false);
 		router.reload();
 	}, []);
 

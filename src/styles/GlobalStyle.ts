@@ -14,6 +14,10 @@ export default createGlobalStyle`
     background: #0A0A0B;
     color: rgba(255, 255, 255, 0.95);
     font-family: Poppins, Arial, Helvetica, sans-serif;
+
+		::-webkit-scrollbar {
+			display: none;
+		}
   }
 
   .blurred__background {
@@ -73,11 +77,11 @@ export default createGlobalStyle`
     font-family: Poppins, Arial, Helvetica, sans-serif;
   }
 	body:not(.user-is-tabbing) button:focus,
-body:not(.user-is-tabbing) input:focus,
-body:not(.user-is-tabbing) select:focus,
-body:not(.user-is-tabbing) textarea:focus {
-  outline: none;
-}
+	body:not(.user-is-tabbing) input:focus,
+	body:not(.user-is-tabbing) select:focus,
+	body:not(.user-is-tabbing) textarea:focus {
+		outline: none;
+	}
   input[type="datetime-local"] {
     color: #f2f2f2;
     border: none;
@@ -88,9 +92,20 @@ body:not(.user-is-tabbing) textarea:focus {
     appearance: none;
   }
 
-  .form__quantity {
+  .form__two__columns {
+		width: 100%;
     display: flex;
     flex-direction: row;
+		justify-content: space-between;
+
+		div {
+			:first-child {
+				margin-right: 4px;
+			}
+			:nth-child(2) {
+				margin-left: 4px;
+			}
+		}
 
     .form__field__container {
       :first-child {
@@ -100,19 +115,47 @@ body:not(.user-is-tabbing) textarea:focus {
 
   }
 
-  .form__macros {
+  .form__three__columns {
+		width: 100%;
     display: flex;
     flex-direction: row;
 
-    .macro {
-      :nth-child(2) {
-      margin: 0 8px;
-    }
-      :nth-child(3) {
-      margin: 0 8px 0 0;
-    }
-    }
+		div {
+			:first-child {
+				margin-right: 4px;
+			}
+			:nth-child(2) {
+				margin-left: 4px;
+				margin-right: 4px;
+			}
+			:nth-child(3) {
+				margin-left: 4px;
+			}
+		}
   }
+
+	.form__four__columns {
+		width: 100%;
+		display: flex;
+		flex-direction: row;
+
+		div {
+			:first-child {
+				margin-right: 4px;
+			}
+			:nth-child(2) {
+				margin-left: 4px;
+				margin-right: 4px;
+			}
+			:nth-child(3) {
+				margin-left: 4px;
+				margin-right: 4px;
+			}
+			:nth-child(4) {
+				margin-left: 4px;
+			}
+		}
+	}
 
   .form__field__container {
     height: 56px;

@@ -1,12 +1,11 @@
-import Input from "@/components/Input";
+import Input from "@/components/FormComponents/Input";
 import api from "@/services/api";
 import { Container, FormContainer, Header, Icon, Menu, CreateButton } from "@/styles/pages/food/create";
 import { Floating } from "@/styles/pages/food/search";
 import { Form } from "@unform/web";
 import { FormHandles } from '@unform/core';
-import Link from "next/link";
 import { useRouter } from "next/router";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef } from "react";
 import getValidationErrors from "@/utils/getValidationErrors";
 import * as Yup from 'yup';
 import { useToast } from "@/hooks/toast";
@@ -120,31 +119,25 @@ export default function Create() {
           />
 
 
-          <div className="form__macros">
-            <div className="macro">
-              <Input
-                name="carbohydrates"
-                labelName="Carbohydrates"
-                type="number"
-                step="0.01"
-              />
-            </div>
-            <div className="macro">
-              <Input
-                name="proteins"
-                labelName="Proteins"
-                type="number"
-                step="0.01"
-              />
-            </div>
-            <div className="macro">
-              <Input
-                name="fats"
-                labelName="Fats"
-                type="number"
-                step="0.01"
-              />
-            </div>
+          <div className="form__three__columns">
+						<Input
+							name="carbohydrates"
+							labelName="Carbohydrates"
+							type="number"
+							step="0.01"
+						/>
+						<Input
+							name="proteins"
+							labelName="Proteins"
+							type="number"
+							step="0.01"
+						/>
+						<Input
+							name="fats"
+							labelName="Fats"
+							type="number"
+							step="0.01"
+						/>
           </div>
 
           <Input
@@ -153,7 +146,7 @@ export default function Create() {
             type="number"
             step="0.01"
           />
-          <div className="form__quantity">
+          <div className="form__two__columns ">
             <Input
               name="quantity_amount"
               labelName="Amount"
