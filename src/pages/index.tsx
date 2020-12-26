@@ -70,6 +70,14 @@ export default function Home() {
 			return setLoading(false);
 		}
 
+		data.logs.map((item) => {
+			return {
+				...item,
+				hour: new Date(item.when).getHours(),
+				minute: new Date(item.when).getMinutes()
+			}
+		});
+
 		setLogData(data);
 		setLoading(false);
 	}, [logData]);
