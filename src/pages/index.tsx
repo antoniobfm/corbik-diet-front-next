@@ -10,6 +10,7 @@ import { useAuth } from '@/hooks/auth';
 import Skeleton from 'react-loading-skeleton';
 import Menu from '@/components/Menu';
 import WholePageTransition from '@/components/WholePageTransition';
+import addZeroBefore from '@/utils/addZeroBefore';
 
 const LoginModal = dynamic(() => import('@/components/LoginModal'),
 	{ loading: () => <div className="blurred__background"><h1>Loading</h1></div> })
@@ -75,8 +76,8 @@ export default function Home() {
 			logs: data.logs.map((item) => {
 			return {
 				...item,
-				hour: new Date(item.when).getHours(),
-				minute: new Date(item.when).getMinutes()
+				hour: addZeroBefore(new Date(item.when).getHours()),
+				minute: addZeroBefore(new Date(item.when).getMinutes())
 			}
 		})};
 
