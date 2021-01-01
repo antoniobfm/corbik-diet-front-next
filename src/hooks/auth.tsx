@@ -138,7 +138,7 @@ export const ProtectRoute = ({ children }) => {
 
 	const router = useRouter();
 	const { isAuthenticated, loading } = useAuth();
-	if (loading || (!isAuthenticated && window.location.pathname !== '/login' && window.location.pathname !== '/')) {
+	if (loading || (!isAuthenticated && window.location.pathname !== '/login')) {
 		return <Login />;
 	} else if (isAuthenticated && window.location.pathname !== '/login') {
 		console.log('tru');

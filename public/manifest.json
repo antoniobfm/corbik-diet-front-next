@@ -2,7 +2,7 @@
   "name": "Corbik",
   "short_name": "Corbik",
   "description": "Corbik the stonks lifestyle",
-  "display": "standalone",
+  "display": "fullscreen",
   "orientation": "portrait",
   "theme_color": "#317EFB",
   "background_color": "#0A0A0B",

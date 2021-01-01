@@ -13,7 +13,8 @@ import WholePageTransition from "@/components/WholePageTransition";
 
 interface IFoodFormData {
   name: string;
-  brand: string;
+  brand?: string;
+  barcode?: string;
   carbohydrates: string;
   proteins: string;
   fats: string;
@@ -24,7 +25,8 @@ interface IFoodFormData {
 
 interface IFood {
   name: string;
-  brand: string;
+  brand?: string;
+  barcode?: string;
   carbohydrates: number;
   proteins: number;
   fats: number;
@@ -35,6 +37,8 @@ interface IFood {
 
 export default function Create() {
   const router = useRouter();
+	const { barcode } = router.query;
+
   const formRef = useRef<FormHandles>(null);
   const { addToast } = useToast();
 
@@ -45,7 +49,8 @@ export default function Create() {
 
         const schema = Yup.object().shape({
           name: Yup.string().required('Email is required'),
-          brand: Yup.string().required('Password is required'),
+          brand: Yup.string(),
+          barcode: Yup.string(),
           carbohydrates: Yup.string().required('Password is required'),
           proteins: Yup.string().required('Password is required'),
           fats: Yup.string().required('Password is required'),
@@ -61,6 +66,7 @@ export default function Create() {
         const food: IFood = {
           name: data.name,
           brand: data.brand,
+          barcode: data.barcode,
           carbohydrates: parseFloat(data.carbohydrates),
           proteins: parseFloat(data.proteins),
           fats: parseFloat(data.fats),
@@ -104,7 +110,8 @@ export default function Create() {
       </Header>
       <Form
         ref={formRef}
-        onSubmit={handleSubmit}
+				onSubmit={handleSubmit}
+				initialData={{ barcode: barcode }}
       >
         <FormContainer>
           <Input
@@ -112,11 +119,18 @@ export default function Create() {
             labelName="Name"
             type="input"
           />
-          <Input
-            name="brand"
-            labelName="Brand"
-            type="input"
-          />
+          <div className="form__two__columns ">
+						<Input
+							name="brand"
+							labelName="Brand"
+							type="input"
+						/>
+						<Input
+							name="barcode"
+							labelName="Barcode"
+							type="input"
+						/>
+					</div>
 
 
           <div className="form__three__columns">

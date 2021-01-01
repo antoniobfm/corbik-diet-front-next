@@ -3,19 +3,14 @@ import WholePageTransition from "@/components/WholePageTransition";
 import { useAuth } from "@/hooks/auth";
 import { useToast } from "@/hooks/toast";
 import api from "@/services/api";
-import { Container, Details, Header, Menu } from "@/styles/pages/food/food";
-import { CreateButton, Floating } from "@/styles/pages/food/search";
+import { Container, Details, Header, Menu, CreateButton } from "@/styles/pages/food/food";
+import { Floating } from "@/styles/pages/food/search";
 import { Calories, Macro, Macros } from "@/styles/pages/Home";
 import addZeroBefore from "@/utils/addZeroBefore";
 import toFixedNumber from "@/utils/formatNumbers";
 import { Form } from "@unform/web";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
-import useSWR from "swr";
-
-interface FoodProps {
-  slug: string;
-}
 
 interface IFood {
   food_id: string;
@@ -29,7 +24,7 @@ interface IFood {
   when: Date;
 }
 
-export default function Food({ slug }: FoodProps) {
+export default function Food() {
   const [foodData, setFoodData] = useState<any>([]);
   const [amount, setAmount] = useState('');
   const [carbs, setCarbs] = useState(0);
@@ -47,10 +42,7 @@ export default function Food({ slug }: FoodProps) {
 
   const { addToast } = useToast();
 
-  console.log(foodId);
-
   const handleData = useCallback((data: any) => {
-    data = data.data;
     setFoodData(data);
     console.log(data);
     setAmount(data.quantity_amount);
@@ -58,16 +50,28 @@ export default function Food({ slug }: FoodProps) {
     setCarbs(toFixedNumber(parseFloat(data.quantity_amount) * data.carbohydrates / data.quantity_amount, 2, 10));
     setProts(toFixedNumber(parseFloat(data.quantity_amount) * data.proteins / data.quantity_amount, 2, 10));
     setCalories(toFixedNumber(parseFloat(data.quantity_amount) * data.calories / data.quantity_amount, 2, 10));
-  }, []);
+	}, []);
 
-  const { data: { data: foodDataG } = {}, isValidating } = useSWR(
-    `/food-library/food/${foodId}`,
-    api.get, {
-      refreshInterval: 30000,
-      onSuccess: (data, key, config) => {
-        handleData(data);
-      }
-   });
+
+	useEffect(() => {
+		async function loadData() {
+			if (foodId) {
+				const response = await api.get(`/food-library/food/${foodId}`);
+
+				handleData(response.data);
+			}
+		}
+		loadData();
+	}, [foodId]);
+
+  // const { data: { data: foodDataG } = {}, isValidating } = useSWR(
+  //   `/food-library/food/${foodId}`,
+  //   api.get, {
+  //     refreshInterval: 30000,
+  //     onSuccess: (data, key, config) => {
+  //       handleData(data);
+  //     }
+  //  });
 
   const handleSubmit = useCallback((e) => {
     e.preventDefault()

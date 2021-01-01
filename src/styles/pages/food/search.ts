@@ -2,7 +2,7 @@ import { FiSearch } from 'react-icons/fi';
 import styled from 'styled-components';
 
 export const Container = styled.div`
-
+	width: 100vw;
 `;
 
 export const Header = styled.header`
@@ -78,7 +78,7 @@ export const Floating = styled.div`
   height: 56px;
   margin: auto;
   margin-top: -28px;
-  margin-bottom: 24px;
+  margin-bottom: 12px;
 
   position: relative;
   z-index: 3;
@@ -127,7 +127,7 @@ export const Icon = styled(FiSearch)`
   opacity: 0.4;
 `;
 
-export const CreateButton = styled.button`
+export const CreateButtonOld = styled.button`
   width: 35%;
   height: 56px;
 
@@ -138,4 +138,35 @@ export const CreateButton = styled.button`
   font-size: 12px;
   font-weight: 600;
   color: #D5F6E3;
+`;
+
+export const CreateButton = styled.button`
+  width: 100%;
+  height: 56px;
+
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+
+  font-size: 12px;
+  font-weight: 600;
+  color: #444444;
+
+	svg {
+		color: #444444;
+		font-size: 16px;
+	}
+`;
+
+export const BarcodeButton = styled.button`
+  width: 35%;
+  height: 56px;
+
+  background: linear-gradient(111.07deg, #2755AE 0%, rgba(39, 84, 174, 0.5) 100%), #181A1B;
+	border: 1px solid #1E4085;
+  border-radius: 6px;
+
+  font-size: 12px;
+  font-weight: 600;
+  color: #D5E0F6;
 `;

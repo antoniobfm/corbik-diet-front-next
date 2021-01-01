@@ -1,14 +1,18 @@
+import BarcodeScannerComponent from "@/components/BarcodeScanner";
 import WholePageTransition from "@/components/WholePageTransition";
 import api from "@/services/api";
-import { Container, CreateButton, Floating, Food, Foods, Header, Icon, Menu } from "@/styles/pages/food/search";
+import { Container, BarcodeButton, CreateButton, Floating, Food, Foods, Header, Icon, Menu } from "@/styles/pages/food/search";
 import Link from "next/link";
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useState } from "react";
+import { IoIosAddCircleOutline, IoMdAddCircleOutline } from "react-icons/io";
 
 export default function Search() {
 	const [searchResult, setSearchResult] = useState<any[]>([]);
 	const [initialLoad, setInitialLoad] = useState<any[]>([]);
-  const [searchInput, setSearchInput] = useState('');
+	const [searchInput, setSearchInput] = useState('');
+
+	const [showBarcodeScanner, setShowBarcodeScanner] = useState(false);
 
   const router = useRouter();
 
@@ -19,13 +23,14 @@ export default function Search() {
       setInitialLoad(data);
     }
 
-    initialLoad();
+		initialLoad();
+		setShowBarcodeScanner(false);
   }, []);
 
   useEffect(() => {
     async function loadFood() {
       if(searchInput && searchInput.length >= 3) {
-        const {data} = await api.get(`/food-library/${searchInput}`);
+        const {data} = await api.post(`/food-library/search`, { food_name: searchInput });
 
         console.log(data);
 
@@ -41,8 +46,16 @@ export default function Search() {
     router.push('/food/create');
   }, []);
 
+  const handleBarcode = useCallback((e) => {
+		e.preventDefault();
+		setShowBarcodeScanner(true);
+  }, []);
+
   return (
 		<WholePageTransition>
+		{showBarcodeScanner &&
+			<BarcodeScannerComponent setVisibility={setShowBarcodeScanner} />
+		}
     <Container>
       <Header>
         <h1>Log Food</h1>
@@ -112,9 +125,13 @@ export default function Search() {
 				      onChange={e => setSearchInput(e.target.value)}
             />
           </div>
-          <CreateButton onClick={handleClick}>CREATE FOOD</CreateButton>
+          <BarcodeButton onClick={handleBarcode}>BARCODE</BarcodeButton>
         </Menu>
       </Floating>
+			<CreateButton onClick={handleClick}>
+				<IoMdAddCircleOutline /><br />
+				CREATE FOOD
+				</CreateButton>
     </Container>
 		</WholePageTransition>
   )
