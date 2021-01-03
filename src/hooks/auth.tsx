@@ -68,10 +68,10 @@ const AuthProvider: React.FC = ({ children }) => {
 					return;
 				}
 			}
-			setLoading(false);
 		}
 
 		loadUserFromLocalStorageOrGetFromServer();
+		setLoading(false);
 	}, [])
 
 	const signIn = useCallback(async ({ email, password }) => {

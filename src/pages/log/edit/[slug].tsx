@@ -1,5 +1,6 @@
 import Input from "@/components/FormComponents/Input";
 import WholePageTransition from "@/components/WholePageTransition";
+import ConfirmActionModal from "@/components/ConfirmActionModal";
 import { useAuth } from "@/hooks/auth";
 import { useToast } from "@/hooks/toast";
 import api from "@/services/api";
@@ -14,6 +15,7 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import useSWR from "swr";
+import { AnimatePresence } from "framer-motion";
 
 interface ILog {
 	id: number;
@@ -131,6 +133,17 @@ export default function Edit(food: string) {
 	return (
 		<>
 			<WholePageTransition>
+    	<AnimatePresence>
+			{showConfirmation &&
+				<ConfirmActionModal
+				title="Confirm deletion"
+				buttonTextConfirmation={'DELETE'}
+				buttonColorConfirmation={'red'}
+				buttonTextCancel={'CANCEL'}
+				setState={setShowConfirmation}
+				handleConfirmation={handleDelete} />
+			}
+			</AnimatePresence>
 				<Container>
 					<Header>
 						<div>
@@ -201,19 +214,6 @@ export default function Edit(food: string) {
 					</div>
 				</Container>
 			</WholePageTransition>
-			{showConfirmation &&
-				<ConfirmDeletion>
-					<button type="button" onClick={handleConfirmation} />
-					<div>
-						<h2>Confirm deletion</h2>
-						<div>
-							<button type="button" onClick={handleConfirmation} className="button--cancel">CANCEL</button>
-							<button type="button" onClick={handleDelete} className="button--confirm--deletion">CONFIRM</button>
-						</div>
-					</div>
-					<button type="button" onClick={handleConfirmation} />
-				</ConfirmDeletion>
-			}
 		</>
 	);
 }

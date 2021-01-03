@@ -1,6 +1,5 @@
 import Button from "@/components/FormComponents/Button";
 import { useAuth } from "@/hooks/auth";
-import { CreateButton } from "@/styles/pages/food/create";
 import { Container, CreateAccount, LoginContainer } from "@/styles/pages/login";
 import { useCallback, useRef } from "react";
 import { FormHandles } from '@unform/core';
@@ -26,7 +25,7 @@ export default function Login() {
         const schema = Yup.object().shape({
           email: Yup.string()
             .required('Email is required')
-            .email('Email is invalid'),
+						.email('Email is invalid'),
           password: Yup.string().required('Password is required'),
         });
 
@@ -73,13 +72,13 @@ export default function Login() {
               labelName="Password"
               type="password"
             />
-          <Button type="submit" style={{width: '100%'}}>{loading ? 'LOADING' : 'SIGN IN'}</Button>
+          <Button type="submit" style={{width: '100%'}} loading={loading}>SIGN IN</Button>
           </Form>
         </div>
         <h5>Forgot password</h5>
       </LoginContainer>
       <CreateAccount>
-        <CreateButton style={{width: '100%'}} onClick={() => {}}>CREATE ACCOUNT</CreateButton>
+        <Button type="button" style={{width: '100%'}} onClick={() => {}}>CREATE ACCOUNT</Button>
       </CreateAccount>
     </Container>
   )

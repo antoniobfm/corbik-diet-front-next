@@ -38,6 +38,7 @@ const Scanner = ({onDetected}: any) => {
 		Quagga.onDetected(detected);
 
 		return () => {
+			Quagga.stop();
 			Quagga.offDetected(detected);
 		};
   }, []);

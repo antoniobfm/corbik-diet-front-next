@@ -1,17 +1,16 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
+	height: 100vh;
   display: flex;
   flex-direction: column;
-
-  padding-top: 30vh;
+	justify-content: center;
 `;
 
 export const LoginContainer = styled.main`
-  flex: 1;
+  height: auto;
   margin: 0 16px;
   padding: 0 16px 24px;
-
 
   display: flex;
   flex-direction: column;

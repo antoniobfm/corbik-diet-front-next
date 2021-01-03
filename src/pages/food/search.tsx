@@ -1,4 +1,5 @@
 import BarcodeScannerComponent from "@/components/BarcodeScanner";
+import GoBack from "@/components/GoBack";
 import WholePageTransition from "@/components/WholePageTransition";
 import api from "@/services/api";
 import { Container, BarcodeButton, CreateButton, Floating, Food, Foods, Header, Icon, Menu } from "@/styles/pages/food/search";
@@ -96,22 +97,6 @@ export default function Search() {
             </a>
           </Link>
         ))}
-        {/*<Link href={`/food/red`}>
-          <a>
-            <Food>
-              <div className="name-maker-and-quantity">
-                <div className="name-maker">
-                  <h6>Natureza</h6>
-                  <h4>Banana</h4>
-                </div>
-                <h5>100g</h5>
-              </div>
-              <div className="macros">
-                <h5>C26   P0.3   F0.6</h5>
-              </div>
-            </Food>
-          </a>
-        </Link> */}
       </Foods>
       <Floating>
         <Menu>

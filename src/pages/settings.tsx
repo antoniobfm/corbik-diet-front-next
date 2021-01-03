@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import Input from "@/components/FormComponents/Input";
+import GoBack from "@/components/GoBack";
 import Button from "@/components/FormComponents/Button";
 import { useToast } from "@/hooks/toast";
 import WholePageTransition from "@/components/WholePageTransition";
@@ -170,6 +171,7 @@ const handleSubmit = useCallback(
 
   return (
 		<WholePageTransition>
+		<GoBack />
     <Container>
       <Header>
         <h1>Settings</h1>
@@ -187,6 +189,7 @@ const handleSubmit = useCallback(
 						labelName="Carbohydrates"
 						type="number"
 						step="0.01"
+						required={true}
 					/>
 					<Input
 						name="proteins"

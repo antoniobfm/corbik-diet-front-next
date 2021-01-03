@@ -1,3 +1,4 @@
+import ConfirmActionModal from "@/components/ConfirmActionModal";
 import Button from "@/components/FormComponents/Button";
 import Input from "@/components/FormComponents/Input";
 import WholePageTransition from "@/components/WholePageTransition";
@@ -11,6 +12,7 @@ import addZeroBefore from "@/utils/addZeroBefore";
 import getValidationErrors from "@/utils/getValidationErrors";
 import { FormHandles } from "@unform/core";
 import { Form } from "@unform/web";
+import { AnimatePresence } from "framer-motion";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Skeleton from 'react-loading-skeleton';
@@ -163,6 +165,17 @@ export default function Edit(body: string) {
 	return (
 		<>
 		<WholePageTransition>
+    	<AnimatePresence>
+			{showConfirmation &&
+				<ConfirmActionModal
+				title="Confirm deletion"
+				buttonTextConfirmation={'DELETE'}
+				buttonColorConfirmation={'red'}
+				buttonTextCancel={'CANCEL'}
+				setState={setShowConfirmation}
+				handleConfirmation={handleDelete} />
+			}
+			</AnimatePresence>
 			<Container>
 				<Header>
 					<div>
@@ -251,19 +264,6 @@ export default function Edit(body: string) {
 				</div>
 			</Container>
 		</WholePageTransition>
-			{showConfirmation &&
-				<ConfirmDeletion>
-					<button type="button" onClick={handleConfirmation} />
-					<div>
-						<h2>Confirm deletion</h2>
-						<div>
-							<button type="button" onClick={handleConfirmation} className="button--cancel">CANCEL</button>
-							<button type="button" onClick={handleDelete} className="button--confirm--deletion">CONFIRM</button>
-						</div>
-					</div>
-					<button type="button" onClick={handleConfirmation} />
-				</ConfirmDeletion>
-			}
 		</>
 	);
 }

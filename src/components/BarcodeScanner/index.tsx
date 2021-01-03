@@ -30,6 +30,10 @@ export default function BarcodeScannerComponent({setVisibility}: any) {
 		}
 	}, [results]);
 
+	const handleGoBack = useCallback(() => {
+
+	}, []);
+
 	return (
 		<ModalContainer>
 			<Container>
