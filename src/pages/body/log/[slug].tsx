@@ -16,7 +16,6 @@ import { AnimatePresence } from "framer-motion";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Skeleton from 'react-loading-skeleton';
-import useSWR from "swr";
 import * as Yup from 'yup';
 
 interface ILog {
@@ -46,6 +45,8 @@ export default function Edit(body: string) {
 
 	const [showConfirmation, setShowConfirmation] = useState(false);
 
+	const [logData, setLogData] = useState<any>();
+
 	const [muscle, setMuscle] = useState<string | null>();
 	const [water, setWater] = useState<string | null>();
 	const [fat, setFat] = useState<string | null>();
@@ -65,7 +66,6 @@ export default function Edit(body: string) {
 	}, [showConfirmation]);
 
 	const handleData = useCallback((data: ILog) => {
-		data = data.data;
 		setFat(data.fat);
 		setMuscle(data.muscle);
 		setWater(data.water);
@@ -74,38 +74,30 @@ export default function Edit(body: string) {
 		setDate(new Date(data.when));
 	}, []);
 
-	const { data: { data: logData } = {}, isValidating } = useSWR(
-		`/body/log/specific/${logId}`,
-		api.get, {
-		onSuccess: (data, key, config) => {
-			handleData(data);
-		}
-	});
-
-
 	useEffect(() => {
-		if (logData) {
-			setFat(logData.fat);
-			setMuscle(logData.muscle);
-			setWater(logData.water);
-			setWeight(logData.weight);
+		async function loadData() {
+			if (logId) {
+				const response = await api.get(`/body/log/specific/${logId}`);
+				setLogData(response.data);
+				handleData(response.data);
+			}
 		}
-	}, [logData]);
+		loadData();
+	}, [logId]);
 
-	const showSkeleton = isValidating || loading;
 	const { addToast } = useToast();
 
 	const handleDelete = useCallback((e) => {
 		e.preventDefault()
 		async function editFood() {
-			await api.delete(`/food/log/specific/${logData.id}`);
+			await api.delete(`/body/log/specific/${logData.id}`);
 
 			addToast({
 				type: 'success',
 				title: 'Deleted log with success',
 			});
 
-			router.push(`/`);
+			router.push(`/body`);
 		}
 
 		editFood();
@@ -185,26 +177,26 @@ export default function Edit(body: string) {
 				<Macros>
 					<Macro macro="carb">
 						<h3>Muscle</h3>
-						<span>{muscle && muscle}</span>
-						<progress id="muscle" value={muscle && muscle} max={user && user.muscle}>30%</progress>
+						<span>{muscle ? muscle : '0'}</span>
+						<progress id="muscle" value={muscle ? muscle : '0'} max={user ? user.muscle : '0'}>30%</progress>
 					</Macro>
 					<Macro macro="protein">
 						<h3>Protein</h3>
-						<span>{water && water}</span>
-						<progress id="water" value={water && water} max={user && user.water}>30%</progress>
+						<span>{water ? water : '0'}</span>
+						<progress id="water" value={water ? water : '0'} max={user ? user.water : '0'}>30%</progress>
 					</Macro>
 					<Macro macro="fat">
 						<h3>Fat</h3>
-						<span>{fat && fat}</span>
-						<progress id="fat" value={fat && fat} max={user && user.fat}>30%</progress>
+						<span>{fat ? fat : '0'}</span>
+						<progress id="fat" value={fat ? fat : '0'} max={user ? user.fat : '0'}>30%</progress>
 					</Macro>
 				</Macros>
 				<Calories>
 					<div>
 						<h3>Weight</h3>
-						<span>{weight && weight}</span>
+						<span>{weight ? weight : '0'}</span>
 					</div>
-					<progress id="weight" value={weight && weight} max={user && user.weight}>30%</progress>
+					<progress id="weight" value={weight ? weight : '0'} max={user ? user.weight : '0'}>30%</progress>
 				</Calories>
 				<Details>
 					<Form

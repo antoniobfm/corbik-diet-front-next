@@ -28,7 +28,8 @@ export const Header = styled.header`
 `;
 
 export const Details = styled.div`
-  height: 40vh;
+  height: auto;
+	min-height: 40vh;
 	padding: 32px 16px 33px;
 	box-sizing: border-box;
   border-radius: 6px;

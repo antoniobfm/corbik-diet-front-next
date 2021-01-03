@@ -4,17 +4,15 @@ import ConfirmActionModal from "@/components/ConfirmActionModal";
 import { useAuth } from "@/hooks/auth";
 import { useToast } from "@/hooks/toast";
 import api from "@/services/api";
-import { Details, Header, Menu } from "@/styles/pages/food/food";
-import { CreateButton, Floating } from "@/styles/pages/food/search";
+import { Details, Header } from "@/styles/pages/food/food";
 import { Calories, Macro, Macros } from "@/styles/pages/Home";
-import { Container, EditButton, Icon, StaticMenu, ConfirmDeletion } from "@/styles/pages/log/edit/edit";
+import { Container, EditButton, Icon, StaticMenu } from "@/styles/pages/log/edit/edit";
 import addZeroBefore from "@/utils/addZeroBefore";
 import toFixedNumber from "@/utils/formatNumbers";
 import { Form } from "@unform/web";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useRef, useState } from "react";
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
-import useSWR from "swr";
+import { useCallback, useEffect, useState } from "react";
+import Skeleton from 'react-loading-skeleton';
 import { AnimatePresence } from "framer-motion";
 
 interface ILog {
@@ -38,6 +36,8 @@ export default function Edit(food: string) {
 
 	const [showConfirmation, setShowConfirmation] = useState(false);
 
+	const [logData, setLogData] = useState<any>();
+
 	const [amount, setAmount] = useState('');
 	const [carbs, setCarbs] = useState<number | null>(0);
 	const [prots, setProts] = useState<number | null>(0);
@@ -57,7 +57,6 @@ export default function Edit(food: string) {
 	}, [showConfirmation]);
 
 	const handleData = useCallback((data: any) => {
-		data = data.data;
 		setFats(toFixedNumber(parseFloat(data.quantity_amount) * data.fats / data.quantity_amount, 2, 10));
 		setCarbs(toFixedNumber(parseFloat(data.quantity_amount) * data.carbohydrates / data.quantity_amount, 2, 10));
 		setProts(toFixedNumber(parseFloat(data.quantity_amount) * data.proteins / data.quantity_amount, 2, 10));
@@ -66,14 +65,16 @@ export default function Edit(food: string) {
 		setAmount(`${data.quantity_amount}`);
 	}, []);
 
-	const { data: { data: logData } = {}, isValidating } = useSWR(
-		`/food/log/specific/${logId}`,
-		api.get, {
-		onSuccess: (data, key, config) => {
-			handleData(data);
+	useEffect(() => {
+		async function loadData() {
+			if (logId) {
+				const response = await api.get(`/food/log/specific/${logId}`);
+				setLogData(response.data);
+				handleData(response.data);
+			}
 		}
-	});
-
+		loadData();
+	}, [logId]);
 
 	useEffect(() => {
 		if (logData) {
@@ -84,7 +85,6 @@ export default function Edit(food: string) {
 		}
 	}, [logData, amount]);
 
-	const showSkeleton = isValidating || loading;
 	const { addToast } = useToast();
 
 	const handleDelete = useCallback((e) => {
@@ -182,8 +182,6 @@ export default function Edit(food: string) {
 								labelName="Date"
 								type="datetime-local"
 								value={`${date && new Date(date).getFullYear()}-${addZeroBefore(new Date(date).getMonth() + 1)}-${addZeroBefore(new Date(date).getDate())}T${addZeroBefore(new Date(date).getHours())}:${addZeroBefore(new Date(date).getMinutes())}`}
-								defaultValue={
-									`${date && new Date(date).getFullYear()}-${addZeroBefore(new Date(date).getMonth() + 1)}-${addZeroBefore(new Date(date).getDate())}T${addZeroBefore(new Date(date).getHours())}:${addZeroBefore(new Date(date).getMinutes())}`}
 								onChange={e => setDate(new Date(e.target.value))} />
 						</Form>
 

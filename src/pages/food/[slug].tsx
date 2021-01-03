@@ -52,7 +52,6 @@ export default function Food() {
     setCalories(toFixedNumber(parseFloat(data.quantity_amount) * data.calories / data.quantity_amount, 2, 10));
 	}, []);
 
-
 	useEffect(() => {
 		async function loadData() {
 			if (foodId) {
@@ -63,15 +62,6 @@ export default function Food() {
 		}
 		loadData();
 	}, [foodId]);
-
-  // const { data: { data: foodDataG } = {}, isValidating } = useSWR(
-  //   `/food-library/food/${foodId}`,
-  //   api.get, {
-  //     refreshInterval: 30000,
-  //     onSuccess: (data, key, config) => {
-  //       handleData(data);
-  //     }
-  //  });
 
   const handleSubmit = useCallback((e) => {
     e.preventDefault()
@@ -121,26 +111,26 @@ export default function Food() {
       <Macros>
         <Macro macro="carb">
           <h3>Carbs</h3>
-          <span>{carbs && carbs}</span>
-          <progress id="carbs" value={carbs && carbs} max={user && user.carbohydrates}>30%</progress>
+          <span>{carbs ? carbs : '0'}</span>
+          <progress id="carbs" value={carbs ? carbs : '0'} max={user ? user.carbohydrates : '0'}>30%</progress>
         </Macro>
         <Macro macro="protein">
           <h3>Protein</h3>
-          <span>{prots && prots}</span>
-          <progress id="prots" value={prots && prots} max={user && user.proteins}>30%</progress>
+          <span>{prots ? prots : '0'}</span>
+          <progress id="prots" value={prots ? prots : '0'} max={user ? user.proteins : '0'}>30%</progress>
         </Macro>
         <Macro macro="fat">
           <h3>Fat</h3>
-          <span>{fats && fats}</span>
-          <progress id="fats" value={fats && fats} max={user && user.fats}>30%</progress>
+          <span>{fats ? fats : '0'}</span>
+          <progress id="fats" value={fats ? fats : '0'} max={user ? user.fats : '0'}>30%</progress>
         </Macro>
       </Macros>
       <Calories>
         <div>
           <h3>Calories</h3>
-          <span>{calories && calories}</span>
+          <span>{calories ? calories : '0'}</span>
         </div>
-        <progress id="calories" value={calories && calories} max={user && user.calories}>30%</progress>
+        <progress id="calories" value={calories ? calories : '0'} max={user ? user.calories : '0'}>30%</progress>
       </Calories>
       <Details>
 				<Form onSubmit={() => {}}>
@@ -149,7 +139,6 @@ export default function Food() {
 						labelName="Date"
 						type="datetime-local"
 						value={`${date && new Date(date).getFullYear()}-${addZeroBefore(new Date(date).getMonth() + 1)}-${addZeroBefore(new Date(date).getDate())}T${addZeroBefore(new Date(date).getHours())}:${addZeroBefore(new Date(date).getMinutes())}`}
-						defaultValue={`${new Date(date).getFullYear()}-${addZeroBefore(new Date(date).getMonth() + 1)}-${addZeroBefore(new Date(date).getDate())}T${addZeroBefore(new Date(date).getHours())}:${addZeroBefore(new Date(date).getMinutes())}`}
 						onChange={e => setDate(new Date(e.target.value))} />
 				</Form>
       </Details>
