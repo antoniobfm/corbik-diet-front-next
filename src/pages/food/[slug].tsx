@@ -104,8 +104,8 @@ export default function Food() {
 		<WholePageTransition>
     <Container>
       <Header>
-        <h1>{foodData.name}</h1>
         <h3>{foodData.brand}</h3>
+        <h1>{foodData.name}</h1>
       </Header>
       <Macros>
         <Macro macro="carb">
