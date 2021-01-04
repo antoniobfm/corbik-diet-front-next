@@ -14,7 +14,7 @@ export const DisabledStyle = styled.button`
 	color: #8C8D8E;
 
 	&:hover {
-		background: ${shade(0.2, '#8C8D8E')};
+		/* background: ${shade(0.2, '#8C8D8E')}; */
 	}
 `;
 
@@ -31,7 +31,7 @@ export const GreenStyle = styled.button`
 	color: #D5F6E3;
 
 	&:hover {
-		background: ${shade(0.2, '#D5F6E3')};
+		/* background: ${shade(0.2, '#D5F6E3')}; */
 	}
 `;
 
@@ -48,7 +48,7 @@ export const RedStyle = styled.button`
 	color: #FAD1D1;
 
 	&:hover {
-		background: ${shade(0.2, '#EB5757')};
+		/* background: ${shade(0.2, '#EB5757')}; */
 	}
 `;
 
@@ -65,7 +65,7 @@ export const YellowStyle = styled.button`
   color: #FDF8E7;
 
 	&:hover {
-		background: ${shade(0.2, '#F2C94C')};
+		/* background: ${shade(0.2, '#F2C94C')}; */
 	}
 `;
 
@@ -82,6 +82,6 @@ export const BlueStyle = styled.button`
   color: #D5E0F6;
 
 	&:hover {
-		background: ${shade(0.2, '#1E4085')};
+		/* background: ${shade(0.2, '#1E4085')}; */
 	}
 `;

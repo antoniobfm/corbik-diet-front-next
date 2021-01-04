@@ -20,7 +20,7 @@ export const LoginContainer = styled.main`
   border-radius: 6px;
   border: 1px solid #222425;
 
-  h2 {
+  h3 {
     padding: 17px 0 0;
   }
 

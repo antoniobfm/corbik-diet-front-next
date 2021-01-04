@@ -88,34 +88,40 @@ export default function Home() {
 			<WholePageTransition>
 				<Container>
 					<Header>
-						{/* <button type="button" onClick={e => handleCalendar(e)}>{isToday(selectedDate) ? 'Today' : format(selectedDate, 'MMM, dd')}</button> */}
+						<button type="button" onClick={() => {}}>Overview</button>
 					</Header>
 					<Macros>
 						<Macro macro="carb">
-							<h3>Muscle</h3>
-							<span>{!loading && logData ? logData.currentMuscle : `0`}<span>/{user && parseInt(user.muscle)}%</span></span>
+							<div>
+								<h4>Muscle</h4>
+								<span>{!loading && logData ? logData.currentMuscle : `0`}<span>/{user && parseInt(user.muscle)}%</span></span>
+							</div>
 							<progress id="carbs" value={logData ? logData.currentMuscle : `0`} max={user && user.muscle} />
 						</Macro>
 						<Macro macro="protein">
-							<h3>Water</h3>
-							<span>{!loading && logData ? logData.currentWater : `0`}<span>/{user && parseInt(user.water)}%</span></span>
+							<div>
+								<h4>Water</h4>
+								<span>{!loading && logData ? logData.currentWater : `0`}<span>/{user && parseInt(user.water)}%</span></span>
+							</div>
 							<progress id="carbs" value={logData ? logData.currentWater : `0`} max={user && user.water} />
 						</Macro>
 						<Macro macro="fat">
-							<h3>Fat</h3>
-							<span>{!loading && logData ? logData.currentFat : `0`}<span>/{user && parseInt(user.fat)}%</span></span>
+							<div>
+								<h4>Fat</h4>
+								<span>{!loading && logData ? logData.currentFat : `0`}<span>/{user && parseInt(user.fat)}%</span></span>
+							</div>
 							<progress id="carbs" value={logData ? logData.currentFat : `0`} max={user && user.fat} />
 						</Macro>
 					</Macros>
 					<Calories>
 						<div>
-							<h3>Weight</h3>
+							<h4>Weight</h4>
 							<span>{!loading && logData ? logData.currentWeight : `0`}<span>/{user && parseInt(user.weight)}kg</span></span>
 						</div>
 						<progress id="carbs" value={logData ? logData.currentWeight : `0`} max={user && user.weight} />
 					</Calories>
 					<Logs>
-						<h2>Logs</h2>
+						<h3>Logs</h3>
 						<div>
 							{!loading ? logData && logData.logs && logData.logs.map(log =>
 								<Link key={log.id} href={`/body/log/${log.id}`}>

@@ -54,6 +54,7 @@ export default function Edit(body: string) {
 	const [bones, setBones] = useState<string | null>();
 
 	const [date, setDate] = useState<Date>(new Date());
+	const [headerDate, setHeaderDate] = useState<string>('');
 
 	const { user, loading } = useAuth();
 
@@ -71,6 +72,7 @@ export default function Edit(body: string) {
 		setWater(data.water);
 		setWeight(data.weight);
 		setBones(data.bones);
+		setHeaderDate(`${new Date(data.when).getMonth() + 1}.${new Date(data.when).getDate()}.${new Date(data.when).getFullYear()}`);
 		setDate(new Date(data.when));
 	}, []);
 
@@ -171,29 +173,35 @@ export default function Edit(body: string) {
 			<Container>
 				<Header>
 					<div>
-						<h1>{logData ? logData.when : <Skeleton height={30} width={200} />}</h1>
+						<h1>{headerDate ? headerDate : <Skeleton height={30} width={200} />}</h1>
 					</div>
 				</Header>
 				<Macros>
 					<Macro macro="carb">
-						<h3>Muscle</h3>
-						<span>{muscle ? muscle : '0'}</span>
+						<div>
+							<h4>Muscle</h4>
+							<span>{muscle ? muscle : '0'}</span>
+						</div>
 						<progress id="muscle" value={muscle ? muscle : '0'} max={user ? user.muscle : '0'}>30%</progress>
 					</Macro>
 					<Macro macro="protein">
-						<h3>Protein</h3>
-						<span>{water ? water : '0'}</span>
+						<div>
+							<h4>Protein</h4>
+							<span>{water ? water : '0'}</span>
+						</div>
 						<progress id="water" value={water ? water : '0'} max={user ? user.water : '0'}>30%</progress>
 					</Macro>
 					<Macro macro="fat">
-						<h3>Fat</h3>
-						<span>{fat ? fat : '0'}</span>
+						<div>
+							<h4>Fat</h4>
+							<span>{fat ? fat : '0'}</span>
+						</div>
 						<progress id="fat" value={fat ? fat : '0'} max={user ? user.fat : '0'}>30%</progress>
 					</Macro>
 				</Macros>
 				<Calories>
 					<div>
-						<h3>Weight</h3>
+						<h4>Weight</h4>
 						<span>{weight ? weight : '0'}</span>
 					</div>
 					<progress id="weight" value={weight ? weight : '0'} max={user ? user.weight : '0'}>30%</progress>

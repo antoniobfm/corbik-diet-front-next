@@ -68,7 +68,7 @@ export default function Search() {
               <Food>
                 <div className="name-maker-and-quantity">
                   <div className="name-maker">
-                    <h6>{result.brand}</h6>
+                    <h5>{result.brand}</h5>
                     <h4>{result.name}</h4>
                   </div>
                   <h5>{result.quantity_amount}g</h5>
@@ -85,7 +85,7 @@ export default function Search() {
               <Food>
                 <div className="name-maker-and-quantity">
                   <div className="name-maker">
-                    <h6>{result.brand}</h6>
+                    <h5>{result.brand}</h5>
                     <h4>{result.name}</h4>
                   </div>
                   <h5>{result.quantity_amount}g</h5>

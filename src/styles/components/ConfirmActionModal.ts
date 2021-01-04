@@ -50,8 +50,8 @@ interface ModalContentProps {
 export const ModalContent = styled.div<ModalContentProps>`
 	flex: 1;
 
-	h1 {
-		/* text-align: center; */
+	h3 {
+		text-align: center;
 		padding-bottom: 1rem;
 	}
 

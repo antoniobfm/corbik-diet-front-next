@@ -22,144 +22,141 @@ interface IBodyFormData {
 }
 
 export default function Create() {
-  const router = useRouter();
-  const formRef = useRef<FormHandles>(null);
+	const router = useRouter();
+	const formRef = useRef<FormHandles>(null);
 	const { addToast } = useToast();
 
-  const [date, setDate] = useState<Date>(new Date());
+	const [date, setDate] = useState<Date>(new Date());
 
-  const handleSubmit = useCallback(
-    async (data: IBodyFormData) => {
-      try {
-        formRef.current?.setErrors({});
+	const handleSubmit = useCallback(
+		async (data: IBodyFormData) => {
+			try {
+				formRef.current?.setErrors({});
 
-        const schema = Yup.object().shape({
-          weight: Yup.number().required('Weight is required'),
-          muscle: Yup.number(),
-          fat: Yup.number(),
-          water: Yup.number(),
-          bones: Yup.number()
-        });
-
-        await schema.validate(data, {
-          abortEarly: false,
+				const schema = Yup.object().shape({
+					weight: Yup.number().required('Weight is required'),
+					muscle: Yup.number(),
+					fat: Yup.number(),
+					water: Yup.number(),
+					bones: Yup.number()
 				});
 
-        const body = {
-          weight: data.weight,
-          muscle: data.muscle,
-          water: data.water,
-          fat: data.fat,
+				await schema.validate(data, {
+					abortEarly: false,
+				});
+
+				const body = {
+					weight: data.weight,
+					muscle: data.muscle,
+					water: data.water,
+					fat: data.fat,
 					bones: data.bones,
 					when: date
-        };
+				};
 
-        await api.post(`/body`, body);
+				await api.post(`/body`, body);
 
-        addToast({
-          type: 'success',
-          title: `Logged your body data with success`,
-        });
+				addToast({
+					type: 'success',
+					title: `Logged your body data with success`,
+				});
 
-        router.push(`/body`);
+				router.push(`/body`);
 
-      } catch (err) {
-        if (err instanceof Yup.ValidationError) {
-          const errors = getValidationErrors(err);
+			} catch (err) {
+				if (err instanceof Yup.ValidationError) {
+					const errors = getValidationErrors(err);
 
-          formRef.current?.setErrors(errors);
+					formRef.current?.setErrors(errors);
 
-          addToast({
-            type: 'error',
-            title: `Something went wrong`
-          });
+					addToast({
+						type: 'error',
+						title: `Something went wrong`
+					});
 
-          return;
-        }
-      }
-    },
-    [date],
-  );
+					return;
+				}
+			}
+		},
+		[date],
+	);
 
-  return (
+	return (
 		<WholePageTransition>
-    <Container>
-      <Header>
-        <h1>Log Body</h1>
-      </Header>
-      <Form
-        ref={formRef}
-        onSubmit={handleSubmit}
-      >
-        <FormContainer>
-          <Input
-            name="weight"
-						labelName="Weight"
-						placeholder="Kilos"
-            type="number"
-            step="0.01"
-          />
-          <div className="form__macros">
-            <div className="macro">
-              <Input
-                name="muscle"
+			<Container>
+				<Header>
+					<h1>Log Body</h1>
+				</Header>
+				<Form
+					ref={formRef}
+					onSubmit={handleSubmit}
+				>
+					<FormContainer>
+						<Input
+							name="weight"
+							labelName="Weight"
+							placeholder="Kilos"
+							type="number"
+							step="0.01"
+						/>
+						<div className="form__two__columns ">
+							<Input
+								name="muscle"
 								labelName="Muscle"
 								placeholder="%"
-                type="number"
-                step="0.01"
-              />
-            </div>
-            <div className="macro">
-              <Input
-                name="water"
+								type="number"
+								step="0.01"
+							/>
+
+							<Input
+								name="water"
 								labelName="Water"
 								placeholder="%"
-                type="number"
-                step="0.01"
-              />
-            </div>
-            <div className="macro">
-              <Input
-                name="fat"
+								type="number"
+								step="0.01"
+							/>
+						</div>
+
+						<div className="form__two__columns ">
+							<Input
+								name="fat"
 								labelName="Fat"
 								placeholder="%"
-                type="number"
-                step="0.01"
-              />
-            </div>
-            <div className="macro">
-              <Input
-                name="bones"
+								type="number"
+								step="0.01"
+							/>
+
+							<Input
+								name="bones"
 								labelName="Bones"
 								placeholder="%"
-                type="number"
-                step="0.01"
-              />
-            </div>
-          </div>
+								type="number"
+								step="0.01"
+							/>
+						</div>
 
-					<Input
-					name="when"
-					labelName="When"
-          type="datetime-local"
-          value={`${new Date(date).getFullYear()}-${addZeroBefore(new Date(date).getMonth() + 1)}-${addZeroBefore(new Date(date).getDate())}T${addZeroBefore(new Date(date).getHours())}:${addZeroBefore(new Date(date).getMinutes())}`}
-          onChange={e => setDate(new Date(e.target.value))} />
-        </FormContainer>
+						<Input
+							name="when"
+							labelName="When"
+							type="datetime-local"
+							value={`${new Date(date).getFullYear()}-${addZeroBefore(new Date(date).getMonth() + 1)}-${addZeroBefore(new Date(date).getDate())}T${addZeroBefore(new Date(date).getHours())}:${addZeroBefore(new Date(date).getMinutes())}`}
+							onChange={e => setDate(new Date(e.target.value))} />
+					</FormContainer>
 
-        <Floating>
-          <Menu>
-            <div className="back">
-              <span onClick={() => router.back()}>
-                <div className="icon">
-                  <Icon size={16} />
-                </div>
-              </span>
-            </div>
-            <CreateButton type="submit">LOG</CreateButton>
-          </Menu>
-        </Floating>
-      </Form>
-    </Container>
+					<Floating>
+						<Menu>
+							<div className="back">
+								<span onClick={() => router.back()}>
+									<div className="icon">
+										<Icon size={16} />
+									</div>
+								</span>
+							</div>
+							<CreateButton type="submit">LOG</CreateButton>
+						</Menu>
+					</Floating>
+				</Form>
+			</Container>
 		</WholePageTransition>
-  )
+	)
 }

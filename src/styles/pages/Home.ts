@@ -22,14 +22,14 @@ export const Header = styled.header`
     background: none;
     outline: none;
     border: none;
-    font-size: 31px;
+    font-size: 1.999rem;
     color: white;
     font-weight: 600;
   }
 `;
 
 export const Macros = styled.div`
-  padding: 0 16px 32px;
+  padding: 0 16px 16px;
 
   display: flex;
   justify-content: space-between;
@@ -42,10 +42,16 @@ const colors = {
   fat: '#F2C94C'
 };
 
+
+const colorsShade = {
+  carb: 'rgba(24, 26, 27, 0.03)',
+  protein: 'rgba(24, 26, 27, 0.03)',
+  fat: 'rgba(24, 26, 27, 0.03)'
+};
+
 export const Macro = styled.div<Macros>`
   flex: 1 0 28%;
   max-width: 28%;
-  height: 63px;
 
   color: ${props => colors[`${props.macro}`]};
 
@@ -53,19 +59,27 @@ export const Macro = styled.div<Macros>`
   justify-content: space-between;
   flex-direction: column;
 
-  > span {
-    font-size: 18px;
-    line-height: 27px;
-    margin-top: 4px;
-    align-self: flex-end;
+	> div {
+	display: flex;
+	justify-content: space-between;
+	flex-direction: row;
 
-    > span {
-      font-size: 9px;
-      line-height: 27px;
-      margin-top: 4px;
-      align-self: flex-end;
-    }
+	h4 {
+		line-height: 27px;
+	}
+
+	> span {
+		font-size: 1rem;
+		line-height: 27px;
+		align-self: flex-end;
+
+		> span {
+			font-size: 0.7rem;
+			line-height: 27px;
+			align-self: flex-end;
+		}
   }
+	}
 
   progress[value] {
     -webkit-appearance: none;
@@ -80,14 +94,13 @@ export const Macro = styled.div<Macros>`
     }
 
     ::-webkit-progress-value {
-      background: linear-gradient(90.14deg, rgba(24, 26, 27, 0.03) 0%, ${props => colors[`${props.macro}`]} 100%), ${props => colors[`${props.macro}`]};
+      background: linear-gradient(90.14deg, ${props => colorsShade[`${props.macro}`]} 0%, ${props => colors[`${props.macro}`]} 100%), ${props => colors[`${props.macro}`]};
       border-radius: 9px;
     }
   }
 `;
 
 export const Calories = styled.div`
-  height: 35px;
   padding: 0 16px 24px;
 
   color: #27AE60;
@@ -97,18 +110,16 @@ export const Calories = styled.div`
   justify-content: space-between;
 
   div {
-    height: 27px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 8px;
 
     > span {
-      font-size: 18px;
+      font-size: 1rem;
       line-height: 27px;
 
       > span {
-        font-size: 9px;
+        font-size: 0.7rem;
         line-height: 27px;
         margin-top: 4px;
         align-self: flex-end;
@@ -143,8 +154,8 @@ export const Logs = styled.div`
   display: flex;
   flex-direction: column;
 
-  h2 {
-    padding: 17px 16px;
+  h3 {
+    padding: 16px 16px 16px;
   }
 
   .add-log {

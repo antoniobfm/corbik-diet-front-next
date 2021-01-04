@@ -5,17 +5,18 @@ export const Container = styled.div`
 `;
 
 export const Header = styled.header`
-  padding: 21px 14px;
+  padding: 21px 14px 16px;
 
   h1 {
-
   }
 
   h3 {
+		color: #7E7E7F;
+		line-height: 0px;
     padding-left: 1px;
-    margin-top: -11px;
+		padding-bottom: 4px;
+		padding-top: 8px;
     font-weight: 400;
-    opacity: 0.5;
   }
 
   div {
@@ -29,11 +30,12 @@ export const Header = styled.header`
 
 export const Details = styled.div`
   height: auto;
-	min-height: 40vh;
+	min-height: 60vh;
 	padding: 32px 16px 33px;
 	box-sizing: border-box;
   border-radius: 6px;
   background: #181A1B;
+	border: 1px solid #222425;
 
   position: relative;
   z-index: 0;
@@ -42,41 +44,58 @@ export const Details = styled.div`
   flex-direction: column;
 `;
 
+export const Floating = styled.div`
+  width: 92.5%;
+  max-height: 56px;
+  margin: auto;
+  margin-top: -28px;
+  margin-bottom: 12px;
+
+  position: relative;
+  z-index: 3;
+
+  background: linear-gradient(92.01deg, rgba(255, 255, 255, 0.03) 0%, rgba(24, 26, 27, 0) 62.45%), #181A1B;
+  border-radius: 6px;
+`;
+
 export const Menu = styled.div`
+	max-height: 56px;
   display: flex;
   align-items: center;
   flex-direction: row;
-  border-radius: 6px;
-  box-shadow: inset 0 0 1px #222425, inset 0 0 1px #222425, inset 0 0 1px #222425;
+	box-sizing: border-box;
+	border-radius: 6px;
+	box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.25);
+	border: 1px solid #222425;
+	background: linear-gradient(91.23deg, rgba(255, 255, 255, 0.03) 0%, rgba(24, 26, 27, 0) 50%), #181A1B;
 
   .amount {
-    width: 35%;
+    min-width: 35%;
+		border: none;
     border-right: 1px solid #222425;
-    height: 55px;
-    border-top-left-radius: 6px;
-    border-bottom-left-radius: 6px;
-    background: linear-gradient(92.01deg, rgba(255, 255, 255, 0.03) 0%, rgba(24, 26, 27, 0) 62.45%), #181A1B;
+    min-height: 56px;
 
     display: flex;
     align-items: center;
     flex-direction: row;
-    margin-left: 1px;
 
     input {
       background: none;
       outline: none;
       border: none;
+
       height: 56px;
 
-      padding-left: 16px;
+      padding-left: 24px;
       color: rgba(255, 255, 255, 0.95);
       font-size: 16px;
     }
   }
 
   .unit {
-    width: 30%;
-    height: 56px;
+		// pushes log button over the border
+    min-width: calc(30% + 0px);
+    min-height: 56px;
 
     display: flex;
     align-items: center;
@@ -86,7 +105,6 @@ export const Menu = styled.div`
       background: none;
       outline: none;
       border: none;
-      height: 56px;
 
       padding-left: 16px;
       color: rgba(255, 255, 255, 0.95);
@@ -102,7 +120,7 @@ export const Menu = styled.div`
 `;
 
 export const CreateButton = styled.button`
-  width: 35%;
+  min-width: 35%;
   height: 56px;
 
   background: linear-gradient(111.07deg, #27AE60 0%, rgba(39, 174, 96, 0.5) 100%), #181A1B;

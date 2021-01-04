@@ -6,14 +6,15 @@ export const Container = styled.div`
 `;
 
 export const Header = styled.header`
-  padding: 21px 14px 28px;
+  padding: 21px 14px 20px;
 `;
 
 export const Foods = styled.div`
-  height: 74vh;
+  height: 75vh;
   padding-top: 8px;
   border-radius: 6px;
   background: #181A1B;
+	border: 1px solid #222425;
 
   overflow-y: scroll;
 
@@ -35,21 +36,14 @@ export const Food = styled.div`
   align-items: center;
 
   h4 {
-    font-weight: 400;
     padding-right: 8px;
+		font-weight: 400;
   }
 
-  h5 {
-    font-weight: 400;
-    opacity: 0.5;
-  }
-
-  h6 {
-    position: absolute;
-    font-weight: 400;
-    opacity: 0.5;
-    margin-top: -8px;
-  }
+	h5 {
+		font-weight: 400;
+		opacity: 0.5;
+	}
 
   .when {
     width: 68px;
@@ -66,6 +60,14 @@ export const Food = styled.div`
   .name-maker {
     position: relative;
     padding-left: 16px;
+
+		h5 {
+			width: 20rem;
+			position: absolute;
+			word-break: break-all;
+			margin-top: -0.8rem;
+			font-size: 0.707rem;
+		}
   }
 
   .macros {
@@ -83,10 +85,11 @@ export const Floating = styled.div`
   position: relative;
   z-index: 3;
 
-  background-color: #181A1B;
+  background: linear-gradient(92.01deg, rgba(255, 255, 255, 0.03) 0%, rgba(24, 26, 27, 0) 62.45%), #181A1B;
   border-radius: 6px;
 
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.25);
+	box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.25);
+	border: 1px solid #222425;
 `;
 
 export const Menu = styled.div`
@@ -95,10 +98,10 @@ export const Menu = styled.div`
   flex-direction: row;
 
   .search {
-    width: 65%;
+		// pushes the barcode button over the border
+    width: calc(65% + 1px);
     height: 56px;
     border-radius: 6px;
-    background: linear-gradient(92.01deg, rgba(255, 255, 255, 0.03) 0%, rgba(24, 26, 27, 0) 62.45%), #181A1B;
 
     display: flex;
     align-items: center;
@@ -160,7 +163,10 @@ export const CreateButton = styled.button`
 
 export const BarcodeButton = styled.button`
   width: 35%;
-  height: 56px;
+  height: 58px;
+	margin-top: -1px;
+	margin-right: -14px;
+	position: relative;
 
   background: linear-gradient(111.07deg, #2755AE 0%, rgba(39, 84, 174, 0.5) 100%), #181A1B;
 	border: 1px solid #1E4085;

@@ -6,7 +6,7 @@ export const Container = styled.div`
 `;
 
 export const Header = styled.header`
-  padding: 21px 14px 28px;
+  padding: 21px 14px 16px;
 `;
 
 export const FormContainer = styled.div`

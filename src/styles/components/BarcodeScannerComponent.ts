@@ -3,17 +3,18 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
 	width: 90vw;
-	height: 80vh;
+	display: flex;
+	align-items: center;
 
 	video {
-		height: calc(100% - 56px);
+		max-height: 85vh;
 		width: calc(100%);
 		background: #222425;
 		border-radius: 6px;
 	}
 
 	#interactive {
-		width: 100%;
+		width: 90vw;
 	}
 
 	.drawingBuffer {
@@ -47,7 +48,8 @@ export const ModalContainer = styled.div`
 `;
 
 export const BackButton = styled.button`
-	width: 90%;
+	width: 90vw;
+	margin-top: 8px;
 	height: 56px;
 	border-radius: 6px;
 	background: linear-gradient(92.01deg, rgba(255, 255, 255, 0.03) 0%, rgba(24, 26, 27, 0) 62.45%), #181A1B;

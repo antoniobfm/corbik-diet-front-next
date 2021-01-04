@@ -3,8 +3,7 @@ import WholePageTransition from "@/components/WholePageTransition";
 import { useAuth } from "@/hooks/auth";
 import { useToast } from "@/hooks/toast";
 import api from "@/services/api";
-import { Container, Details, Header, Menu, CreateButton } from "@/styles/pages/food/food";
-import { Floating } from "@/styles/pages/food/search";
+import { Container, Details, Header, Menu, CreateButton, Floating } from "@/styles/pages/food/food";
 import { Calories, Macro, Macros } from "@/styles/pages/Home";
 import addZeroBefore from "@/utils/addZeroBefore";
 import toFixedNumber from "@/utils/formatNumbers";
@@ -110,24 +109,30 @@ export default function Food() {
       </Header>
       <Macros>
         <Macro macro="carb">
-          <h3>Carbs</h3>
-          <span>{carbs ? carbs : '0'}</span>
+					<div>
+						<h4>Carbs</h4>
+						<span>{carbs ? carbs : '0'}</span>
+					</div>
           <progress id="carbs" value={carbs ? carbs : '0'} max={user ? user.carbohydrates : '0'}>30%</progress>
         </Macro>
         <Macro macro="protein">
-          <h3>Protein</h3>
-          <span>{prots ? prots : '0'}</span>
+					<div>
+						<h4>Protein</h4>
+						<span>{prots ? prots : '0'}</span>
+					</div>
           <progress id="prots" value={prots ? prots : '0'} max={user ? user.proteins : '0'}>30%</progress>
         </Macro>
         <Macro macro="fat">
-          <h3>Fat</h3>
-          <span>{fats ? fats : '0'}</span>
+					<div>
+						<h4>Fat</h4>
+						<span>{fats ? fats : '0'}</span>
+					</div>
           <progress id="fats" value={fats ? fats : '0'} max={user ? user.fats : '0'}>30%</progress>
         </Macro>
       </Macros>
       <Calories>
         <div>
-          <h3>Calories</h3>
+          <h4>Calories</h4>
           <span>{calories ? calories : '0'}</span>
         </div>
         <progress id="calories" value={calories ? calories : '0'} max={user ? user.calories : '0'}>30%</progress>

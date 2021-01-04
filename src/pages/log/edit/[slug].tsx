@@ -108,6 +108,7 @@ export default function Edit(food: string) {
 		async function editFood() {
 			const log = {
 				id: logData.id,
+				brand: logData.brand,
 				quantity_amount: parseFloat(amount),
 				carbohydrates: carbs,
 				proteins: prots,
@@ -146,34 +147,38 @@ export default function Edit(food: string) {
 			</AnimatePresence>
 				<Container>
 					<Header>
-						<div>
-							<h1>{logData ? logData.name : <Skeleton height={30} width={200} />}</h1>
-						</div>
-						<h3>{logData ? logData.brand : <Skeleton height={20} width={90} />}</h3>
+						<h3>{logData ? logData.food?.brand : <Skeleton height={20} width={90} />}</h3>
+						<h1>{logData ? logData.name : <Skeleton height={30} width={200} />}</h1>
 					</Header>
 					<Macros>
 						<Macro macro="carb">
-							<h3>Carbs</h3>
-							<span>{carbs && carbs}</span>
-							<progress id="carbs" value={carbs && carbs} max={user && user.carbohydrates}>30%</progress>
+							<div>
+								<h4>Carbs</h4>
+								<span>{carbs ? carbs : '0'}</span>
+							</div>
+							<progress id="carbs" value={carbs ? carbs : '0'} max={user ? user.carbohydrates : '0'}>30%</progress>
 						</Macro>
 						<Macro macro="protein">
-							<h3>Protein</h3>
-							<span>{prots && prots}</span>
-							<progress id="prots" value={prots && prots} max={user && user.proteins}>30%</progress>
+							<div>
+								<h4>Protein</h4>
+								<span>{prots ? prots : '0'}</span>
+							</div>
+							<progress id="prots" value={prots ? prots : '0'} max={user ? user.proteins : '0'}>30%</progress>
 						</Macro>
 						<Macro macro="fat">
-							<h3>Fat</h3>
-							<span>{fats && fats}</span>
-							<progress id="fats" value={fats && fats} max={user && user.fats}>30%</progress>
+							<div>
+								<h4>Fat</h4>
+								<span>{fats ? fats : '0'}</span>
+							</div>
+							<progress id="fats" value={fats ? fats : '0'} max={user ? user.fats : '0'}>30%</progress>
 						</Macro>
 					</Macros>
 					<Calories>
 						<div>
-							<h3>Calories</h3>
-							<span>{calories && calories}</span>
+							<h4>Calories</h4>
+							<span>{calories ? calories : '0'}</span>
 						</div>
-						<progress id="calories" value={calories && calories} max={user && user.calories}>30%</progress>
+						<progress id="calories" value={calories ? calories : '0'} max={user ? user.calories : '0'}>30%</progress>
 					</Calories>
 					<Details>
 						<Form onSubmit={() => { }}>

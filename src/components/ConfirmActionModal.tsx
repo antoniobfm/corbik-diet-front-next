@@ -60,7 +60,7 @@ const ConfirmActionModal: React.FC<IModalWrapper> = ({
 			exit={{ opacity: 0 }}
 			>
 				<motion.div
-				initial={{ marginTop: '100%', opacity: 0, transform: 'scale(0.5)' }}
+				initial={{ marginTop: '100%', opacity: 0, transform: 'scale(0.8)' }}
 				transition={{ ease: "easeOut", duration: 0.2 }}
 				animate={{ marginTop: '0%', opacity: 1, transform: 'scale(1)' }}
 				exit={{ opacity: 0 }}
@@ -68,7 +68,7 @@ const ConfirmActionModal: React.FC<IModalWrapper> = ({
 				ref={node}
 				>
 					<ModalContent color={buttonColorConfirmation}>
-						<h2>{title}</h2>
+						<h3>{title}</h3>
 						{children}
 						<div>
 							{buttonTextCancel &&

@@ -38,34 +38,33 @@ export default createGlobalStyle`
       text-align: center;
     }
   }
+	:root {
+		font-size: 14px;
+	}
 
   h1 {
-    font-size: 31px;
+    font-size: 1.999rem;
   }
 
   h2 {
-    font-size: 25px;
+    font-size: 2.827rem;
   }
 
   h3 {
-    font-size: 18px;
+    font-size: 1.414rem;
   }
 
   p {
-    font-size: 16px;
+    font-size: 1rem;
     line-height: 17px;
   }
 
   h4 {
-    font-size: 16px;
+    font-size: 1rem;
   }
 
   h5 {
-    font-size: 13px;
-  }
-
-  h6 {
-    font-size: 9px;
+    font-size: 0.707rem;
   }
 
   a {
