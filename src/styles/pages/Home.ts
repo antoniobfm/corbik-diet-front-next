@@ -8,7 +8,8 @@ export const Container = styled.div`
   --carbs-color: #EB5757;
   --protein-color: #2D9CDB;
   --fat-color: #F2C94C;
-
+	background: linear-gradient(346.65deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.03) 100%), #0A0A0B;
+	min-height: 100vh;
 	::-webkit-scrollbar {
 		display: none;
 	}

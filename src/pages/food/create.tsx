@@ -49,8 +49,8 @@ export default function Create() {
 
         const schema = Yup.object().shape({
           name: Yup.string().required('Email is required'),
-          brand: Yup.string(),
-          barcode: Yup.string(),
+          brand: Yup.string().optional(),
+          barcode: Yup.string().optional(),
           carbohydrates: Yup.string().required('Password is required'),
           proteins: Yup.string().required('Password is required'),
           fats: Yup.string().required('Password is required'),
@@ -65,8 +65,8 @@ export default function Create() {
 
         const food: IFood = {
           name: data.name,
-          brand: data.brand,
-          barcode: data.barcode,
+          brand: data?.brand,
+          barcode: data?.barcode,
           carbohydrates: parseFloat(data.carbohydrates),
           proteins: parseFloat(data.proteins),
           fats: parseFloat(data.fats),

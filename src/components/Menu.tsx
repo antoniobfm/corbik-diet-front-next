@@ -1,6 +1,7 @@
 import { Container } from "@/styles/components/Menu";
 import { useRouter } from "next/router";
-import { IoIosAdd, IoIosBody, IoIosFitness, IoIosHome, IoIosRestaurant, IoMdBody, IoMdHome, IoMdRestaurant } from 'react-icons/io';
+import { IoAdd, IoBarbell, IoBody, IoHome, IoRestaurant } from 'react-icons/io5';
+import { RiAddLine } from 'react-icons/ri'
 import { Button } from "@/styles/components/Menu";
 
 interface IMenuProps {
@@ -16,42 +17,42 @@ const Menu = ({ currentRoute }: IMenuProps) => {
 			type="button"
 			onClick={() => router.push('/home')}
 			isSelected={'Home' === currentRoute}>
-				<IoIosHome />
+				<IoHome />
 			</Button>
 
 			<Button
 			type="button"
 			onClick={() => router.push('/body')}
 			isSelected={'body' === currentRoute}>
-				<IoIosBody />
+				<IoBody />
 			</Button>
 
 			<Button
 			type="button"
 			onClick={() => router.push('/')}
 			isSelected={'Diet' === currentRoute}>
-				<IoIosRestaurant />
+				<IoRestaurant />
 			</Button>
 
 			<Button
 			type="button"
 			onClick={() => {}}
 			isSelected={'Lifting' === currentRoute}>
-				<IoIosFitness />
+				<IoBarbell />
 			</Button>
 			{'Home' === currentRoute &&
 				<Button type="button" onClick={() => router.push('/body/log/add')} isSelected={false} id="add">
-					<IoIosAdd />
+					<RiAddLine size={18} />
 				</Button>
 			}
 			{'Diet' === currentRoute &&
 				<Button type="button" onClick={() => router.push('/food/search')} isSelected={false} id="add">
-					<IoIosAdd />
+					<RiAddLine size={18} />
 				</Button>
 			}
 			{'body' === currentRoute &&
 				<Button type="button" onClick={() => router.push('/body/log/add')} isSelected={false} id="add">
-					<IoIosAdd />
+					<RiAddLine size={18} />
 				</Button>
 			}
 		</Container>

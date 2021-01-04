@@ -38,11 +38,12 @@ export const Button = styled.button<Props>`
 	background: none;
 	border: none;
 	outline: none;
-	transition: 5s all;
+	transition: 0.3s all;
+	padding-top: 4px;
 
 	svg {
-		transition: 5s all;
+		transition: 0.3s all;
 		color: ${props => props.isSelected ? '#f2f2f2' : '#808080'};
-		font-size: 1.125rem;
+		font-size: 1rem;
 	}
 `;
