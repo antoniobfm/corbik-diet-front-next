@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic'
 import Link from 'next/link';
-import { Container } from "@/styles/pages/home/home";
+import { Container, Chartzin } from "@/styles/pages/home/home";
 import { useCallback, useEffect, useState } from 'react';
 import api from '@/services/api';
 import 'react-day-picker/lib/style.css';
@@ -38,9 +38,17 @@ interface IDayResume {
 	calories: number;
 }
 
+interface IDayResume2 {
+	day: Date;
+	weight: number;
+}
+
 
 export default function Home() {
 	const [logData, setLogData] = useState<IDayResume[]>(null);
+	const [logData2, setLogData2] = useState<IDayResume2[]>(null);
+	const [chartData1, setChartData1] = useState<Chart.ChartData>(null);
+	const [chartData2, setChartData2] = useState<Chart.ChartData>(null);
 	const [loading, setLoading] = useState(true);
 	const [showCalendar, setShowCalendar] = useState(false);
 	const [selectedDate, setSelectedDate] = useState<Date>(setHours(new Date(), 12));
@@ -70,6 +78,18 @@ export default function Home() {
 		setLoading(false);
 	}, [logData]);
 
+	const handleData2 = useCallback((data) => {
+		setLoading(true);
+
+		if (!data) {
+			setLogData(null);
+			return setLoading(false);
+		}
+
+		setLogData2(data);
+		setLoading(false);
+	}, [logData2]);
+
 	useEffect(() => {
 		async function loadData() {
 			try {
@@ -83,6 +103,80 @@ export default function Home() {
 
 		loadData();
 	}, [selectedDate]);
+
+	useEffect(() => {
+		async function loadData() {
+			try {
+				const response = await api.get('/body/log/30days');
+
+				handleData2(response.data);
+			} catch (err) {
+				console.log('err');
+			}
+		}
+
+		loadData();
+	}, [selectedDate]);
+
+	useEffect(() => {
+		const data2: Chart.ChartData = {
+			labels: logData && logData.map(item => item.day),
+			datasets: [
+				{
+					label: 'Calories',
+					fill: true,
+					lineTension: 0.1,
+					backgroundColor: 'rgba(39, 174, 96,0.3)',
+					borderColor: 'rgba(39, 174, 96,1)',
+					borderCapStyle: 'butt',
+					borderDash: [],
+					borderDashOffset: 0.0,
+					borderJoinStyle: 'miter',
+					pointBorderColor: 'rgba(39, 174, 96,1)',
+					pointBackgroundColor: '#fff',
+					pointBorderWidth: 3,
+					pointHoverRadius: 5,
+					pointHoverBackgroundColor: 'rgba(39, 174, 96,1)',
+					pointHoverBorderColor: 'rgba(220,220,220,1)',
+					pointHoverBorderWidth: 2,
+					pointRadius: 1,
+					pointHitRadius: 10,
+					data: logData && logData.map(item => item.calories)
+				}
+			]
+		};
+
+
+		const data3: Chart.ChartData = {
+			labels: logData2 && logData2.map(item => item.day),
+			datasets: [
+				{
+					label: 'Weight',
+					fill: true,
+					lineTension: 0.1,
+					backgroundColor: 'rgba(235, 87, 87,0.3)',
+					borderColor: 'rgba(235, 87, 87,1)',
+					borderCapStyle: 'butt',
+					borderDash: [],
+					borderDashOffset: 0.0,
+					borderJoinStyle: 'miter',
+					pointBorderColor: 'rgba(235, 87, 87,1)',
+					pointBackgroundColor: '#fff',
+					pointBorderWidth: 3,
+					pointHoverRadius: 5,
+					pointHoverBackgroundColor: 'rgba(235, 87, 87,1)',
+					pointHoverBorderColor: 'rgba(220,220,220,1)',
+					pointHoverBorderWidth: 2,
+					pointRadius: 1,
+					pointHitRadius: 10,
+					data: logData2 && logData2.map(item => item.weight)
+				}
+			]
+		};
+
+		setChartData1(data2);
+		setChartData2(data3);
+	}, [logData, logData2]);
 
 	const data = {
 		labels: [
@@ -105,39 +199,32 @@ export default function Home() {
 		}]
 	};
 
-	const data2 = {
-		labels: logData && logData.map(item => item.day),
-		datasets: [
-			{
-				label: 'Calories',
-				fill: false,
-				lineTension: 0.1,
-				backgroundColor: 'rgba(39, 174, 96,0.4)',
-				borderColor: 'rgba(39, 174, 96,1)',
-				borderCapStyle: 'butt',
-				borderDash: [],
-				borderDashOffset: 0.0,
-				borderJoinStyle: 'miter',
-				pointBorderColor: 'rgba(39, 174, 96,1)',
-				pointBackgroundColor: '#fff',
-				pointBorderWidth: 1,
-				pointHoverRadius: 5,
-				pointHoverBackgroundColor: 'rgba(39, 174, 96,1)',
-				pointHoverBorderColor: 'rgba(220,220,220,1)',
-				pointHoverBorderWidth: 2,
-				pointRadius: 1,
-				pointHitRadius: 10,
-				data: logData && logData.map(item => item.calories)
-			}
-		]
-	};
-
 	const options = {
+		responsive: true,
+		aspectRatio: 1,
+		maintainAspectRatio: false,
 		legend: {
 			display: false,
 				labels: {
 				}
 		},
+		scales: {
+				yAxes: [{
+						ticks: {
+								beginAtZero: true,
+								fontColor: '#747676',
+								fontFamily: 'Poppins',
+								fontSize: 6
+						},
+				}],
+				xAxes: [{
+						ticks: {
+								fontColor: '#747676',
+								fontFamily: 'Poppins',
+								fontSize: 6
+						},
+				}]
+		}
 	}
 
 	return (
@@ -145,8 +232,13 @@ export default function Home() {
 			<Menu currentRoute="Home" />
 			<WholePageTransition>
 			<Container>
-				<h1>Cole so testando</h1>
-        <Line data={data2} options={options} />
+				{/* <h1>Cole so testando</h1> */}
+				<Chartzin>
+        <Line data={chartData1} options={options} />
+				</Chartzin>
+				<Chartzin>
+        <Line data={chartData2} options={options} />
+				</Chartzin>
 			</Container>
 			</WholePageTransition>
 			<Link href="/settings">
