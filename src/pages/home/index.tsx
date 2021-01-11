@@ -211,7 +211,7 @@ export default function Home() {
 		scales: {
 				yAxes: [{
 						ticks: {
-								beginAtZero: true,
+								beginAtZero: false,
 								fontColor: '#747676',
 								fontFamily: 'Poppins',
 								fontSize: 6
