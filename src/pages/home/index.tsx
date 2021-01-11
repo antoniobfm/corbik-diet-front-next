@@ -107,7 +107,7 @@ export default function Home() {
 	useEffect(() => {
 		async function loadData() {
 			try {
-				const response = await api.get('/body/log/30days');
+				const response = await api.post('/body/log/30days');
 
 				handleData2(response.data);
 			} catch (err) {
