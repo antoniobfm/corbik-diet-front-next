@@ -1,4 +1,5 @@
-// const withPWA = require('next-pwa')
+const withPWA = require('next-pwa')
+const runtimeCaching = require('next-pwa/cache')
 
 // module.exports = withPWA({
 //   pwa: {
@@ -7,7 +8,11 @@
 //     scope: '/',
 //   }
 // })
-module.exports = {
+module.exports = withPWA({
+  pwa: {
+    dest: 'public',
+    runtimeCaching,
+  },
   typescript: {
     // !! WARN !!
     // Dangerously allow production builds to successfully complete even if
@@ -16,4 +21,4 @@ module.exports = {
     ignoreBuildErrors: true,
   },
   /* config options here */
-}
+})
