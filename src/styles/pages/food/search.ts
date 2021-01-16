@@ -10,7 +10,6 @@ export const Header = styled.header`
 `;
 
 export const Foods = styled.div`
-  height: 75vh;
   padding-top: 8px;
   border-radius: 6px;
   background: #181A1B;
@@ -76,28 +75,54 @@ export const Food = styled.div`
 `;
 
 export const Floating = styled.div`
-  width: 92.5%;
+  width: calc(100vw - 32px);
   height: 56px;
-  margin: auto;
-  margin-top: -28px;
-  margin-bottom: 12px;
+  margin: 0 16px;
+  margin-bottom: 32px;
 
-  position: relative;
-  z-index: 3;
+  position: fixed;
+  z-index: 2;
+	bottom: 0;
 
-  background: linear-gradient(92.01deg, rgba(255, 255, 255, 0.03) 0%, rgba(24, 26, 27, 0) 62.45%), #181A1B;
-  border-radius: 6px;
+	::before {
+		content: '';
+		width: 150vw;
+		height: 124px;
+		position: fixed;
+		bottom: -33px;
+		left: -16px;
+		z-index: 0;
+		transform:scale(1.5);
+		-webkit-mask: -webkit-linear-gradient(transparent, #181A1B 50%, #181A1B);
+  -webkit-mask: linear-gradient(transparent, #181A1B 50%, #181A1B);
+		background: linear-gradient(180deg, rgba(10, 10, 11, 0) 0%, #0A0A0B 100%);
+		backdrop-filter: blur(5px);
+	}
 
-	box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.25);
-	border: 1px solid #222425;
+	> div {
+		position: relative;
+		border: 1px solid #222425;
+		width: 100%;
+		height: 100%;
+  	border-radius: 6px;
+		background: linear-gradient(92.01deg, rgba(255, 255, 255, 0.03) 0%, rgba(24, 26, 27, 0) 62.45%), #181A1B;
+
+	}
+	/* box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.25); */
+
 `;
 
 export const Menu = styled.div`
+	position: relative;
+	z-index: 1;
   display: flex;
   align-items: center;
   flex-direction: row;
 
+
   .search {
+		position: relative;
+	z-index: 1;
 		// pushes the barcode button over the border
     width: calc(65% + 1px);
     height: 56px;
@@ -113,6 +138,8 @@ export const Menu = styled.div`
     }
 
     input {
+			position: relative;
+			z-index: 1;
       background: none;
       outline: none;
       border: none;
@@ -167,6 +194,7 @@ export const BarcodeButton = styled.button`
 	margin-top: -1px;
 	margin-right: -14px;
 	position: relative;
+	z-index: 1;
 
   background: linear-gradient(111.07deg, #2755AE 0%, rgba(39, 84, 174, 0.5) 100%), #181A1B;
 	border: 1px solid #1E4085;

@@ -58,6 +58,23 @@ export default function Search() {
 			<BarcodeScannerComponent setVisibility={setShowBarcodeScanner} />
 		}
     <Container>
+      <Floating>
+				<div>
+					<Menu>
+						<div className="search">
+							<div className="icon">
+								<Icon size={16} />
+							</div>
+							<input
+								type="text"
+								placeholder="Search"
+								onChange={e => setSearchInput(e.target.value)}
+							/>
+						</div>
+						<BarcodeButton onClick={handleBarcode}>BARCODE</BarcodeButton>
+					</Menu>
+				</div>
+      </Floating>
       <Header>
         <h1>Log Food</h1>
       </Header>
@@ -97,26 +114,46 @@ export default function Search() {
             </a>
           </Link>
         ))}
+        {searchInput ? (searchResult && searchResult.map(result =>
+          <Link key={result.id} href={`/food/${result.id}`}>
+            <a>
+              <Food>
+                <div className="name-maker-and-quantity">
+                  <div className="name-maker">
+                    <h5>{result.brand}</h5>
+                    <h4>{result.name}</h4>
+                  </div>
+                  <h5>{result.quantity_amount}g</h5>
+                </div>
+                <div className="macros">
+                  <h5>C{result.carbohydrates}   P{result.proteins}   F{result.fats}</h5>
+                </div>
+              </Food>
+            </a>
+          </Link>
+        )) : (initialLoad && initialLoad.map(result =>
+          <Link key={result.id} href={`/food/${result.id}`}>
+            <a>
+              <Food>
+                <div className="name-maker-and-quantity">
+                  <div className="name-maker">
+                    <h5>{result.brand}</h5>
+                    <h4>{result.name}</h4>
+                  </div>
+                  <h5>{result.quantity_amount}g</h5>
+                </div>
+                <div className="macros">
+                  <h5>C{result.carbohydrates}   P{result.proteins}   F{result.fats}</h5>
+                </div>
+              </Food>
+            </a>
+          </Link>
+        ))}
       </Foods>
-      <Floating>
-        <Menu>
-          <div className="search">
-            <div className="icon">
-              <Icon size={16} />
-            </div>
-            <input
-              type="text"
-              placeholder="Search"
-				      onChange={e => setSearchInput(e.target.value)}
-            />
-          </div>
-          <BarcodeButton onClick={handleBarcode}>BARCODE</BarcodeButton>
-        </Menu>
-      </Floating>
-			<CreateButton onClick={handleClick}>
+			{/* <CreateButton onClick={handleClick}>
 				<IoMdAddCircleOutline /><br />
 				CREATE FOOD
-				</CreateButton>
+			</CreateButton> */}
     </Container>
 		</WholePageTransition>
   )

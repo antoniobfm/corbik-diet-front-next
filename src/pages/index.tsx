@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import api from '@/services/api';
 import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
-import { isToday, format, formatISO, setHours } from 'date-fns';
+import { isToday, format, formatISO, setHours, startOfDay, endOfDay } from 'date-fns';
 import { useAuth } from '@/hooks/auth';
 import Skeleton from 'react-loading-skeleton';
 import Menu from '@/components/Menu';
@@ -88,8 +88,9 @@ export default function Home() {
 	useEffect(() => {
 		async function loadData() {
 			try {
-				const when = formatISO(selectedDate);
-				const response = await api.post('/food/log/day', { when });
+				const start = formatISO(startOfDay(selectedDate));
+				const end = formatISO(endOfDay(selectedDate));
+				const response = await api.post('/food/log/day', { start, end });
 
 				handleData(response.data);
 			} catch (err) {
