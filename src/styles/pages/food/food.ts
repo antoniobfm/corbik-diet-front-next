@@ -1,11 +1,14 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-
+	background: linear-gradient(346.65deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.03) 100%), #0A0A0B;
+	min-height: 100vh;
+	padding-bottom: 120px;
 `;
 
 export const Header = styled.header`
   padding: 21px 14px 16px;
+	max-height: 54px;
 
   h1 {
   }
@@ -30,12 +33,12 @@ export const Header = styled.header`
 
 export const Details = styled.div`
   height: auto;
-	min-height: 60vh;
 	padding: 32px 16px 33px;
 	box-sizing: border-box;
-  border-radius: 6px;
   background: #181A1B;
 	border: 1px solid #222425;
+	border-left: none;
+	border-right: none;
 
   position: relative;
   z-index: 0;
@@ -66,7 +69,6 @@ export const Menu = styled.div`
 	box-sizing: border-box;
 	border-radius: 6px;
 	box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.25);
-	border: 1px solid #222425;
 	background: linear-gradient(91.23deg, rgba(255, 255, 255, 0.03) 0%, rgba(24, 26, 27, 0) 50%), #181A1B;
 
   .amount {

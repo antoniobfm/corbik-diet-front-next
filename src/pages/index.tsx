@@ -11,6 +11,7 @@ import Skeleton from 'react-loading-skeleton';
 import Menu from '@/components/Menu';
 import WholePageTransition from '@/components/WholePageTransition';
 import addZeroBefore from '@/utils/addZeroBefore';
+import { useRouter } from 'next/router';
 
 const LoginModal = dynamic(() => import('@/components/LoginModal'),
 	{ loading: () => <div className="blurred__background"><h1>Loading</h1></div> })
@@ -49,6 +50,8 @@ export default function Home() {
 	const [loading, setLoading] = useState(true);
 	const [showCalendar, setShowCalendar] = useState(false);
 	const [selectedDate, setSelectedDate] = useState<Date>(setHours(new Date(), 12));
+
+	const router = useRouter();
 
 	const { isAuthenticated, user, signOut } = useAuth();
 	if (!isAuthenticated) return <LoginModal />;
@@ -143,22 +146,18 @@ export default function Home() {
 					<h3>Logs</h3>
 					<div>
 						{!loading ? logData && logData.logs && logData.logs.map(log =>
-							<Link key={log.id} href={`/log/edit/${log.id}`}>
-								<a>
-									<Log>
-										<div className="when">
-											<h5>{log.hour}:{log.minute}</h5>
-										</div>
-										<div className="name-and-quantity">
-											<h4>{log.name}</h4>
-											<h5>{log.quantity_amount}g</h5>
-										</div>
-										<div className="macros">
-											<h5>C{log.carbohydrates}   P{log.proteins}   F{log.fats}</h5>
-										</div>
-									</Log>
-								</a>
-							</Link>
+							<Log key={log.id} onClick={() => router.push(`/log/edit/${log.id}`)}>
+								<div className="when">
+									<h5>{log.hour}:{log.minute}</h5>
+								</div>
+								<div className="name-and-quantity">
+									<h4>{log.name}</h4>
+									<h5>{log.quantity_amount}g</h5>
+								</div>
+								<div className="macros">
+									<h5>C{log.carbohydrates}   P{log.proteins}   F{log.fats}</h5>
+								</div>
+							</Log>
 						) :
 							<Skeleton count={4} duration={2} height={64} width='92.5%' style={{ marginLeft: 16, marginRight: 16 }} />
 						}

@@ -2,18 +2,57 @@ import { FiSearch } from 'react-icons/fi';
 import styled from 'styled-components';
 
 export const Container = styled.div`
+background: linear-gradient(346.65deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.03) 100%), #0A0A0B;
+min-height: 100vh;
 	width: 100vw;
+	padding-bottom: 120px;
 `;
 
 export const Header = styled.header`
-  padding: 21px 14px 20px;
+	box-sizing: border 	-box;
+  padding: 16px 14px 0px;
+	margin-bottom: 16px;
+	height: 42px;
+
+	display: flex;
+	flex-direction: row;
+
+	justify-content: space-between;
+	align-items: center;
+
+	button {
+		outline: none;
+		border: none;
+		background: none;
+		color: #7E7E7F;
+
+		font-family: "Poppins";
+		font-weight: 600;
+		font-size: 10px;
+		height: 100%;
+	}
+
+  h1 {
+		background: none;
+  }
+
+  h3 {
+		color: #7E7E7F;
+		line-height: 0px;
+    padding-left: 1px;
+		padding-bottom: 4px;
+		padding-top: 8px;
+    font-weight: 400;
+  }
+
 `;
 
 export const Foods = styled.div`
-  padding-top: 8px;
-  border-radius: 6px;
+	padding: 16px 0 0;
+	margin-bottom: 16px;
   background: #181A1B;
-	border: 1px solid #222425;
+	border-top: 1px solid #222425;
+	border-bottom: none;
 
   overflow-y: scroll;
 
@@ -23,16 +62,65 @@ export const Foods = styled.div`
 	::-webkit-scrollbar {
 		display: none;
 	}
+
+	.header {
+		padding: 0px 16px 16px;
+		height: 32px;
+
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+
+		h3 {
+			span {
+				padding-left: 8px;
+				font-size: 10px;
+				color: #7E7E7E;
+			}
+		}
+
+		button {
+			outline: none;
+			border: none;
+			background: none;
+			color: #7E7E7F;
+
+			font-family: "Poppins";
+			font-weight: 600;
+			font-size: 10px;
+			height: 100%;
+
+			svg {
+				font-size: 16px;
+			}
+		}
+	}
+
+	.search-first {
+		flex: 1;
+		border-bottom: 1px solid #222425;
+
+		h4 {
+			text-align: center;
+			color: #545454;
+			padding: 24px 0;
+		}
+	}
 `;
 
 export const Food = styled.div`
-  height: 64px;
+  height: 56px;
   border-bottom: 1px solid #222425;
   padding: 4px 0 0 0;
 
   display: flex;
   flex-direction: row;
   align-items: center;
+
+	:hover, :focus, :active {
+		backdrop-filter: brightness(1.2);
+	}
 
   h4 {
     padding-right: 8px;
@@ -94,7 +182,7 @@ export const Floating = styled.div`
 		z-index: 0;
 		transform:scale(1.5);
 		-webkit-mask: -webkit-linear-gradient(transparent, #181A1B 50%, #181A1B);
-  -webkit-mask: linear-gradient(transparent, #181A1B 50%, #181A1B);
+  	-webkit-mask: linear-gradient(transparent, #181A1B 50%, #181A1B);
 		background: linear-gradient(180deg, rgba(10, 10, 11, 0) 0%, #0A0A0B 100%);
 		backdrop-filter: blur(5px);
 	}
@@ -119,10 +207,9 @@ export const Menu = styled.div`
   align-items: center;
   flex-direction: row;
 
-
   .search {
 		position: relative;
-	z-index: 1;
+		z-index: 1;
 		// pushes the barcode button over the border
     width: calc(65% + 1px);
     height: 56px;
@@ -133,7 +220,6 @@ export const Menu = styled.div`
     flex-direction: row;
 
     .icon {
-      width: 50px;
       margin-left: 21px;
     }
 
@@ -144,6 +230,7 @@ export const Menu = styled.div`
       outline: none;
       border: none;
       height: 56px;
+			width: 100%;
 
       padding-left: 16px;
       color: rgba(255, 255, 255, 0.95);

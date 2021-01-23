@@ -7,7 +7,7 @@ import { useToast } from "@/hooks/toast";
 import api from "@/services/api";
 import { Details, Header } from "@/styles/pages/food/food";
 import { Calories, Macro, Macros } from "@/styles/pages/Home";
-import { Container, Icon, ConfirmDeletion } from "@/styles/pages/log/edit/edit";
+import { Container, DeleteIcon, ConfirmDeletion, Footer } from "@/styles/pages/log/edit/edit";
 import addZeroBefore from "@/utils/addZeroBefore";
 import getValidationErrors from "@/utils/getValidationErrors";
 import { FormHandles } from "@unform/core";
@@ -254,14 +254,14 @@ export default function Edit(body: string) {
 									step="0.01"
 								/>
 							</div>
-						<Button type="submit" style={{width: '100%'}}>EDIT</Button>
+						<Button fullWidth type="submit" color="yellow">EDIT</Button>
 					</Form>
 				</Details>
-				<div className="delete">
+				<Footer>
 					<button type="button" onClick={handleConfirmation}>
-						<Icon />
+						<DeleteIcon />
 					</button>
-				</div>
+				</Footer>
 			</Container>
 		</WholePageTransition>
 		</>

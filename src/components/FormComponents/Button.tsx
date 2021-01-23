@@ -5,14 +5,15 @@ import { DisabledStyle, GreenStyle, RedStyle, YellowStyle, BlueStyle } from "@/s
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 	loading?: boolean;
 	disabled?: boolean;
+	fullWidth: boolean;
 	color?: 'green' | 'red' | 'yellow';
 };
 
-export default function Button({ children, loading, color = 'green', disabled = false, ...rest }: ButtonProps) {
+export default function Button({ children, loading, color = 'green', disabled = false, fullWidth = true, ...rest }: ButtonProps) {
 
 	if (disabled) {
 		return (
-			<DisabledStyle type="button" {...rest}>
+			<DisabledStyle type="button" {...rest} style={{width: `${fullWidth && `100%`}`}}>
 				{loading ? 'Loading...' : children}
 			</DisabledStyle>
 		);
@@ -20,7 +21,7 @@ export default function Button({ children, loading, color = 'green', disabled = 
 
 	if (color === 'green') {
 		return (
-			<GreenStyle type="button" {...rest}>
+			<GreenStyle type="button" {...rest} style={{width: `${fullWidth && `100%`}`}}>
 				{loading ? 'Loading...' : children}
 			</GreenStyle>
 		);
@@ -28,7 +29,7 @@ export default function Button({ children, loading, color = 'green', disabled = 
 
 	if (color === 'red') {
 		return (
-			<RedStyle type="button" {...rest}>
+			<RedStyle type="button" {...rest} style={{width: `${fullWidth && `100%`}`}}>
 				{loading ? 'Loading...' : children}
 			</RedStyle>
 		);
@@ -36,7 +37,7 @@ export default function Button({ children, loading, color = 'green', disabled = 
 
 	if (color === 'yellow') {
 		return (
-			<YellowStyle type="button" {...rest}>
+			<YellowStyle type="button" {...rest} style={{width: `${fullWidth && `100%`}`}}>
 				{loading ? 'Loading...' : children}
 			</YellowStyle>
 		);
@@ -44,7 +45,7 @@ export default function Button({ children, loading, color = 'green', disabled = 
 
 	if (color === 'blue') {
 		return (
-			<BlueStyle type="button" {...rest}>
+			<BlueStyle type="button" {...rest} style={{width: `${fullWidth && `100%`}`}}>
 				{loading ? 'Loading...' : children}
 			</BlueStyle>
 		);

@@ -2,20 +2,54 @@ import { FiChevronLeft } from 'react-icons/fi';
 import styled from 'styled-components';
 
 export const Container = styled.div`
-
-`;
-
-export const Header = styled.header`
-  padding: 21px 14px 16px;
+	background: linear-gradient(346.65deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.03) 100%), #0A0A0B;
+	min-height: 100vh;
+	padding-bottom: 56px;
 `;
 
 export const FormContainer = styled.div`
-  padding: 24px 16px 56px;
-  border-radius: 6px;
+	margin-bottom: 16px;
+  padding: 16px 16px 24px;
   background: #181A1B;
+	border-top: 1px solid #222425;
+	border-bottom: 1px solid #222425;
 
   display: flex;
   flex-direction: column;
+
+	.header {
+		padding-bottom: 16px;
+		height: 32px;
+
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+
+		h3 {
+			span {
+				padding-left: 8px;
+				font-size: 10px;
+				color: #7E7E7E;
+			}
+		}
+
+		button {
+			outline: none;
+			border: none;
+			background: none;
+			color: #7E7E7F;
+
+			font-family: "Poppins";
+			font-weight: 600;
+			font-size: 10px;
+			height: 100%;
+
+			svg {
+				font-size: 16px;
+			}
+		}
+	}
 `;
 
 export const Menu = styled.div`

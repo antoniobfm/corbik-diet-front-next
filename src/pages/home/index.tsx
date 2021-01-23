@@ -9,6 +9,7 @@ import { useAuth } from '@/hooks/auth';
 import Menu from '@/components/Menu';
 import WholePageTransition from '@/components/WholePageTransition';
 import { Line } from 'react-chartjs-2';
+import { endOfDay, startOfDay } from 'date-fns';
 
 const LoginModal = dynamic(() => import('@/components/LoginModal'),
 	{ loading: () => <div className="blurred__background"><h1>Loading</h1></div> })
@@ -93,7 +94,10 @@ export default function Home() {
 	useEffect(() => {
 		async function loadData() {
 			try {
-				const response = await api.get('/food/log/30days');
+				const today = new Date();
+				const start = startOfDay(today).getTime();
+				const end = endOfDay(today).getTime();
+				const response = await api.post('/food/log/30days', {start, end});
 
 				handleData(response.data);
 			} catch (err) {
@@ -107,7 +111,11 @@ export default function Home() {
 	useEffect(() => {
 		async function loadData() {
 			try {
-				const response = await api.post('/body/log/30days');
+				const today = new Date();
+				const start = startOfDay(today).getTime();
+				const end = endOfDay(today).getTime();
+
+				const response = await api.post('/body/log/30days', {start, end});
 
 				handleData2(response.data);
 			} catch (err) {

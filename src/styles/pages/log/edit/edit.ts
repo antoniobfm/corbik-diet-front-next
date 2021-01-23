@@ -1,23 +1,123 @@
 import styled from 'styled-components';
-import { FiTrash } from 'react-icons/fi';
+import { FiSettings, FiTrash } from 'react-icons/fi';
 
 export const Container = styled.div`
-  .delete {
-    width: 100px;
-    margin: auto;
-    button {
-      width: 100px;
-      height: 64px;
-      background: none;
-      outline: none;
-      border: none;
+	background: linear-gradient(346.65deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.03) 100%), #0A0A0B;
+	min-height: 100vh;
+`;
+export const Details = styled.div`
+	margin-bottom: 16px;
+  height: auto;
+	padding: 16px 16px 32px;
+	box-sizing: border-box;
+  background: #181A1B;
+	border: 1px solid #222425;
+	border-left: none;
+	border-right: none;
 
-      svg {
-        color: white;
-        opacity: 0.5;
-      }
-    }
-  }
+  position: relative;
+  z-index: 0;
+
+  display: flex;
+  flex-direction: column;
+
+	.Special__Select {
+		padding: 0 0 0 16px;
+		border: 1px solid #222425;
+		background: linear-gradient(92.97deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0) 100%);
+		height: 68px;
+
+		border-radius: 6px;
+
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		margin-bottom: 8px;
+
+		.Special__Select__DropdownIndicator {
+			height: 100%;
+			width: 10%;
+			color: #828282;
+			border-left: 1px solid #222425;
+
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		h3 {
+			font-size: 14px;
+		}
+		h5 {
+			font-size: 9.9px;
+			font-weight: 400;
+			color: #828282;
+		}
+	}
+
+	.history__container {
+		.history__item {
+			height: 48px;
+
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+
+			border-bottom: 1px solid #222425;
+
+			:nth-last-child() {
+				border-bottom: none;
+			}
+
+			.history__item__title {
+				font-family: "Poppins";
+				font-size: 14px;
+			}
+
+			.history__item__subtitle {
+				font-family: "Poppins";
+				font-size: 10px;
+				font-weight: 400;
+				color: #7E7E7F;
+			}
+		}
+	}
+
+	.header {
+		padding-bottom: 16px;
+		height: 32px;
+
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+
+		h3 {
+			span {
+				padding-left: 8px;
+				font-size: 10px;
+				color: #7E7E7E;
+			}
+		}
+
+		button {
+			outline: none;
+			border: none;
+			background: none;
+			color: #7E7E7F;
+
+			font-family: "Poppins";
+			font-weight: 600;
+			font-size: 10px;
+			height: 100%;
+
+			svg {
+				font-size: 16px;
+			}
+		}
+	}
 `;
 
 export const EditButton = styled.button`
@@ -33,19 +133,11 @@ export const EditButton = styled.button`
   color: #FDF8E7;
 `;
 
-export const Icon = styled(FiTrash)`
-  width: 18px;
-  height: 18px;
-
-  opacity: 0.5;
-`;
-
 export const StaticMenu = styled.div`
-  position: absolute;
+  position: relative;
   bottom: 0;
   height: 56px;
-  margin: 24px 0;
-  width: calc(100% - 32px);
+  width: calc(100%);
 
   background-color: #181A1B;
   border-radius: 6px;
@@ -171,4 +263,38 @@ export const ConfirmDeletion = styled.div`
 
     }
   }
+`;
+
+export const Footer = styled.footer`
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+
+	button {
+		width: 100px;
+		height: 64px;
+		background: none;
+		outline: none;
+		border: none;
+
+		svg {
+			color: white;
+			opacity: 0.5;
+		}
+	}
+`;
+
+
+export const DeleteIcon = styled(FiTrash)`
+  width: 18px;
+  height: 18px;
+
+  opacity: 0.5;
+`;
+
+export const SettingsIcon = styled(FiSettings)`
+  width: 18px;
+  height: 18px;
+
+  opacity: 0.5;
 `;

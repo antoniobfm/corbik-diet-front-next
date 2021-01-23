@@ -1,7 +1,7 @@
 import Input from "@/components/FormComponents/Input";
 import api from "@/services/api";
-import { Container, FormContainer, Header, Icon, Menu, CreateButton } from "@/styles/pages/food/create";
-import { Floating } from "@/styles/pages/food/search";
+import { Container, FormContainer, Icon, Menu, CreateButton } from "@/styles/pages/food/create";
+import { Floating, Header } from "@/styles/pages/food/search";
 import { Form } from "@unform/web";
 import { FormHandles } from '@unform/core';
 import { useRouter } from "next/router";

@@ -25,12 +25,15 @@ const toastTypeVariations = {
 };
 
 export const Container = styled(motion.div) <ContainerProps>`
-	width: 100vw;
+	width: 95vw;
+	margin-right: 2.5vw;
+	margin-top: 2vh;
   backdrop-filter: blur(3px);
   text-align: center;
   box-sizing: border-box;
 	position: relative;
 	padding: 0;
+	border-radius: 6px;;
 	/* margin: 30px;
 	border-radius: 10px; */
 	box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);

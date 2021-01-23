@@ -9,6 +9,7 @@ import { useAuth } from '@/hooks/auth';
 import Skeleton from 'react-loading-skeleton';
 import Menu from '@/components/Menu';
 import WholePageTransition from '@/components/WholePageTransition';
+import { useRouter } from 'next/router';
 
 const LoginModal = dynamic(() => import('@/components/LoginModal'),
 	{ loading: () => <div className="blurred__background"><h1>Loading</h1></div> })
@@ -41,6 +42,8 @@ export default function Home() {
 	const [loading, setLoading] = useState(true);
 	const [showCalendar, setShowCalendar] = useState(false);
 	const [selectedDate, setSelectedDate] = useState<Date>(setHours(new Date(), 12));
+
+	const router = useRouter();
 
 	const { isAuthenticated, user, signOut } = useAuth();
 	if (!isAuthenticated) return <LoginModal />;
@@ -124,22 +127,18 @@ export default function Home() {
 						<h3>Logs</h3>
 						<div>
 							{!loading ? logData && logData.logs && logData.logs.map(log =>
-								<Link key={log.id} href={`/body/log/${log.id}`}>
-									<a>
-										<Log>
-											<div className="when">
-												<h5>{log.month}/{log.day}</h5>
-											</div>
-											<div className="name-and-quantity">
-												<h4>{log.weight}</h4>
-												<h5>kilos</h5>
-											</div>
-											<div className="macros">
-												<h5>M{log.muscle}   W{log.water}   F{log.fat}</h5>
-											</div>
-										</Log>
-									</a>
-								</Link>
+								<Log  key={log.id} onClick={() => router.push(`/body/log/${log.id}`)}>
+									<div className="when">
+										<h5>{log.month}/{log.day}</h5>
+									</div>
+									<div className="name-and-quantity">
+										<h4>{log.weight}</h4>
+										<h5>kilos</h5>
+									</div>
+									<div className="macros">
+										<h5>M{log.muscle}   W{log.water}   F{log.fat}</h5>
+									</div>
+								</Log>
 							) :
 								<Skeleton count={4} duration={2} height={64} width='92.5%' style={{ marginLeft: 16, marginRight: 16 }} />
 							}
@@ -158,17 +157,6 @@ export default function Home() {
 					<h4 style={{ opacity: 0.5, fontWeight: 400, textAlign: 'center', paddingTop: 40, paddingBottom: 40 }}>Settings</h4>
 				</a>
 			</Link>
-
-			{/* {showCalendar &&
-      <Calendar>
-        <button type="button" onClick={e => handleCalendar(e)}/>
-          <DayPicker
-            onDayClick={handleDateChange}
-            selectedDays={selectedDate}
-          />
-        <button type="button" onClick={e => handleCalendar(e)}/>
-      </Calendar>
-      } */}
 		</>
 	)
 }

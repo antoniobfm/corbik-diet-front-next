@@ -7,7 +7,6 @@ export const Container = styled.div`
 export const Chartzin = styled.div`
 	margin: 16px 0px;
 	padding: 16px 8px;
-	border-radius: 6px;
 
 	background-color: #181A1B;
 	border: 1px solid #222425;

@@ -5,17 +5,17 @@ import { useAuth } from "@/hooks/auth";
 import { useToast } from "@/hooks/toast";
 import api from "@/services/api";
 import { Header } from "@/styles/pages/food/food";
-import { Calories, Macro, Macros } from "@/styles/pages/Home";
-import { Container, EditButton, StaticMenu, Details, Footer, DeleteIcon, SettingsIcon } from "@/styles/pages/log/edit/edit";
-import addZeroBefore from "@/utils/addZeroBefore";
+import { Details } from "@/styles/pages/log/edit/slug/settings";
+import { Container, Footer } from "@/styles/pages/log/edit/edit";
 import toFixedNumber from "@/utils/formatNumbers";
 import { Form } from "@unform/web";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import Skeleton from 'react-loading-skeleton';
 import { AnimatePresence } from "framer-motion";
-import { FiSettings } from "react-icons/fi";
-import { format } from "date-fns";
+import { FiChevronDown, FiChevronLeft } from "react-icons/fi";
+import Button from "@/components/FormComponents/Button";
+import SpecialDropdownModal from "@/components/Modals/SpecialDropdownModal";
 
 interface ILog {
 	id: number;
@@ -33,13 +33,12 @@ interface ILog {
 	user_id: string;
 }
 
-export default function Edit(food: string) {
+export default function EditLogSettings(food: string) {
 	const router = useRouter();
 
 	const [showConfirmation, setShowConfirmation] = useState(false);
 
 	const [logData, setLogData] = useState<any>();
-	const [foodHistory, setFoodHistory] = useState<any>([]);
 
 	const [amount, setAmount] = useState('');
 	const [carbs, setCarbs] = useState<number | null>(0);
@@ -60,17 +59,6 @@ export default function Edit(food: string) {
 	}, [showConfirmation]);
 
 	const handleData = useCallback((data: any) => {
-
-		const tempFoodLogs = [];
-		data.food.foodLogs.map(log => {
-			tempFoodLogs.push({
-				when: format(new Date(log.when), 'dd/MM'),
-				amount: log.quantity_amount
-			});
-		});
-
-		setFoodHistory(tempFoodLogs);
-
 		setFats(toFixedNumber(parseFloat(data.quantity_amount) * data.fats / data.quantity_amount, 2, 10));
 		setCarbs(toFixedNumber(parseFloat(data.quantity_amount) * data.carbohydrates / data.quantity_amount, 2, 10));
 		setProts(toFixedNumber(parseFloat(data.quantity_amount) * data.proteins / data.quantity_amount, 2, 10));
@@ -83,8 +71,8 @@ export default function Edit(food: string) {
 		async function loadData() {
 			if (logId) {
 				const response = await api.get(`/food/log/specific/${logId}`);
-				setLogData(response.data);
 				console.log(response.data);
+				setLogData(response.data);
 				handleData(response.data);
 			}
 		}
@@ -151,112 +139,45 @@ export default function Edit(food: string) {
 			<WholePageTransition>
     	<AnimatePresence>
 			{showConfirmation &&
-				<ConfirmActionModal
-				title="Confirm deletion"
-				buttonTextConfirmation={'DELETE'}
-				buttonColorConfirmation={'red'}
-				buttonTextCancel={'CANCEL'}
-				setState={setShowConfirmation}
-				handleConfirmation={handleDelete} />
+				<SpecialDropdownModal setState={setShowConfirmation} logData={logData} />
 			}
 			</AnimatePresence>
 				<Container>
 					<Header>
-						<h3>{logData ? logData.food?.brand : <Skeleton height={12} width={90} style={{marginTop: -30}} />}</h3>
-						<h1>{logData ? logData.name : <Skeleton height={36} width={200} />}</h1>
+						<h1>Log Settings</h1>
 					</Header>
-					<Macros>
-						<Macro macro="carb">
-							<div>
-								<h4>Carbs</h4>
-								<span>{carbs ? carbs : '0'}</span>
-							</div>
-							<progress id="carbs" value={carbs ? carbs : '0'} max={user ? user.carbohydrates : '0'}>30%</progress>
-						</Macro>
-						<Macro macro="protein">
-							<div>
-								<h4>Protein</h4>
-								<span>{prots ? prots : '0'}</span>
-							</div>
-							<progress id="prots" value={prots ? prots : '0'} max={user ? user.proteins : '0'}>30%</progress>
-						</Macro>
-						<Macro macro="fat">
-							<div>
-								<h4>Fat</h4>
-								<span>{fats ? fats : '0'}</span>
-							</div>
-							<progress id="fats" value={fats ? fats : '0'} max={user ? user.fats : '0'}>30%</progress>
-						</Macro>
-					</Macros>
-					<Calories>
-						<div>
-							<h4>Calories</h4>
-							<span>{calories ? calories : '0'}</span>
-						</div>
-						<progress id="calories" value={calories ? calories : '0'} max={user ? user.calories : '0'}>30%</progress>
-					</Calories>
 					<Details>
 						<div className="header">
-							<h3>Summary</h3>
+							<h3>Source</h3>
 							{/* <button onClick={() => {router.push('/food/create')}}>
 								<FiSettings />
 							</button> */}
 						</div>
 						<Form onSubmit={() => { }}>
-							<Input
-								name="when"
-								labelName="Date"
-								type="datetime-local"
-								value={`${date && new Date(date).getFullYear()}-${addZeroBefore(new Date(date).getMonth() + 1)}-${addZeroBefore(new Date(date).getDate())}T${addZeroBefore(new Date(date).getHours())}:${addZeroBefore(new Date(date).getMinutes())}`}
-								onChange={e => setDate(new Date(e.target.value))} />
-						</Form>
-
-						<StaticMenu>
-							<div>
-								<div className="amount">
-									<input
-										type="number"
-										placeholder="Amount"
-										defaultValue={amount}
-										onChange={e => setAmount(e.target.value)}
-										step="0.01"
-									/>
+							<div className="Special__Select" onClick={() => setShowConfirmation(true)}>
+								<div>
+									<h3>{logData ? logData.name : <Skeleton height={30} width={200} />}</h3>
+									<h5>{logData ? logData.brand : <Skeleton height={20} width={90} />}</h5>
 								</div>
-								<div className="unit">
-									<select name="select">
-										<option value="gram">Grams</option>
-									</select>
+								<div className="Special__Select__DropdownIndicator">
+									<FiChevronDown />
 								</div>
-								<EditButton onClick={handleEdit}>EDIT</EditButton>
 							</div>
-						</StaticMenu>
-					</Details>
-					<Details>
-						<div className="header">
-							<h3>History</h3>
-							{/* <button onClick={() => {router.push('/food/create')}}>
-								<FiSettings />
-							</button> */}
-						</div>
-						<div className="history__container">
-							{foodHistory && foodHistory.map(log =>
-								<div className="history__item">
-									<div className="history__item__title">
-										{log.when}
-									</div>
-									<div className="history__item__subtitle">
-										{log.amount}
-									</div>
+							<div className="Special__Select">
+								<div>
+									<h3>Version {logData && logData.foodVersion && logData.foodVersion.version}</h3>
+									<h5>{logData && logData.foodVersion.id === logData.food.food_version_default ? 'Default' : ''}</h5>
 								</div>
-							)}
-						</div>
+								<div className="Special__Select__DropdownIndicator">
+									<FiChevronDown />
+								</div>
+							</div>
+							<Button type="submit" disabled fullWidth>SAVE</Button>
+						</Form>
 					</Details>
 					<Footer>
-						<button type="button" onClick={handleConfirmation}>
-							<DeleteIcon />
-						</button>
-						<button type="button" onClick={() => {router.push(`/log/edit/${logId}/settings`)}}>
-							<SettingsIcon />
+						<button type="button" onClick={() => {router.back()}}>
+							<FiChevronLeft />
 						</button>
 					</Footer>
 				</Container>

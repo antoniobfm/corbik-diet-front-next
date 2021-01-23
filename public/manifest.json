@@ -5,7 +5,7 @@
   "display": "fullscreen",
   "orientation": "portrait",
   "theme_color": "#317EFB",
-  "background_color": "#0A0A0B",
+  "background_color": "#000",
   "start_url": "/",
   "scope": "/",
   "shortcuts": [
