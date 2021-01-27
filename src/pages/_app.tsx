@@ -17,6 +17,7 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
 				<SkeletonTheme color="#0A0A0B" highlightColor="#181A1B">
 					<AnimatePresence>
 						<Head>
+							<meta name='viewport' content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover' />
 						</Head>
 						<Component {...pageProps} />
 					</AnimatePresence>
