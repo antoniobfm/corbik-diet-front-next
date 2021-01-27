@@ -1,15 +1,20 @@
 import dynamic from 'next/dynamic'
 import Link from 'next/link';
-import { Calories, Container, Header, Log, Logs, Macro, Macros } from "@/styles/pages/Home";
+import { BigCardHeader, Calories, Container, Header, Log, Logs, Macro, Macros } from "@/styles/pages/Home";
 import { useCallback, useEffect, useState } from 'react';
 import api from '@/services/api';
 import 'react-day-picker/lib/style.css';
-import { formatISO, setHours } from 'date-fns';
+import { endOfDay, formatISO, setHours, startOfDay } from 'date-fns';
 import { useAuth } from '@/hooks/auth';
 import Skeleton from 'react-loading-skeleton';
 import Menu from '@/components/Menu';
 import WholePageTransition from '@/components/WholePageTransition';
 import { useRouter } from 'next/router';
+import { FiChevronDown, FiList } from 'react-icons/fi';
+import { Chartzin } from '@/styles/pages/home/home';
+import LineChart from '@/components/Charts/LineChart';
+import LogsHorizontalScroll from '@/components/Logs/Body/HorizontalScroll';
+import LogsVerticalScroll from '@/components/Logs/Body/VerticalScroll';
 
 const LoginModal = dynamic(() => import('@/components/LoginModal'),
 	{ loading: () => <div className="blurred__background"><h1>Loading</h1></div> })
@@ -39,7 +44,9 @@ interface IDayResume {
 
 export default function Home() {
 	const [logData, setLogData] = useState<IDayResume | null>(null);
+	const [chartData, setChartData] = useState<IDayResume[]>(null);
 	const [loading, setLoading] = useState(true);
+	const [isHorizontal, setIsHorizontal] = useState(true);
 	const [showCalendar, setShowCalendar] = useState(false);
 	const [selectedDate, setSelectedDate] = useState<Date>(setHours(new Date(), 12));
 
@@ -73,17 +80,28 @@ export default function Home() {
 	useEffect(() => {
 		async function loadData() {
 			try {
+				// Logs
 				const when = formatISO(selectedDate);
 				const response = await api.post('/body/logs', { when });
 
 				handleData(response.data);
-			} catch (err) {
+
+				// Chart
+				const today = new Date();
+				const start = startOfDay(today).getTime();
+				const end = endOfDay(today).getTime();
+				const response_chart = await api.post('/body/log/30days', {start, end});
+				setChartData(response_chart.data);
+				} catch (err) {
 				console.log('err');
 			}
 		}
-
 		loadData();
 	}, [selectedDate]);
+
+	const handleLogsDirection = useCallback(() => {
+		setIsHorizontal(!isHorizontal);
+	}, [isHorizontal]);
 
 	return (
 		<>
@@ -91,7 +109,7 @@ export default function Home() {
 			<WholePageTransition>
 				<Container>
 					<Header>
-						<button type="button" onClick={() => {}}>Overview</button>
+						<h1>Overview</h1>
 					</Header>
 					<Macros>
 						<Macro macro="carb">
@@ -124,22 +142,16 @@ export default function Home() {
 						<progress id="carbs" value={logData ? logData.currentWeight : `0`} max={user && user.weight} />
 					</Calories>
 					<Logs>
-						<h3>Logs</h3>
+						<BigCardHeader isHorizontal={isHorizontal}>
+							<h3>Logs</h3>
+							<div onClick={handleLogsDirection}>
+								<FiChevronDown />
+							</div>
+						</BigCardHeader>
 						<div>
-							{!loading ? logData && logData.logs && logData.logs.map(log =>
-								<Log  key={log.id} onClick={() => router.push(`/body/log/${log.id}`)}>
-									<div className="when">
-										<h5>{log.month}/{log.day}</h5>
-									</div>
-									<div className="name-and-quantity">
-										<h4>{log.weight}</h4>
-										<h5>kilos</h5>
-									</div>
-									<div className="macros">
-										<h5>M{log.muscle}   W{log.water}   F{log.fat}</h5>
-									</div>
-								</Log>
-							) :
+							{!loading ? logData && logData.logs &&
+								isHorizontal ? <LogsHorizontalScroll data={logData.logs} /> : <LogsVerticalScroll data={logData.logs} />
+								:
 								<Skeleton count={4} duration={2} height={64} width='92.5%' style={{ marginLeft: 16, marginRight: 16 }} />
 							}
 						</div>
@@ -150,6 +162,9 @@ export default function Home() {
 						</div>
 					</Logs>
 
+					<Chartzin>
+						<LineChart extractName="weight" logData={chartData} />
+					</Chartzin>
 				</Container>
 			</WholePageTransition>
 			<Link href="/settings">

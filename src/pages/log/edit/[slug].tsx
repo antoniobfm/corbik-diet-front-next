@@ -70,13 +70,15 @@ export default function Edit(food: string) {
 		});
 
 		setFoodHistory(tempFoodLogs);
+		console.log(data.food.foodLogs);
+		const { quantity_amount } = data;
 
-		setFats(toFixedNumber(parseFloat(data.quantity_amount) * data.fats / data.quantity_amount, 2, 10));
-		setCarbs(toFixedNumber(parseFloat(data.quantity_amount) * data.carbohydrates / data.quantity_amount, 2, 10));
-		setProts(toFixedNumber(parseFloat(data.quantity_amount) * data.proteins / data.quantity_amount, 2, 10));
-		setCalories(toFixedNumber(parseFloat(data.quantity_amount) * data.calories / data.quantity_amount, 2, 10));
+		setFats(toFixedNumber(parseFloat(quantity_amount) * data.fats / quantity_amount, 2, 10));
+		setCarbs(toFixedNumber(parseFloat(quantity_amount) * data.carbohydrates / quantity_amount, 2, 10));
+		setProts(toFixedNumber(parseFloat(quantity_amount) * data.proteins / quantity_amount, 2, 10));
+		setCalories(toFixedNumber(parseFloat(quantity_amount) * data.calories / quantity_amount, 2, 10));
 		setDate(new Date(data.when));
-		setAmount(`${data.quantity_amount}`);
+		setAmount(quantity_amount % 1 === 0 ? `${parseInt(quantity_amount, 10)}` : `${quantity_amount}`);
 	}, []);
 
 	useEffect(() => {

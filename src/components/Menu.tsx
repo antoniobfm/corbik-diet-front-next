@@ -26,20 +26,6 @@ const Menu = ({ currentRoute }: IMenuProps) => {
 			isSelected={'body' === currentRoute}>
 				<IoBody />
 			</Button>
-
-			<Button
-			type="button"
-			onClick={() => router.push('/')}
-			isSelected={'Diet' === currentRoute}>
-				<IoRestaurant />
-			</Button>
-
-			<Button
-			type="button"
-			onClick={() => {}}
-			isSelected={'Lifting' === currentRoute}>
-				<IoBarbell />
-			</Button>
 			{'Home' === currentRoute &&
 				<Button type="button" onClick={() => router.push('/body/log/add')} isSelected={false} id="add">
 					<RiAddLine size={18} />
@@ -55,6 +41,20 @@ const Menu = ({ currentRoute }: IMenuProps) => {
 					<RiAddLine size={18} />
 				</Button>
 			}
+
+			<Button
+			type="button"
+			onClick={() => router.push('/')}
+			isSelected={'Diet' === currentRoute}>
+				<IoRestaurant />
+			</Button>
+
+			<Button
+			type="button"
+			onClick={() => {}}
+			isSelected={'Lifting' === currentRoute}>
+				<IoBarbell />
+			</Button>
 		</Container>
   )
 }

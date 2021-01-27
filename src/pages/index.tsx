@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic'
 import Link from 'next/link';
-import { Calendar, Calories, Container, Header, Log, Logs, Macro, Macros } from "@/styles/pages/Home";
+import { BigCardHeader, Calendar, Calories, Container, Header, Log, Logs, Macro, Macros } from "@/styles/pages/Home";
 import { useCallback, useEffect, useState } from 'react';
 import api from '@/services/api';
 import DayPicker from 'react-day-picker';
@@ -12,6 +12,11 @@ import Menu from '@/components/Menu';
 import WholePageTransition from '@/components/WholePageTransition';
 import addZeroBefore from '@/utils/addZeroBefore';
 import { useRouter } from 'next/router';
+import { FiChevronDown, FiList, FiSettings } from 'react-icons/fi';
+import LogsHorizontalScroll from '@/components/Logs/Food/HorizontalScroll';
+import LogsVerticalScroll from '@/components/Logs/Food/VerticalScroll';
+import { Chartzin } from '@/styles/pages/home/home';
+import LineChart from '@/components/Charts/LineChart';
 
 const LoginModal = dynamic(() => import('@/components/LoginModal'),
 	{ loading: () => <div className="blurred__background"><h1>Loading</h1></div> })
@@ -47,7 +52,9 @@ interface IDayResume {
 
 export default function Home() {
 	const [logData, setLogData] = useState<IDayResume | null>(null);
+	const [chartData, setChartData] = useState<IDayResume[]>(null);
 	const [loading, setLoading] = useState(true);
+	const [isHorizontal, setIsHorizontal] = useState(true);
 	const [showCalendar, setShowCalendar] = useState(false);
 	const [selectedDate, setSelectedDate] = useState<Date>(setHours(new Date(), 12));
 
@@ -96,6 +103,7 @@ export default function Home() {
 				const response = await api.post('/food/log/day', { start, end });
 
 				handleData(response.data);
+
 			} catch (err) {
 				console.log('err');
 			}
@@ -104,13 +112,39 @@ export default function Home() {
 		loadData();
 	}, [selectedDate]);
 
+	useEffect(() => {
+		async function loadData() {
+			const today = new Date();
+			const start = startOfDay(today).getTime();
+			const end = endOfDay(today).getTime();
+			const response_chart = await api.post('/food/log/30days', {start, end});
+			setChartData(response_chart.data);
+		}
+
+		loadData();
+	}, [logData])
+
+	const handleLogsDirection = useCallback(() => {
+		setIsHorizontal(!isHorizontal);
+	}, [isHorizontal]);
+
 	return (
 		<>
 			<Menu currentRoute="Diet" />
 			<WholePageTransition>
 			<Container>
 				<Header>
-					<button type="button" onClick={e => handleCalendar(e)}>{isToday(selectedDate) ? 'Today' : format(selectedDate, 'MMM, dd')}</button>
+					<button
+					id="diet--home--change--date"
+					type="button"
+					onClick={e => handleCalendar(e)}>
+						{isToday(selectedDate) ? 'Today' : format(selectedDate, 'MMM, dd')}
+					</button>
+					<button
+					id="diet--home--settings--button"
+					onClick={() => {router.push('/food/settings')}}>
+						<FiSettings />
+					</button>
 				</Header>
 				<Macros>
 					<Macro macro="carb">
@@ -143,22 +177,18 @@ export default function Home() {
 					<progress id="carbs" value={logData ? logData.calories : `0`} max={user && user.calories}>30%</progress>
 				</Calories>
 				<Logs>
-					<h3>Logs</h3>
+					<BigCardHeader isHorizontal={isHorizontal}>
+						<h3>Logs</h3>
+						<div onClick={handleLogsDirection}>
+							<FiChevronDown />
+						</div>
+					</BigCardHeader>
 					<div>
-						{!loading ? logData && logData.logs && logData.logs.map(log =>
-							<Log key={log.id} onClick={() => router.push(`/log/edit/${log.id}`)}>
-								<div className="when">
-									<h5>{log.hour}:{log.minute}</h5>
-								</div>
-								<div className="name-and-quantity">
-									<h4>{log.name}</h4>
-									<h5>{log.quantity_amount}g</h5>
-								</div>
-								<div className="macros">
-									<h5>C{log.carbohydrates}   P{log.proteins}   F{log.fats}</h5>
-								</div>
-							</Log>
-						) :
+						{!loading ? logData && logData.logs ?
+							isHorizontal ? <LogsHorizontalScroll data={logData.logs} /> : <LogsVerticalScroll data={logData.logs} />
+							:
+							<div/>
+							:
 							<Skeleton count={4} duration={2} height={64} width='92.5%' style={{ marginLeft: 16, marginRight: 16 }} />
 						}
 					</div>
@@ -168,22 +198,20 @@ export default function Home() {
 						</Link>
 					</div>
 				</Logs>
+				<Chartzin>
+					<LineChart extractName="calories" logData={chartData} />
+				</Chartzin>
 
 			</Container>
 			</WholePageTransition>
-			<Link href="/settings">
-				<a>
-					<h4 style={{ opacity: 0.5, fontWeight: 400, textAlign: 'center', paddingTop: 40, paddingBottom: 40 }}>Settings</h4>
-				</a>
-			</Link>
 
 			{showCalendar &&
 				<Calendar>
 					<button type="button" onClick={e => handleCalendar(e)} />
-					<DayPicker
-						onDayClick={handleDateChange}
-						selectedDays={selectedDate}
-					/>
+						<DayPicker
+							onDayClick={handleDateChange}
+							selectedDays={selectedDate}
+						/>
 					<button type="button" onClick={e => handleCalendar(e)} />
 				</Calendar>
 			}

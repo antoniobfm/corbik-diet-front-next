@@ -36,63 +36,6 @@ export default function Settings() {
 
   const { updateUser, user, signOut } = useAuth();
 
-  const handleSubmitTargets = useCallback(
-    async (data: TargetsFormData) => {
-      try {
-        formTargetsRef.current?.setErrors({});
-
-        const schema = Yup.object().shape({
-          carbohydrates: Yup.string().required('Carbohydrates amount required'),
-          proteins: Yup.string().required('Proteins amount required'),
-          fats: Yup.string().required('Fats amount required'),
-          calories: Yup.string().required('Calories amount required'),
-        });
-
-        await schema.validate(data, {
-          abortEarly: false,
-        });
-
-        const {
-          carbohydrates,
-          proteins,
-          fats,
-          calories
-        } = data;
-
-        const formData = {
-          carbohydrates: parseInt(carbohydrates, 10),
-          proteins:  parseInt(proteins, 10),
-          fats:  parseInt(fats, 10),
-          calories:  parseInt(calories, 10)
-        };
-
-        const response = await api.put('/profile/targets', formData);
-
-        updateUser(response.data);
-
-        addToast({
-          type: 'success',
-          title: `Modified your targets with success`
-        });
-
-      } catch (err) {
-        if (err instanceof Yup.ValidationError) {
-          const errors = getValidationErrors(err);
-
-          formTargetsRef.current?.setErrors(errors);
-
-          addToast({
-            type: 'error',
-            title: `Something went wrong`
-          });
-
-          return;
-        }
-      }
-    },
-    [history],
-  );
-
 const handleSubmit = useCallback(
   async (data: ProfileFormData) => {
     try {
@@ -174,53 +117,15 @@ const handleSubmit = useCallback(
 		<GoBack />
     <Container>
       <Header>
-        <h1>Settings</h1>
+        <h1>User Settings</h1>
       </Header>
-      <div>
-				<Form
-					ref={formTargetsRef}
-					initialData={{ carbohydrates: user.carbohydrates, proteins: user.proteins, fats: user.fats, calories: user.calories }}
-					onSubmit={handleSubmitTargets}
-				>
-        <h3>Targets</h3>
-        <div className="form__three__columns">
-					<Input
-						name="carbohydrates"
-						labelName="Carbohydrates"
-						type="number"
-						step="0.01"
-						required={true}
-					/>
-					<Input
-						name="proteins"
-						labelName="Proteins"
-						type="number"
-						step="0.01"
-					/>
-					<Input
-						name="fats"
-						labelName="Fats"
-						type="number"
-						step="0.01"
-					/>
-        </div>
-        <Input
-          name="calories"
-          labelName="Calories"
-          type="number"
-          step="0.01"
-        />
-        <Button type="submit" style={{width: '100%'}}>SAVE</Button>
-        </Form>
-      </div>
-
       <div>
 				<Form
 					ref={formRef}
 					initialData={{ name: user.name, email: user.email }}
 					onSubmit={handleSubmit}
 				>
-          <h3>User</h3>
+          <h3>Your account</h3>
 					<Input
             name="name"
             labelName="Name"

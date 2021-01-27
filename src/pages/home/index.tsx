@@ -8,8 +8,12 @@ import { setHours } from 'date-fns';
 import { useAuth } from '@/hooks/auth';
 import Menu from '@/components/Menu';
 import WholePageTransition from '@/components/WholePageTransition';
-import { Line } from 'react-chartjs-2';
 import { endOfDay, startOfDay } from 'date-fns';
+import { Header } from '@/styles/pages/Home';
+import { useRouter } from 'next/router';
+import { FiSettings } from 'react-icons/fi';
+import { Line } from 'react-chartjs-2';
+import LineChart from '@/components/Charts/LineChart';
 
 const LoginModal = dynamic(() => import('@/components/LoginModal'),
 	{ loading: () => <div className="blurred__background"><h1>Loading</h1></div> })
@@ -217,35 +221,59 @@ export default function Home() {
 				}
 		},
 		scales: {
-				yAxes: [{
-						ticks: {
-								beginAtZero: false,
-								fontColor: '#747676',
-								fontFamily: 'Poppins',
-								fontSize: 6
-						},
-				}],
-				xAxes: [{
-						ticks: {
-								fontColor: '#747676',
-								fontFamily: 'Poppins',
-								fontSize: 6
-						},
-				}]
+			yAxes: [{
+				display: false,
+				gridLines: {
+					display: false ,
+					color: "#FFFFFF"
+				},
+				ticks: {
+						beginAtZero: false,
+						fontColor: '#747676',
+						fontFamily: 'Poppins',
+						fontSize: 6,
+						borderColor: 'red'
+				},
+			}],
+			xAxes: [{
+				display: false,
+				gridLines: {
+					display: false ,
+					color: "#FFFFFF"
+				},
+				ticks: {
+						fontColor: '#747676',
+						fontFamily: 'Poppins',
+						fontSize: 6
+				},
+			}]
 		}
 	}
+	const router = useRouter();
 
 	return (
 		<>
 			<Menu currentRoute="Home" />
 			<WholePageTransition>
 			<Container>
-				{/* <h1>Cole so testando</h1> */}
+				<Header>
+					<button
+					id="diet--home--change--date"
+					type="button"
+					onClick={() => {}}>
+						Home
+					</button>
+					<button
+					id="diet--home--settings--button"
+					onClick={() => {router.push('/settings')}}>
+						<FiSettings />
+					</button>
+				</Header>
 				<Chartzin>
-        <Line data={chartData1} options={options} />
+					<LineChart extractName="calories" logData={logData} />
 				</Chartzin>
 				<Chartzin>
-        <Line data={chartData2} options={options} />
+					<LineChart extractName="weight" logData={logData2} />
 				</Chartzin>
 			</Container>
 			</WholePageTransition>

@@ -16,16 +16,42 @@ export const Container = styled.div`
 `;
 
 export const Header = styled.header`
-  padding: 21px 14px 28px;
+	padding: 16px 14px 0px;
+	margin-bottom: 16px;
+	height: 42px;
 
-  button {
+	display: flex;
+	flex-direction: row;
+
+	justify-content: space-between;
+	align-items: center;
+
+  #diet--home--change--date {
+		flex: 1;
+		min-width: 50%;
+		height: 100%;
     background: none;
     outline: none;
     border: none;
-    font-size: 1.999rem;
-    color: white;
+		text-align: left;
+    color: #f2f2f2;
+    font-size: 2rem;
     font-weight: 600;
   }
+
+	#diet--home--settings--button {
+		flex: 1;
+		height: 100%;
+		background: none;
+		outline: none;
+		border: none;
+		text-align: right;
+		color: #7E7E7F;
+
+		font-family: "Poppins";
+		font-weight: 600;
+		font-size: 1.125rem;
+	}
 `;
 
 export const Macros = styled.div`
@@ -154,10 +180,6 @@ export const Logs = styled.div`
   display: flex;
   flex-direction: column;
 
-  h3 {
-    padding: 16px 16px 16px;
-  }
-
   .add-log {
     padding: 16px 16px 0 0;
     align-self: flex-end;
@@ -171,6 +193,45 @@ export const Logs = styled.div`
       text-decoration: none;
     }
   }
+`;
+
+interface IBigCardHeader {
+	isHorizontal?: boolean;
+}
+
+export const BigCardHeader = styled.div<IBigCardHeader>`
+	display: flex;
+	justify-content: space-between;
+	padding: 16px 16px 16px;
+
+	h3 {
+	}
+
+	button {
+		background: none;
+		outline: none;
+		border: none;
+
+		svg {
+			color: #7E7E7F;
+
+			font-size: 1rem;
+			height: 100%;
+		}
+	}
+	div {
+		min-width: 30%;
+		float: 1;
+		text-align: right;
+
+		svg {
+			transition: 0.3s all;
+			color: #7E7E7F;
+			transform: ${props => props.isHorizontal && `rotate(-90deg)`};
+			font-size: 1rem;
+			height: 100%;
+		}
+	}
 `;
 
 export const Log = styled.div`

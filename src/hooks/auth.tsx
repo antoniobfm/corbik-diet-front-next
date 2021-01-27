@@ -98,7 +98,7 @@ const AuthProvider: React.FC = ({ children }) => {
 		localStorage.removeItem('@Corbik:User');
 
 		setData({} as AuthState);
-		} catch ({message}: Error) {
+		} catch (err) {
 			localStorage.removeItem('@Corbik:User');
 			router.reload();
 		}

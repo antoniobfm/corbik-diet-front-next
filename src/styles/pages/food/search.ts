@@ -9,7 +9,6 @@ min-height: 100vh;
 `;
 
 export const Header = styled.header`
-	box-sizing: border 	-box;
   padding: 16px 14px 0px;
 	margin-bottom: 16px;
 	height: 42px;
@@ -112,14 +111,17 @@ export const Foods = styled.div`
 export const Food = styled.div`
   height: 56px;
   border-bottom: 1px solid #222425;
+	background: #181A1B;
   padding: 4px 0 0 0;
 
   display: flex;
   flex-direction: row;
   align-items: center;
 
-	:hover, :focus, :active {
-		backdrop-filter: brightness(1.2);
+	transition: 0.3s all;
+
+	:active {
+  	filter: brightness(1.6);
 	}
 
   h4 {

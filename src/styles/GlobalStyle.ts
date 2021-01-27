@@ -5,6 +5,9 @@ export default createGlobalStyle`
     margin: 0;
     padding: 0;
 
+		-webkit-user-select: none; /* Safari */
+		-ms-user-select: none; /* IE 10 and IE 11 */
+		user-select: none; /* Standard syntax */
 
   --carbs-color: #EB5757;
   --protein-color: #2D9CDB;

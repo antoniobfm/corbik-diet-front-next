@@ -1,15 +1,15 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-	margin-top: 16px;
+	min-height: 100vh;
+	background: linear-gradient(346.65deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.03) 100%), #0A0A0B;
 `;
 
 export const Chartzin = styled.div`
 	margin: 16px 0px;
-	padding: 16px 8px;
+	padding: 16px 0px;
+	height: 10vh;
 
-	background-color: #181A1B;
-	border: 1px solid #222425;
 
 	.chartjs-size-monitor {
 		position: relative;
