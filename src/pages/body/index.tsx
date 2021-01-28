@@ -166,9 +166,9 @@ export default function Home() {
 							}
 						</div>
 						<div className="add-log">
-							<Link href={`/body/log/add`}>
-								<a>ADD LOG</a>
-							</Link>
+							<button onClick={() => router.push(`/body/log/add`)}>
+								ADD LOG
+							</button>
 						</div>
 					</Logs>
 
