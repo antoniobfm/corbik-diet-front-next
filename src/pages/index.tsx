@@ -15,8 +15,6 @@ import { useRouter } from 'next/router';
 import { FiChevronDown, FiList, FiSettings } from 'react-icons/fi';
 import LogsHorizontalScroll from '@/components/Logs/Food/HorizontalScroll';
 import LogsVerticalScroll from '@/components/Logs/Food/VerticalScroll';
-import { Chartzin } from '@/styles/pages/home/home';
-import LineChart from '@/components/Charts/LineChart';
 import Chart from "chart.js";
 
 const LoginModal = dynamic(() => import('@/components/LoginModal'),
@@ -59,6 +57,7 @@ export default function Home() {
 	const [showCalendar, setShowCalendar] = useState(false);
 	const [selectedDate, setSelectedDate] = useState<Date>(setHours(new Date(), 12));
 
+	const router = useRouter();
 
 	let chartRef = createRef<HTMLCanvasElement>();
 
@@ -160,9 +159,7 @@ export default function Home() {
 				options: options
 		});
 
-	}, [chartRef, logData]);
-
-	const router = useRouter();
+	}, [chartRef, chartData]);
 
 	const { isAuthenticated, user, signOut } = useAuth();
 	if (!isAuthenticated) return <LoginModal />;
