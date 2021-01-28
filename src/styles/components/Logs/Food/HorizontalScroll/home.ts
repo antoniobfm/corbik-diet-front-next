@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
+	position: relative;
+
 	.scrolly2 {
 		width: calc(100vw);
 		height: 80px;

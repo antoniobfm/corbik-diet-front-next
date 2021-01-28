@@ -10,7 +10,7 @@ import Skeleton from 'react-loading-skeleton';
 import Menu from '@/components/Menu';
 import WholePageTransition from '@/components/WholePageTransition';
 import { useRouter } from 'next/router';
-import { FiChevronDown, FiList } from 'react-icons/fi';
+import { FiChevronDown, FiList, FiSettings } from 'react-icons/fi';
 import { Chartzin } from '@/styles/pages/home/home';
 import LineChart from '@/components/Charts/LineChart';
 import LogsHorizontalScroll from '@/components/Logs/Body/HorizontalScroll';
@@ -109,7 +109,17 @@ export default function Home() {
 			<WholePageTransition>
 				<Container>
 					<Header>
-						<h1>Overview</h1>
+						<button
+						id="diet--home--change--date"
+						type="button"
+						onClick={() => {}}>
+							Overview
+						</button>
+						<button
+						id="diet--home--settings--button"
+						onClick={() => {router.push('/food/settings')}}>
+							<FiSettings />
+						</button>
 					</Header>
 					<Macros>
 						<Macro macro="carb">

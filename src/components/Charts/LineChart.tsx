@@ -1,4 +1,4 @@
-import React, { CanvasHTMLAttributes, Component, createRef, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, { CanvasHTMLAttributes, Component, createRef, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Chart from "chart.js";
 
 interface IProps {
@@ -96,7 +96,7 @@ const LineChart: React.FC<IProps> = ({logData, extractName}: IProps) => {
 				data: data,
 				options: options
 		});
-	}, [chartRef])
+	}, [chartRef]);
 
 	return (
 		<canvas

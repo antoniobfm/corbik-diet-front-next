@@ -1,3 +1,4 @@
+import { darken } from 'polished';
 import styled from 'styled-components';
 
 interface Macros {
@@ -173,6 +174,7 @@ export const Calories = styled.div`
 `;
 
 export const Logs = styled.div`
+	position: relative;
   padding-bottom: 33px;
   // border-radius: 6px;
   background: #181A1B;
@@ -181,18 +183,34 @@ export const Logs = styled.div`
   flex-direction: column;
 
   .add-log {
+		z-index: 2;
     padding: 16px 16px 0 0;
     align-self: flex-end;
 
-    a {
+    button {
+      /* background: linear-gradient(113.21deg, rgba(39, 174, 96, 1) 0%, rgba(39, 174, 96, 0.5) 100%); */
+			background: none;
+			border: none;
+			outline: none;
+			padding: 4px 8px;
+			border-radius: 6px;
       font-size: 13px;
-      opacity: 0.5;
+      opacity: 1;
       font-weight: 600;
-      color: #ffffff;
+			color: #f2f2f2;
+      /* color: ${darken(0.1, '#D5F6E3')}; */
 
       text-decoration: none;
     }
   }
+
+	canvas {
+		opacity: 0.5;
+		position: absolute;
+		bottom: 0;
+		max-height: 50px;
+		max-width: 100vw;
+	}
 `;
 
 interface IBigCardHeader {
