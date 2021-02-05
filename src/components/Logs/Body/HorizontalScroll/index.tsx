@@ -27,7 +27,11 @@ interface IProps {
 
 export default function LogsHorizontalScroll({ data }: IProps) {
 	return (
-		<Container>
+		<Container
+			initial={{ opacity: 0, height: data.length * 64 }}
+			animate={{ opacity: 1, height: 80 }}
+			transition={{ duration: 0.3 }}
+			exit={{ opacity: 0 }}>
 			<div className="scrolly2">
 			<div className="scrolly-container">
 				{data && data.map(log =>

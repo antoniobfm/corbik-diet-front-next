@@ -102,8 +102,50 @@ export const Foods = styled.div`
 
 		h4 {
 			text-align: center;
+			font-weight: 400;
 			color: #545454;
 			padding: 24px 0;
+		}
+
+		button {
+			flex: 1;
+			height: 48px;
+			background: none;
+			border: none;
+			outline: none;
+			transition: 0.3s all;
+			margin: auto;
+			margin-top: 16px;
+			margin-bottom: 8px;
+
+			right: 0;
+			border-radius: 24px;
+			background: #27AE60;
+			box-shadow: 0px 0px 3px #27AE60, 0px 0px 24px #27AE60;
+
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+
+			padding: 0 21px 0 16px;
+
+			> div {
+				margin-right: 16px;
+
+				svg {
+					color: #D5F6E3;
+					opacity: 1;
+					padding-top: 3px;
+					font-size: 16px;
+					filter: drop-shadow(0px 2px 3px #D5F6E3);
+				}
+			}
+
+			span {
+				color: #D5F6E3;
+				opacity: 1;
+				filter: drop-shadow(0px 2px 3px #D5F6E3);
+			}
 		}
 	}
 `;
@@ -196,7 +238,6 @@ export const Floating = styled.div`
 		height: 100%;
   	border-radius: 6px;
 		background: linear-gradient(92.01deg, rgba(255, 255, 255, 0.03) 0%, rgba(24, 26, 27, 0) 62.45%), #181A1B;
-
 	}
 	/* box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.25); */
 
@@ -289,7 +330,31 @@ export const BarcodeButton = styled.button`
 	border: 1px solid #1E4085;
   border-radius: 6px;
 
-  font-size: 12px;
-  font-weight: 600;
-  color: #D5E0F6;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+
+	span {
+		flex: 1;
+		text-align: left;
+		font-size: 12px;
+		font-weight: 600;
+		color: #D5E0F6;
+	}
+
+	div {
+		padding-left: 16px;
+		padding-right: 16px;
+		height: 100%;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+
+		svg {
+			font-size: 20px;
+			color: #D5E0F6;
+		}
+	}
 `;

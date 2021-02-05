@@ -8,7 +8,6 @@ export const Container = styled.div`
 
 export const Header = styled.header`
   padding: 21px 14px 16px;
-	max-height: 54px;
 
   h1 {
   }

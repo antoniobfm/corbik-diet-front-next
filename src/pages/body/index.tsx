@@ -68,7 +68,7 @@ export default function Home() {
 				{
 					label: `oloco`,
 					fill: true,
-					lineTension: 0.1,
+					lineTension: 1,
 					backgroundColor: gradientStroke,
 					borderColor: 'rgba(150, 150, 150, 1)',
 					borderCapStyle: 'butt',

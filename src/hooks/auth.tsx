@@ -9,6 +9,8 @@ import React, {
 } from 'react';
 
 import api from '../services/api';
+import nookies from "nookies";
+import { GetServerSidePropsContext } from 'next';
 
 interface User {
 	id: string;
@@ -135,7 +137,6 @@ function useAuth(): AuthContextData {
 export { AuthContext, AuthProvider, useAuth };
 
 export const ProtectRoute = ({ children }) => {
-
 	const router = useRouter();
 	const { isAuthenticated, loading } = useAuth();
 	if (loading || (!isAuthenticated && window.location.pathname !== '/login')) {
@@ -145,3 +146,16 @@ export const ProtectRoute = ({ children }) => {
 	}
 	return children;
 };
+
+export async function getServerSideProps(context: GetServerSidePropsContext, children) {
+  try {
+    const cookies = nookies.get(context);
+    console.log(cookies);
+		console.log('tururuu');
+    return children;
+  } catch (err) {
+    context.res.writeHead(302, { Location: "/login" });
+    context.res.end();
+    return { props: {} };
+  }
+}

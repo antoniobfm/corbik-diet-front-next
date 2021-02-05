@@ -13,26 +13,16 @@ export const Container = styled.div`
 	width: 100vw;
 	height:	48px;
 	background: rgba(11, 11, 12, 0.6);
-	border-top: 1px solid rgba(34, 36, 37, 0.6);
+	/* border-top: 1px solid rgba(34, 36, 37, 0.6); */
 	backdrop-filter: blur(6px);
 
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
-
-	#add {
-		height: 100%;
-		background: linear-gradient(113.21deg, rgba(39, 174, 96, 0.5) 0%, rgba(39, 174, 96, 0.25) 96.25%);
-
-		svg {
-			color: #D5F6E3;
-			opacity: 0.8;
-		}
-	}
 `;
 
-export const Button = styled.button<Props>`
+export const Button = styled(motion.button)<Props>`
 	flex: 1;
 	height: 100%;
 	background: none;
@@ -47,3 +37,31 @@ export const Button = styled.button<Props>`
 		font-size: 1rem;
 	}
 `;
+
+export const FloatingButton = styled(motion.button)<Props>`
+	flex: 1;
+	height: 100%;
+	background: none;
+	border: none;
+	outline: none;
+	transition: 0.3s all;
+	padding-top: 4px;
+
+	position: absolute;
+	right: 0;
+	margin-bottom: 140px;
+	margin-right: 16px;
+	width: 48px;
+	height: 48px;
+	border-radius: 24px;
+	background: #27AE60;
+	box-shadow: 0px 0px 4px #27AE60, 0px 0px 36px #27AE60;
+
+	svg {
+		color: #D5F6E3;
+		opacity: 0.8;
+		font-size: 16px;
+		filter: drop-shadow(0px 2px 1.75px #D5F6E3);
+	}
+`;
+// , boxShadow: '0px 0px 2px #27AE60, 0px 0px 18px #27AE60'

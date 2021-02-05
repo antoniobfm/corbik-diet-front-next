@@ -1,5 +1,7 @@
+import useLongPress from "@/components/useLogPress";
 import { Container } from "@/styles/components/Logs/Food/HorizontalScroll/HorizontalScrollCards";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 interface ILog {
 	id: number;
@@ -33,13 +35,38 @@ export default function LogsHorizontalScrollCards({ data }: IProps) {
 	const carbPerc = (parseInt(carbohydrates, 10) / total) * 360;
 	const protsPerc = (parseInt(proteins, 10) / total) * 360 + Math.floor(carbPerc);
 	const fatPerc = (parseInt(fats, 10) / total) * 360 + Math.floor(carbPerc) + Math.floor(protsPerc);
-console.log(data);
+
+
+  const [longPressCount, setlongPressCount] = useState(0)
+  const [clickCount, setClickCount] = useState(0)
+
+
+  const onLongPress = () => {
+		// router.push(`/log/edit/${data.id}`)
+    setlongPressCount(longPressCount + 1);
+  };
+
+  const onClick = () => {
+    console.log('click is triggered')
+		router.push(`/log/edit/${data.id}`)
+    setClickCount(clickCount + 1);
+  }
+
+  const defaultOptions = {
+    shouldPreventDefault: true,
+    delay: 50,
+  };
+
+  const longPressEvent = useLongPress(onLongPress, onClick, defaultOptions);
+
+
 	return (
 		<Container
-			onClick={() => router.push(`/log/edit/${data.id}`)}
+			{...longPressEvent}
 			carbPerc={Math.floor(carbPerc)}
 			protsPerc={Math.floor(protsPerc)}
 			fatPerc={Math.floor(fatPerc)}
+			whileTap={{ scale: 0.9 }}
 		>
 			<div className="header">
 				<h1>{data.name}</h1>
@@ -53,7 +80,7 @@ console.log(data);
 				<h4 style={{ color: "#2D9CDB" }}>P{proteins}</h4>
 				<h4 style={{ color: "#F2C94C" }}>F{fats}</h4>
 				<div className="pie"></div>
-				</div>
-      </Container>
+			</div>
+		</Container>
   )
 }

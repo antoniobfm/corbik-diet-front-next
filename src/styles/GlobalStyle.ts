@@ -9,9 +9,6 @@ export default createGlobalStyle`
 		-ms-user-select: none; /* IE 10 and IE 11 */
 		user-select: none; /* Standard syntax */
 
-  --carbs-color: #EB5757;
-  --protein-color: #2D9CDB;
-  --fat-color: #F2C94C;
   }
   body {
     background: #0A0A0B;
@@ -43,6 +40,19 @@ export default createGlobalStyle`
   }
 	:root {
 		font-size: 14px;
+
+		--carbs-color: #EB5757;
+		--protein-color: #2D9CDB;
+		--fat-color: #F2C94C;
+		--primary-color: aqua green;
+
+		--corbik-green: #27AE60;
+
+		--high-emphasis: #DEDEDE;
+		--medium-emphasis: #999999;
+		--low-emphasis: #616161;
+
+		--stroke-color: #222425;
 	}
 
   h1 {
@@ -71,7 +81,7 @@ export default createGlobalStyle`
   }
 
   a {
-    color: #fff;
+    color: var(--high-emphasis);
     text-decoration: none;
   }
 
@@ -85,7 +95,7 @@ export default createGlobalStyle`
 		outline: none;
 	}
   input[type="datetime-local"] {
-    color: #f2f2f2;
+    color: var(--high-emphasis);
     border: none;
     outline: none;
     font-size: 16px;
@@ -181,11 +191,11 @@ export default createGlobalStyle`
       border: none;
       outline: none;
 
-      color: white;
+			color: var(--high-emphasis);
 
       :focus {
         ~ label {
-          color: white;
+    			color: var(--high-emphasis);
         }
       }
     }

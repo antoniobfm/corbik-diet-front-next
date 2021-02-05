@@ -1,5 +1,5 @@
 import { Container } from "@/styles/components/Logs/Food/HorizontalScroll/home";
-import React, { CanvasHTMLAttributes, Component, createRef, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React from 'react';
 import LogsHorizontalScrollCards from "./HorizontalScrollCards";
 
 
@@ -30,7 +30,12 @@ interface IProps {
 const LogsHorizontalScroll: React.FC<IProps> = ({data}: IProps) => {
 
 	return (
-		<Container>
+		<Container
+			initial={{ opacity: 0, height: data.length * 64 }}
+			animate={{ opacity: 1, height: 80 }}
+			transition={{ duration: 0.3 }}
+			exit={{ opacity: 0 }}
+		>
 			<div className="scrolly2">
 				<div className="scrolly-container">
 					{data && data.map(log =>

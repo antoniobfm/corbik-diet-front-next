@@ -6,6 +6,7 @@ import api from '@/services/api';
 import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import { isToday, format, formatISO, setHours, startOfDay, endOfDay } from 'date-fns';
+import nookies from "nookies";
 import { useAuth } from '@/hooks/auth';
 import Skeleton from 'react-loading-skeleton';
 import Menu from '@/components/Menu';
@@ -16,6 +17,12 @@ import { FiChevronDown, FiList, FiSettings } from 'react-icons/fi';
 import LogsHorizontalScroll from '@/components/Logs/Food/HorizontalScroll';
 import LogsVerticalScroll from '@/components/Logs/Food/VerticalScroll';
 import Chart from "chart.js";
+import errorHandler from "../errors/errorHandler";
+import { useError } from '@/hooks/errors';
+import { GetServerSidePropsContext } from 'next';
+import { AnimatePresence } from 'framer-motion';
+import * as d3 from 'd3';
+import { Chartzin } from '@/styles/pages/home/home';
 
 const LoginModal = dynamic(() => import('@/components/LoginModal'),
 	{ loading: () => <div className="blurred__background"><h1>Loading</h1></div> })
@@ -49,7 +56,7 @@ interface IDayResume {
 }
 
 
-export default function Home() {
+export default function Home({tururu}) {
 	const [logData, setLogData] = useState<IDayResume | null>(null);
 	const [chartData, setChartData] = useState<IDayResume[]>(null);
 	const [loading, setLoading] = useState(true);
@@ -58,108 +65,62 @@ export default function Home() {
 	const [selectedDate, setSelectedDate] = useState<Date>(setHours(new Date(), 12));
 
 	const router = useRouter();
+	const {handleError} = useError();
 
-	let chartRef = createRef<HTMLCanvasElement>();
+	// let chartRef = createRef<HTMLCanvasElement>();
 
-	useEffect(() => {
-		const canvas = document.getElementById(`background-chart`) as HTMLCanvasElement;
-		const ctx = canvas.getContext('2d');
+//  useEffect(() => {
 
-		var gradientStroke = ctx.createLinearGradient(chartRef.current.width / 2, 0, chartRef.current.width / 2, chartRef.current.height);
-		gradientStroke.addColorStop(0, 'rgba(255, 255, 255, 0.075)');
+// 	// set the dimensions and margins of the graph
+// 	var margin = {top: 30, right: 30, bottom: 70, left: 60},
+// 			width = 460 - margin.left - margin.right,
+// 			height = 400 - margin.top - margin.bottom;
 
-		gradientStroke.addColorStop(0.63, 'rgba(24, 26, 27, 0)');
+// 	// append the svg object to the body of the page
+// 	var svg = d3.select("#my_dataviz")
+// 		.append("svg")
+// 			.attr("width", width + margin.left + margin.right)
+// 			.attr("height", height + margin.top + margin.bottom)
+// 		.append("g")
+// 			.attr("transform",
+// 						"translate(" + margin.left + "," + margin.top + ")");
 
-		const data2: Chart.ChartData = {
-			labels: chartData && chartData.map(item => item.when),
-			datasets: [
-				{
-					label: `oloco`,
-					fill: true,
-					lineTension: 0.1,
-					backgroundColor: gradientStroke,
-					borderColor: 'rgba(150, 150, 150, 1)',
-					borderCapStyle: 'butt',
-					borderDash: [],
-					borderDashOffset: 0.0,
-					borderJoinStyle: 'miter',
-					borderWidth: 1,
 
-					pointBorderColor: 'rgba(150, 150, 150, 1)',
-					pointBackgroundColor: 'rgba(150, 150, 150, 1)',
-					pointBorderWidth: 0.1,
-					pointHoverRadius: 0.1,
-					pointHoverBackgroundColor: 'rgba(150, 150, 150, 1)',
-					pointHoverBorderColor: 'rgba(220,220,220,1)',
-					pointHoverBorderWidth: 0.1,
-					pointRadius: 0.1,
-					pointHitRadius: 0.1,
-					data: chartData && chartData.map(item => parseInt(item.calories, 10))
-				}
-			]
-		};
+// 	// Parse the Data
+// 	d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/7_OneCatOneNum_header.csv", function(data) {
 
-		const options: Chart.ChartOptions = {
-			responsive: true,
-			aspectRatio: 1,
-			maintainAspectRatio: false,
-			tooltips: {
-				enabled: false,
-			},
-			events: [],
-			hover: {
-				mode: null
-			},
-			animation: {
-				duration: 0,
-			},
-			legend: {
-				display: false,
-					labels: {
-					}
-			},
-			layout: {
-				padding: {
-						top: 0,
-						bottom: 0,
-				}
-			},
-			scales: {
-				yAxes: [{
-					display: false,
-					gridLines: {
-						display: false ,
-						color: "#FFFFFF"
-					},
-					ticks: {
-							beginAtZero: false,
-							fontColor: '#747676',
-							fontFamily: 'Poppins',
-							fontSize: 6,
-					},
-				}],
-				xAxes: [{
-					display: false,
-					gridLines: {
-						display: false ,
-						color: "#FFFFFF"
-					},
-					ticks: {
-							fontColor: '#747676',
-							fontFamily: 'Poppins',
-							fontSize: 6
-					},
-				}]
-			}
-		}
+// 	// X axis
+// 	var x = d3.scaleBand()
+// 		.range([ 0, width ])
+// 		.domain(data.map(function(d) { return d.Country; }))
+// 		.padding(0.2);
+// 	svg.append("g")
+// 		.attr("transform", "translate(0," + height + ")")
+// 		.call(d3.axisBottom(x))
+// 		.selectAll("text")
+// 			.attr("transform", "translate(-10,0)rotate(-45)")
+// 			.style("text-anchor", "end");
 
-		new Chart(ctx, {
-				type: "line",
-				data: data2,
-				options: options
-		});
+// 	// Add Y axis
+// 	var y = d3.scaleLinear()
+// 		.domain([0, 13000])
+// 		.range([ height, 0]);
+// 	svg.append("g")
+// 		.call(d3.axisLeft(y));
 
-	}, [chartRef, chartData]);
+// 	// Bars
+// 	svg.selectAll("mybar")
+// 		.data(data)
+// 		.enter()
+// 		.append("rect")
+// 			.attr("x", function(d) { return x(d.Country); })
+// 			.attr("y", function(d) { return y(d.Value); })
+// 			.attr("width", x.bandwidth())
+// 			.attr("height", function(d) { return height - y(d.Value); })
+// 			.attr("fill", "#69b3a2")
+
+// 	})
+//   }, [chartData]);
 
 	const { isAuthenticated, user, signOut } = useAuth();
 	if (!isAuthenticated) return <LoginModal />;
@@ -206,7 +167,7 @@ export default function Home() {
 				handleData(response.data);
 
 			} catch (err) {
-				console.log('err');
+				handleError(err);
 			}
 		}
 
@@ -285,25 +246,32 @@ export default function Home() {
 						</div>
 					</BigCardHeader>
 					<div>
+						<AnimatePresence>
 						{!loading ? logData && logData.logs ?
 							isHorizontal ? <LogsHorizontalScroll data={logData.logs} /> : <LogsVerticalScroll data={logData.logs} />
 							:
-							<div/>
+							<div className="search-first">
+								<h4>NO LOGS TODAY</h4>
+							</div>
 							:
 							<Skeleton count={4} duration={2} height={64} width='92.5%' style={{ marginLeft: 16, marginRight: 16 }} />
 						}
+						</AnimatePresence>
 					</div>
 					<div className="add-log">
 						<button onClick={() => router.push(`/food/search`)}>
-							ADD LOG
+							ADD LOG {tururu}
 						</button>
 					</div>
-					<canvas
+					{/* <canvas
 						height="100px"
 						id={`background-chart`}
 						ref={chartRef}
-					/>
+					/> */}
 				</Logs>
+				{/* <Chartzin>
+<div id="my_dataviz"></div>
+				</Chartzin> */}
 			</Container>
 			</WholePageTransition>
 
@@ -319,4 +287,18 @@ export default function Home() {
 			}
 		</>
 	)
+}
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  try {
+    const cookies = nookies.get(context);
+    console.log(cookies);
+		console.log('tururuu');
+    return {
+			props: {tururu: ''}
+		};
+  } catch (err) {
+    context.res.writeHead(302, { Location: "/login" });
+    context.res.end();
+    return { props: {} };
+  }
 }

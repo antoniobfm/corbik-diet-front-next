@@ -35,9 +35,10 @@ export const Header = styled.header`
     outline: none;
     border: none;
 		text-align: left;
-    color: #f2f2f2;
+    color: var(--high-emphasis);
     font-size: 2rem;
     font-weight: 600;
+		letter-spacing: calc(1.999rem / 100 * 3 * -1);
   }
 
 	#diet--home--settings--button {
@@ -47,7 +48,7 @@ export const Header = styled.header`
 		outline: none;
 		border: none;
 		text-align: right;
-		color: #7E7E7F;
+		color: var(--low-emphasis);
 
 		font-family: "Poppins";
 		font-weight: 600;
@@ -130,7 +131,7 @@ export const Macro = styled.div<Macros>`
 export const Calories = styled.div`
   padding: 0 16px 24px;
 
-  color: #27AE60;
+  color: var(--corbik-green);
 
   display: flex;
   flex-direction: column;
@@ -167,7 +168,7 @@ export const Calories = styled.div`
     }
 
     ::-webkit-progress-value {
-      background: linear-gradient(90.14deg, rgba(24, 26, 27, 0.03) 0%, #27AE60 100%), #27AE60;
+      background: linear-gradient(90.14deg, rgba(24, 26, 27, 0.03) 0%, var(--corbik-green) 100%), var(--corbik-green);
       border-radius: 9px;
     }
   }
@@ -175,9 +176,11 @@ export const Calories = styled.div`
 
 export const Logs = styled.div`
 	position: relative;
-  padding-bottom: 33px;
+  padding-bottom: 16px;
   // border-radius: 6px;
   background: #181A1B;
+	border-top: 1px solid var(--stroke-color);
+	border-bottom: 1px solid var(--stroke-color);
 
   display: flex;
   flex-direction: column;
@@ -197,7 +200,7 @@ export const Logs = styled.div`
       font-size: 13px;
       opacity: 1;
       font-weight: 600;
-			color: #f2f2f2;
+			color: var(--high-emphasis);
       /* color: ${darken(0.1, '#D5F6E3')}; */
 
       text-decoration: none;
@@ -211,6 +214,18 @@ export const Logs = styled.div`
 		max-height: 50px;
 		max-width: 100vw;
 	}
+
+	.search-first {
+		flex: 1;
+
+		h4 {
+			font-size: 13px;
+			text-align: center;
+			font-weight: 600;
+			color: var(--low-emphasis);
+			padding: 24px 0;
+		}
+	}
 `;
 
 interface IBigCardHeader {
@@ -222,16 +237,13 @@ export const BigCardHeader = styled.div<IBigCardHeader>`
 	justify-content: space-between;
 	padding: 16px 16px 16px;
 
-	h3 {
-	}
-
 	button {
 		background: none;
 		outline: none;
 		border: none;
 
 		svg {
-			color: #7E7E7F;
+			color: var(--medium-emphasis);
 
 			font-size: 1rem;
 			height: 100%;
@@ -244,7 +256,7 @@ export const BigCardHeader = styled.div<IBigCardHeader>`
 
 		svg {
 			transition: 0.3s all;
-			color: #7E7E7F;
+			color: var(--low-emphasis);
 			transform: ${props => props.isHorizontal && `rotate(-90deg)`};
 			font-size: 1rem;
 			height: 100%;
@@ -254,7 +266,7 @@ export const BigCardHeader = styled.div<IBigCardHeader>`
 
 export const Log = styled.div`
   height: 64px;
-  border-bottom: 1px solid #222425;
+  border-bottom: 1px solid var(--stroke-color);
   padding: 0 0 0 0;
 
   display: flex;

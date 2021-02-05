@@ -1,6 +1,6 @@
-import { Container } from "@/styles/components/Menu";
+import { Container, FloatingButton } from "@/styles/components/Menu";
 import { useRouter } from "next/router";
-import { IoAdd, IoBarbell, IoBody, IoHome, IoRestaurant } from 'react-icons/io5';
+import { IoBarbell, IoBody, IoHome, IoRestaurant } from 'react-icons/io5';
 import { RiAddLine } from 'react-icons/ri'
 import { Button } from "@/styles/components/Menu";
 
@@ -27,19 +27,34 @@ const Menu = ({ currentRoute }: IMenuProps) => {
 				<IoBody />
 			</Button>
 			{'Home' === currentRoute &&
-				<Button type="button" onClick={() => router.push('/body/log/add')} isSelected={false} id="add">
-					<RiAddLine size={18} />
-				</Button>
+				<FloatingButton
+					type="button"
+					onClick={() => router.push('/body/log/add')}
+					isSelected={false}
+					whileTap={{ scale: 0.9 }}>
+					<RiAddLine size={16} />
+				</FloatingButton>
 			}
 			{'Diet' === currentRoute &&
-				<Button type="button" onClick={() => router.push('/food/search')} isSelected={false} id="add">
-					<RiAddLine size={18} />
-				</Button>
+				<FloatingButton
+					type="button"
+					drag
+					dragConstraints={{left: 0, top: 0, right: 0, bottom: 0}}
+					dragElastic={0.5}
+					onClick={() => router.push('/food/search')}
+					isSelected={false}
+					whileTap={{ scale: 0.9 }}>
+					<RiAddLine size={16} />
+				</FloatingButton>
 			}
 			{'body' === currentRoute &&
-				<Button type="button" onClick={() => router.push('/body/log/add')} isSelected={false} id="add">
-					<RiAddLine size={18} />
-				</Button>
+				<FloatingButton
+					type="button"
+					onClick={() => router.push('/body/log/add')}
+					isSelected={false}
+					whileTap={{ scale: 0.9 }}>
+					<RiAddLine size={16} />
+				</FloatingButton>
 			}
 
 			<Button

@@ -11,7 +11,7 @@ import addZeroBefore from "@/utils/addZeroBefore";
 import toFixedNumber from "@/utils/formatNumbers";
 import { Form } from "@unform/web";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 
 interface IFoodVersion {
@@ -124,6 +124,15 @@ export default function Food() {
 		setCalories(toFixedNumber(parseFloat(amount) * foodData.calories / foodData.quantity_amount, 2, 10));
 	}, [foodData, amount]);
 
+	// Auto Focus on search bar
+  let inputRef = useRef<HTMLInputElement>();
+
+  useEffect(() => {
+		if(inputRef.current) {
+			inputRef.current.focus();
+		}
+  }, [inputRef]);
+
 	if (foodId) {
 		return (
 			<WholePageTransition>
@@ -199,8 +208,10 @@ export default function Food() {
 								<div className="amount">
 									<input
 										type="number"
+										ref={inputRef}
 										placeholder="Amount"
 										defaultValue={amount}
+										value={amount}
 										onChange={e => setAmount(e.target.value)}
 										step="0.01"
 									/>

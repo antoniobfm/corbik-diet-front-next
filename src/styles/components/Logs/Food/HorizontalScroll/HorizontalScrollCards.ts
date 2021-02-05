@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
 interface IProps {
@@ -6,7 +7,7 @@ interface IProps {
 	fatPerc: number;
 }
 
-export const Container = styled.div<IProps>`
+export const Container = styled(motion.div)<IProps>`
 	min-width: 104px;
 	max-width: 104px;
 	height: 80px;

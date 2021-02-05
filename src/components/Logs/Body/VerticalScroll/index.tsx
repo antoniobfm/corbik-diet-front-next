@@ -27,7 +27,11 @@ interface IProps {
 
 export default function LogsVerticalScroll({ data }: IProps) {
 	return (
-		<Container>
+		<Container
+		initial={{ opacity: 0, height: 80 }}
+		animate={{ opacity: 1, height: 'auto' }}
+		transition={{ duration: 0.3 }}
+		exit={{ opacity: 0 }}>
 			{data && data.map(log =>
 				<VerticalScrollCard key={log.id} data={log} />
 			)}
