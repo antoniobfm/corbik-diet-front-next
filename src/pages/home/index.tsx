@@ -270,10 +270,10 @@ export default function Home() {
 					</button>
 				</Header>
 				<Chartzin>
-					<LineChart extractName="calories" logData={logData} />
+					<LineChart extractName="calories" logData={logData} baseColor="#27AE60" />
 				</Chartzin>
 				<Chartzin>
-					<LineChart extractName="weight" logData={logData2} />
+					<LineChart extractName="weight" logData={logData2} baseColor="#27AE60" />
 				</Chartzin>
 			</Container>
 			</WholePageTransition>
