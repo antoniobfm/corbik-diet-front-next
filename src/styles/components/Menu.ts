@@ -55,7 +55,10 @@ export const FloatingButton = styled(motion.button)<Props>`
 	height: 48px;
 	border-radius: 24px;
 	background: #27AE60;
-	box-shadow: 0px 0px 4px #27AE60, 0px 0px 36px #27AE60;
+	/* box-shadow: 0px 0px 4px #27AE60, 0px 0px 36px #27AE60; */
+ animation-name: breath-animation;
+ animation-duration: 8s;
+ animation-iteration-count: infinite;
 
 	svg {
 		color: #D5F6E3;

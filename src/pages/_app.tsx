@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import AppProvider from '@/hooks'
 import { ProtectRoute } from '@/hooks/auth'
@@ -9,6 +9,7 @@ import { AppProps } from 'next/dist/next-server/lib/router/router'
 import Head from 'next/head';
 
 const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
+
 	return (
 		<>
 		<AppProvider>

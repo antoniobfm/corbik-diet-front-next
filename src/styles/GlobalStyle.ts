@@ -38,6 +38,14 @@ export default createGlobalStyle`
       text-align: center;
     }
   }
+
+	@keyframes breath-animation {
+ 0% { box-shadow: 0px 0px 4px #27AE60, 0px 0px 26px #27AE60; }
+ 30% { box-shadow: 0px 0px 8px #27AE60, 0px 0px 46px #27AE60; }
+ 40% { box-shadow: 0px 0px 6px #27AE60, 0px 0px 46px #27AE60;; }
+ 100% { box-shadow: 0px 0px 4px #27AE60, 0px 0px 26px #27AE60; }
+}
+
 	:root {
 		font-size: 14px;
 
@@ -51,8 +59,13 @@ export default createGlobalStyle`
 		--high-emphasis: #DEDEDE;
 		--medium-emphasis: #999999;
 		--low-emphasis: #616161;
+		--disabled-color: #333333;
 
 		--stroke-color: #222425;
+
+		--zero-level-black: #0A0A0B;
+		--first-level-black: #181A1B;
+		--second-level-black: #222426;
 	}
 
   h1 {

@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic'
 import Link from 'next/link';
-import { BigCardHeader, Calendar, Calories, Container, Header, Log, Logs, Macro, Macros } from "@/styles/pages/Home";
+import { BigCardHeader, Calendar, Calories, Container, Header, Log, Logs, Macro, Macros, CardContainer, CardHeader, CardContent, Mission } from "@/styles/pages/Home";
 import { createRef, useCallback, useEffect, useState } from 'react';
 import api from '@/services/api';
 import DayPicker from 'react-day-picker';
@@ -13,16 +13,16 @@ import Menu from '@/components/Menu';
 import WholePageTransition from '@/components/WholePageTransition';
 import addZeroBefore from '@/utils/addZeroBefore';
 import { useRouter } from 'next/router';
-import { FiChevronDown, FiList, FiSettings } from 'react-icons/fi';
+import { FiCheck, FiChevronDown, FiList, FiSettings } from 'react-icons/fi';
 import LogsHorizontalScroll from '@/components/Logs/Food/HorizontalScroll';
 import LogsVerticalScroll from '@/components/Logs/Food/VerticalScroll';
 import Chart from "chart.js";
-import errorHandler from "../errors/errorHandler";
 import { useError } from '@/hooks/errors';
 import { GetServerSidePropsContext } from 'next';
 import { AnimatePresence } from 'framer-motion';
 import * as d3 from 'd3';
 import { Chartzin } from '@/styles/pages/home/home';
+import LineChart from '@/components/Charts/LineChart';
 
 const LoginModal = dynamic(() => import('@/components/LoginModal'),
 	{ loading: () => <div className="blurred__background"><h1>Loading</h1></div> })
@@ -59,6 +59,7 @@ interface IDayResume {
 export default function Home({tururu}) {
 	const [logData, setLogData] = useState<IDayResume | null>(null);
 	const [chartData, setChartData] = useState<IDayResume[]>(null);
+	const [chartRawData, setChartRawData] = useState<IDayResume[]>(null);
 	const [loading, setLoading] = useState(true);
 	const [isHorizontal, setIsHorizontal] = useState(true);
 	const [showCalendar, setShowCalendar] = useState(false);
@@ -67,60 +68,8 @@ export default function Home({tururu}) {
 	const router = useRouter();
 	const {handleError} = useError();
 
-	// let chartRef = createRef<HTMLCanvasElement>();
+	let chartRef = createRef<HTMLCanvasElement>();
 
-//  useEffect(() => {
-
-// 	// set the dimensions and margins of the graph
-// 	var margin = {top: 30, right: 30, bottom: 70, left: 60},
-// 			width = 460 - margin.left - margin.right,
-// 			height = 400 - margin.top - margin.bottom;
-
-// 	// append the svg object to the body of the page
-// 	var svg = d3.select("#my_dataviz")
-// 		.append("svg")
-// 			.attr("width", width + margin.left + margin.right)
-// 			.attr("height", height + margin.top + margin.bottom)
-// 		.append("g")
-// 			.attr("transform",
-// 						"translate(" + margin.left + "," + margin.top + ")");
-
-
-// 	// Parse the Data
-// 	d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/7_OneCatOneNum_header.csv", function(data) {
-
-// 	// X axis
-// 	var x = d3.scaleBand()
-// 		.range([ 0, width ])
-// 		.domain(data.map(function(d) { return d.Country; }))
-// 		.padding(0.2);
-// 	svg.append("g")
-// 		.attr("transform", "translate(0," + height + ")")
-// 		.call(d3.axisBottom(x))
-// 		.selectAll("text")
-// 			.attr("transform", "translate(-10,0)rotate(-45)")
-// 			.style("text-anchor", "end");
-
-// 	// Add Y axis
-// 	var y = d3.scaleLinear()
-// 		.domain([0, 13000])
-// 		.range([ height, 0]);
-// 	svg.append("g")
-// 		.call(d3.axisLeft(y));
-
-// 	// Bars
-// 	svg.selectAll("mybar")
-// 		.data(data)
-// 		.enter()
-// 		.append("rect")
-// 			.attr("x", function(d) { return x(d.Country); })
-// 			.attr("y", function(d) { return y(d.Value); })
-// 			.attr("width", x.bandwidth())
-// 			.attr("height", function(d) { return height - y(d.Value); })
-// 			.attr("fill", "#69b3a2")
-
-// 	})
-//   }, [chartData]);
 
 	const { isAuthenticated, user, signOut } = useAuth();
 	if (!isAuthenticated) return <LoginModal />;
@@ -180,7 +129,7 @@ export default function Home({tururu}) {
 			const start = startOfDay(today).getTime();
 			const end = endOfDay(today).getTime();
 			const response_chart = await api.post('/food/log/30days', {start, end});
-			setChartData(response_chart.data);
+			setChartRawData(response_chart.data);
 		}
 
 		loadData();
@@ -189,6 +138,37 @@ export default function Home({tururu}) {
 	const handleLogsDirection = useCallback(() => {
 		setIsHorizontal(!isHorizontal);
 	}, [isHorizontal]);
+
+	useEffect(() => {
+		const data4: Chart.ChartData = {
+			labels: chartRawData && chartRawData.map(item => item.day),
+			datasets: [
+				{
+					label: 'Calories',
+					fill: true,
+					lineTension: 0.1,
+					backgroundColor: 'rgba(39, 174, 96,0.3)',
+					borderColor: 'rgba(39, 174, 96,1)',
+					borderCapStyle: 'butt',
+					borderDash: [],
+					borderDashOffset: 0.0,
+					borderJoinStyle: 'miter',
+					pointBorderColor: 'rgba(39, 174, 96,1)',
+					pointBackgroundColor: '#fff',
+					pointBorderWidth: 3,
+					pointHoverRadius: 5,
+					pointHoverBackgroundColor: 'rgba(39, 174, 96,1)',
+					pointHoverBorderColor: 'rgba(220,220,220,1)',
+					pointHoverBorderWidth: 2,
+					pointRadius: 1,
+					pointHitRadius: 10,
+					data: chartRawData && chartRawData.map(item => item.calories)
+				}
+			]
+		};
+
+		setChartData(data4);
+	}, [chartRawData]);
 
 	return (
 		<>
@@ -269,9 +249,36 @@ export default function Home({tururu}) {
 						ref={chartRef}
 					/> */}
 				</Logs>
-				{/* <Chartzin>
-<div id="my_dataviz"></div>
-				</Chartzin> */}
+				<CardContainer>
+					<CardHeader>
+						<h3>Welcome to the diet page</h3>
+						<p>Your diet is everything you eat, inside or outside of your planning.</p>
+					</CardHeader>
+					<CardContent>
+						<h4>Getting started</h4>
+						<div id="missions-container">
+							<Mission isDone={true}>
+								<div className="is-done">
+									<FiCheck />
+								</div>
+								<h5>Create your first food</h5>
+							</Mission>
+							<Mission isDone={false}>
+								<div className="is-done" />
+								<h5>Add your first food log</h5>
+							</Mission>
+							<Mission isDone={false}>
+								<div className="is-done" />
+								<h5>Set your macro’s target</h5>
+							</Mission>
+						</div>
+					</CardContent>
+				</CardContainer>
+				<CardContainer>
+					<div id="test-chart">
+						<LineChart extractName="calories" logData={chartRawData} baseColor="#27AE60"/>
+					</div>
+				</CardContainer>
 			</Container>
 			</WholePageTransition>
 
