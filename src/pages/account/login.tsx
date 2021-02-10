@@ -70,16 +70,26 @@ export default function Login() {
 				<h3>Login</h3>
 				<div>
 					<Form ref={formRef} onSubmit={handleSignIn}>
-						<Input name="email" labelName="Email" type="input" onChange={(e) => setEmailInput(e.target.value)} />
-						<Input name="password" labelName="Password" type="password" onChange={(e) => setPasswordInput(e.target.value)} />
-							<ButtonLogin
-								type="submit"
-								style={{ width: '100%' }}
-								isDisabled={isEmpty}
-								disabled={isEmpty}
-							>
-								{loadingAction ? 'Loading...' : 'SIGN IN'}
-							</ButtonLogin>
+						<Input
+							name="email"
+							labelName="Email"
+							type="input"
+							onChange={(e) => setEmailInput(e.target.value)}
+						/>
+						<Input
+							name="password"
+							labelName="Password"
+							type="password"
+							onChange={(e) => setPasswordInput(e.target.value)}
+						/>
+						<ButtonLogin
+							type="submit"
+							style={{ width: '100%' }}
+							isDisabled={isEmpty}
+							disabled={isEmpty}
+						>
+							{loadingAction ? 'Loading...' : 'SIGN IN'}
+						</ButtonLogin>
 					</Form>
 				</div>
 				<h5 onClick={() => router.push('/account/forgot-password')}>

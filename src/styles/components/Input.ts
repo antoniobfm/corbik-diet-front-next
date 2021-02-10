@@ -22,6 +22,10 @@ export const Container = styled.div<ContainerProps>`
 
 	input {
 		width: 100%;
+    -webkit-user-select: text; /* Chrome, Opera, Safari */
+    -moz-user-select: text; /* Firefox 2+ */
+    -ms-user-select: text; /* IE 10+ */
+    user-select: text; /* Standard syntax */
 
 		font-size: 18px;
 		font-weight: 400;
