@@ -6,13 +6,13 @@ import { ToastProvider } from './toast';
 
 const AppProvider: React.FC = ({ children }) => {
 	return (
-		<AuthProvider>
-			<ToastProvider>
+		<ToastProvider>
+			<AuthProvider>
 				<ErrorProvider>
 					{children}
 				</ErrorProvider>
-			</ToastProvider>
-		</AuthProvider>
+			</AuthProvider>
+		</ToastProvider>
 	);
 };
 

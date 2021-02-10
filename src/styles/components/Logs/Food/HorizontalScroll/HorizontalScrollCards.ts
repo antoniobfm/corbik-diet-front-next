@@ -31,6 +31,7 @@ export const Container = styled(motion.div)<IProps>`
 		justify-content: space-between;
 		align-items: flex-start;
 		height: auto;
+
 		h1 {
 			flex: 1;
 			min-width: 77%;
@@ -56,6 +57,7 @@ export const Container = styled(motion.div)<IProps>`
 	.details2 {
 		flex: 1;
 		margin-top: -8px;
+
 		span {
 			height: auto;
 			flex: 1;

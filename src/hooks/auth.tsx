@@ -1,4 +1,4 @@
-import Login from '@/pages/login';
+import Login from '@/pages/account/login';
 import { Router, useRouter } from 'next/router';
 import React, {
 	createContext,
@@ -6,8 +6,11 @@ import React, {
 	useState,
 	useContext,
 	useEffect,
+	Dispatch,
+	SetStateAction,
 } from 'react';
 
+import { useToast } from '@/hooks/toast'
 import api from '../services/api';
 import nookies from "nookies";
 import { GetServerSidePropsContext } from 'next';
@@ -39,21 +42,33 @@ interface SignInCredentials {
 	password: string;
 }
 
+interface ResetPassword {
+	token: string;
+	password: string;
+	password_confirmation: string;
+	setState: Dispatch<SetStateAction<boolean>>;
+}
+
 interface AuthContextData {
 	isAuthenticated: boolean;
 	user: User;
 	loading: boolean;
+	loadingAction: boolean;
 	signIn(credentials: SignInCredentials): Promise<void>;
 	signOut(): void;
 	updateUser(user: User): void;
+	forgotPassword(email: string): Promise<void>;
+	resetPassword(data: ResetPassword): Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 const AuthProvider: React.FC = ({ children }) => {
-	const [loading, setLoading] = useState(true)
+	const [loading, setLoading] = useState(true);
+	const [loadingAction, setLoadingAction] = useState(false);
 	const [data, setData] = useState<AuthState>({} as AuthState);
 
+	const { addToast } = useToast();
 	const router = useRouter();
 
 	useEffect(() => {
@@ -115,9 +130,42 @@ const AuthProvider: React.FC = ({ children }) => {
 		},
 		[setData],
 	);
+
+	const forgotPassword = useCallback(async (email: string) => {
+		setLoadingAction(true);
+		try {
+			await api.post('/password/forgot', {
+					email
+			});
+		} catch (err) {
+			console.log(err);
+		}
+		setLoadingAction(false);
+	}, []);
+
+	const resetPassword = useCallback(async ({ token, password, password_confirmation, setState }: ResetPassword) => {
+		setLoadingAction(true);
+		try {
+			await api.post('/password/reset', {
+				token,
+				password,
+				password_confirmation
+			});
+
+			setState(true);
+			setTimeout(() => { router.push('/') }, 5000);
+		} catch (err) {
+			addToast({
+				title: 'Something went wrong',
+				type: 'error'
+			});
+		}
+		setLoadingAction(false);
+	}, []);
+
 	return (
 		<AuthContext.Provider
-			value={{ isAuthenticated: !!data.user, user: data.user, loading, signIn, signOut, updateUser }}
+			value={{ isAuthenticated: !!data.user, user: data.user, loading, loadingAction, signIn, signOut, updateUser, forgotPassword, resetPassword }}
 		>
 			{children}
 		</AuthContext.Provider>
@@ -139,9 +187,9 @@ export { AuthContext, AuthProvider, useAuth };
 export const ProtectRoute = ({ children }) => {
 	const router = useRouter();
 	const { isAuthenticated, loading } = useAuth();
-	if (loading || (!isAuthenticated && window.location.pathname !== '/login')) {
+	if (loading || (!isAuthenticated && window.location.pathname !== '/account/login' && window.location.pathname !== '/account/forgot-password' && window.location.pathname !== '/account/reset-password')) {
 		return <Login />;
-	} else if (isAuthenticated && window.location.pathname !== '/login') {
+	} else if (isAuthenticated && window.location.pathname !== '/account/login'  && window.location.pathname !== '/account/forgot-password' && window.location.pathname !== '/account/reset-password') {
 		console.log('tru');
 	}
 	return children;
@@ -154,7 +202,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext, chi
 		console.log('tururuu');
     return children;
   } catch (err) {
-    context.res.writeHead(302, { Location: "/login" });
+    context.res.writeHead(302, { Location: "/account/login" });
     context.res.end();
     return { props: {} };
   }

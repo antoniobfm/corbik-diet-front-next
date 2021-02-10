@@ -53,107 +53,7 @@ export default function Home() {
 
 	let chartRef = createRef<HTMLCanvasElement>();
 
-	useEffect(() => {
-		const canvas = document.getElementById(`background-chart`) as HTMLCanvasElement;
-		const ctx = canvas.getContext('2d');
-
-		var gradientStroke = ctx.createLinearGradient(chartRef.current.width / 2, 0, chartRef.current.width / 2, chartRef.current.height);
-		gradientStroke.addColorStop(0, 'rgba(255, 255, 255, 0.075)');
-
-		gradientStroke.addColorStop(0.63, 'rgba(24, 26, 27, 0)');
-
-		const data2: Chart.ChartData = {
-			labels: chartData && chartData.map(item => item.when),
-			datasets: [
-				{
-					label: `oloco`,
-					fill: true,
-					lineTension: 1,
-					backgroundColor: gradientStroke,
-					borderColor: 'rgba(150, 150, 150, 1)',
-					borderCapStyle: 'butt',
-					borderDash: [],
-					borderDashOffset: 0.0,
-					borderJoinStyle: 'miter',
-					borderWidth: 1,
-
-					pointBorderColor: 'rgba(150, 150, 150, 1)',
-					pointBackgroundColor: 'rgba(150, 150, 150, 1)',
-					pointBorderWidth: 0.1,
-					pointHoverRadius: 0.1,
-					pointHoverBackgroundColor: 'rgba(150, 150, 150, 1)',
-					pointHoverBorderColor: 'rgba(220,220,220,1)',
-					pointHoverBorderWidth: 0.1,
-					pointRadius: 0.1,
-					pointHitRadius: 0.1,
-					data: chartData && chartData.map(item => parseInt(item.weight, 10))
-				}
-			]
-		};
-
-		const options: Chart.ChartOptions = {
-			responsive: true,
-			aspectRatio: 1,
-			maintainAspectRatio: false,
-			tooltips: {
-				enabled: false,
-			},
-			events: [],
-			hover: {
-				mode: null
-			},
-			animation: {
-				duration: 0,
-			},
-			legend: {
-				display: false,
-					labels: {
-					}
-			},
-			layout: {
-				padding: {
-						top: 0,
-						bottom: 0,
-				}
-			},
-			scales: {
-				yAxes: [{
-					display: false,
-					gridLines: {
-						display: false ,
-						color: "#FFFFFF"
-					},
-					ticks: {
-							beginAtZero: false,
-							fontColor: '#747676',
-							fontFamily: 'Poppins',
-							fontSize: 6,
-					},
-				}],
-				xAxes: [{
-					display: false,
-					gridLines: {
-						display: false ,
-						color: "#FFFFFF"
-					},
-					ticks: {
-							fontColor: '#747676',
-							fontFamily: 'Poppins',
-							fontSize: 6
-					},
-				}]
-			}
-		}
-
-		new Chart(ctx, {
-				type: "line",
-				data: data2,
-				options: options
-		});
-
-	}, [chartRef, chartData]);
-
-	const { isAuthenticated, user, signOut } = useAuth();
+	const { isAuthenticated, user } = useAuth();
 	if (!isAuthenticated) return <LoginModal />;
 
 	const handleDateChange = useCallback((day: Date) => {
@@ -279,11 +179,6 @@ export default function Home() {
 					</Logs>
 				</Container>
 			</WholePageTransition>
-			<Link href="/settings">
-				<a>
-					<h4 style={{ opacity: 0.5, fontWeight: 400, textAlign: 'center', paddingTop: 40, paddingBottom: 40 }}>Settings</h4>
-				</a>
-			</Link>
 		</>
 	)
 }

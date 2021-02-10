@@ -3,18 +3,17 @@ import React, { ButtonHTMLAttributes } from 'react';
 import { DisabledStyle, GreenStyle, RedStyle, YellowStyle, BlueStyle } from "@/styles/components/Button";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-	loading?: boolean;
+	loadingAction?: boolean;
 	disabled?: boolean;
 	fullWidth: boolean;
 	color?: 'green' | 'red' | 'yellow';
 };
 
-export default function Button({ children, loading, color = 'green', disabled = false, fullWidth = true, ...rest }: ButtonProps) {
-
+export default function Button({ children, loadingAction, color = 'green', disabled = false, fullWidth = true, ...rest }: ButtonProps) {
 	if (disabled) {
 		return (
 			<DisabledStyle type="button" {...rest} style={{width: `${fullWidth && `100%`}`}}>
-				{loading ? 'Loading...' : children}
+				{loadingAction ? 'Loading...' : children}
 			</DisabledStyle>
 		);
 	}
@@ -22,7 +21,7 @@ export default function Button({ children, loading, color = 'green', disabled = 
 	if (color === 'green') {
 		return (
 			<GreenStyle type="button" {...rest} style={{width: `${fullWidth && `100%`}`}}>
-				{loading ? 'Loading...' : children}
+				{loadingAction ? 'Loading...' : children}
 			</GreenStyle>
 		);
 	}
@@ -30,7 +29,7 @@ export default function Button({ children, loading, color = 'green', disabled = 
 	if (color === 'red') {
 		return (
 			<RedStyle type="button" {...rest} style={{width: `${fullWidth && `100%`}`}}>
-				{loading ? 'Loading...' : children}
+				{loadingAction ? 'Loading...' : children}
 			</RedStyle>
 		);
 	}
@@ -38,7 +37,7 @@ export default function Button({ children, loading, color = 'green', disabled = 
 	if (color === 'yellow') {
 		return (
 			<YellowStyle type="button" {...rest} style={{width: `${fullWidth && `100%`}`}}>
-				{loading ? 'Loading...' : children}
+				{loadingAction ? 'Loading...' : children}
 			</YellowStyle>
 		);
 	}
@@ -46,7 +45,7 @@ export default function Button({ children, loading, color = 'green', disabled = 
 	if (color === 'blue') {
 		return (
 			<BlueStyle type="button" {...rest} style={{width: `${fullWidth && `100%`}`}}>
-				{loading ? 'Loading...' : children}
+				{loadingAction ? 'Loading...' : children}
 			</BlueStyle>
 		);
 	}

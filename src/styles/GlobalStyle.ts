@@ -40,11 +40,11 @@ export default createGlobalStyle`
   }
 
 	@keyframes breath-animation {
- 0% { box-shadow: 0px 0px 4px #27AE60, 0px 0px 26px #27AE60; }
- 30% { box-shadow: 0px 0px 8px #27AE60, 0px 0px 46px #27AE60; }
- 40% { box-shadow: 0px 0px 6px #27AE60, 0px 0px 46px #27AE60;; }
- 100% { box-shadow: 0px 0px 4px #27AE60, 0px 0px 26px #27AE60; }
-}
+		0% { box-shadow: 0px 0px 4px #27AE60, 0px 0px 26px #27AE60; }
+		30% { box-shadow: 0px 0px 8px #27AE60, 0px 0px 46px #27AE60; }
+		40% { box-shadow: 0px 0px 6px #27AE60, 0px 0px 46px #27AE60; }
+		100% { box-shadow: 0px 0px 4px #27AE60, 0px 0px 26px #27AE60; }
+	}
 
 	:root {
 		font-size: 14px;

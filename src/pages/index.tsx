@@ -304,7 +304,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 			props: {tururu: ''}
 		};
   } catch (err) {
-    context.res.writeHead(302, { Location: "/login" });
+    context.res.writeHead(302, { Location: "/account/login" });
     context.res.end();
     return { props: {} };
   }

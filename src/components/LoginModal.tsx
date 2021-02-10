@@ -1,6 +1,6 @@
 import { useAuth } from "@/hooks/auth";
 import { CreateButton } from "@/styles/pages/food/create";
-import { Container, CreateAccount, LoginContainer } from "@/styles/pages/login";
+import { Container, CreateAccount, LoginContainer } from "@/styles/pages/account/login";
 import { useRouter } from "next/router";
 import { useCallback, useRef } from "react";
 
