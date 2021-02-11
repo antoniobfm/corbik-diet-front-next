@@ -90,6 +90,11 @@ export const Menu = styled.div`
       padding-left: 24px;
       color: rgba(255, 255, 255, 0.95);
       font-size: 16px;
+
+			-webkit-user-select: text; /* Chrome, Opera, Safari */
+			-moz-user-select: text; /* Firefox 2+ */
+			-ms-user-select: text; /* IE 10+ */
+			user-select: text; /* Standard syntax */
     }
   }
 
