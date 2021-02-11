@@ -92,7 +92,8 @@ const AuthProvider: React.FC = ({ children }) => {
 	}, [])
 
 	const signIn = useCallback(async ({ email, password }) => {
-		setLoading(true);
+		setLoadingAction(true);
+		try {
 		const response = await api.post('sessions', {
 			email,
 			password,
@@ -100,12 +101,13 @@ const AuthProvider: React.FC = ({ children }) => {
 
 		const { user } = response.data;
 
-
 		localStorage.setItem('@Corbik:User', JSON.stringify(user));
 
 		setData({ user });
-		setLoading(false);
-		router.reload();
+		} catch (err) {
+			router.push('/');
+		}
+		setLoadingAction(false);
 	}, []);
 
 	const signOut = useCallback(async () => {
