@@ -160,8 +160,12 @@ export default function Home() {
 							</div>
 						</BigCardHeader>
 						<div>
-							{!loading ? logData && logData.logs &&
+							{!loading ? logData && logData.logs ?
 								isHorizontal ? <LogsHorizontalScroll data={logData.logs} /> : <LogsVerticalScroll data={logData.logs} />
+								:
+								<div className="search-first">
+									<h4>NO LOGS</h4>
+								</div>
 								:
 								<Skeleton count={4} duration={2} height={64} width='92.5%' style={{ marginLeft: 16, marginRight: 16 }} />
 							}
