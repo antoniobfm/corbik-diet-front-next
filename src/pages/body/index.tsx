@@ -204,17 +204,17 @@ export default function Home() {
 						<CardContent>
 							<h4>Getting started</h4>
 							<div id="missions-container">
-								<Mission isDone={true}>
+								<Mission isDone={logData.logs.length >= 1}>
 									<div className="is-done">
 										<FiCheck />
 									</div>
 									<h5>Add your first log</h5>
 								</Mission>
-								<Mission isDone={!!user.calories && !!user.carbohydrates && !!user.proteins && !!user.carbohydrates && !!user.fats}>
+								<Mission isDone={!!user.weight}>
 									<div className="is-done">
 										<FiCheck />
 									</div>
-									<h5>Set your body composition target</h5>
+									<h5>Set your weight target</h5>
 								</Mission>
 							</div>
 						</CardContent>
