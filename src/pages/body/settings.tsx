@@ -1,6 +1,6 @@
 import { useAuth } from "@/hooks/auth";
 import api from "@/services/api";
-import { CardContent, CardHeader, Header, WideCardContainer } from "@/styles/pages/Home";
+import { WideCardContainer, CardContent, CardHeader, Header } from "@/styles/pages/Home";
 import { Container } from "@/styles/pages/settings";
 import { useCallback, useRef } from "react";
 import getValidationErrors from '../../utils/getValidationErrors';
@@ -14,19 +14,15 @@ import { useToast } from "@/hooks/toast";
 import WholePageTransition from "@/components/WholePageTransition";
 
 interface TargetsFormData {
-	carbohydrates: string;
-	proteins: string;
-	fats: string;
-	calories: string;
+	weight: string;
 }
 
-export default function DietSettings() {
+export default function BodySettings() {
 	const { addToast } = useToast();
 
-	const formRef = useRef<FormHandles>(null);
 	const formTargetsRef = useRef<FormHandles>(null);
 
-	const { updateUser, user, signOut } = useAuth();
+	const { updateUser, user } = useAuth();
 
 	const handleSubmitTargets = useCallback(
 		async (data: TargetsFormData) => {
@@ -34,10 +30,7 @@ export default function DietSettings() {
 				formTargetsRef.current?.setErrors({});
 
 				const schema = Yup.object().shape({
-					carbohydrates: Yup.string().required('Carbohydrates amount required'),
-					proteins: Yup.string().required('Proteins amount required'),
-					fats: Yup.string().required('Fats amount required'),
-					calories: Yup.string().required('Calories amount required'),
+					weight: Yup.string().required('Weight amount required'),
 				});
 
 				await schema.validate(data, {
@@ -45,20 +38,14 @@ export default function DietSettings() {
 				});
 
 				const {
-					carbohydrates,
-					proteins,
-					fats,
-					calories
+					weight,
 				} = data;
 
 				const formData = {
-					carbohydrates: parseInt(carbohydrates, 10),
-					proteins: parseInt(proteins, 10),
-					fats: parseInt(fats, 10),
-					calories: parseInt(calories, 10)
+					weight: parseInt(weight, 10),
 				};
 
-				const response = await api.put('/profile/targets', formData);
+				const response = await api.put('/profile/body-targets', formData);
 
 				updateUser(response.data);
 
@@ -90,7 +77,7 @@ export default function DietSettings() {
 			<GoBack />
 			<Container>
 				<Header>
-					<h1>Diet Settings</h1>
+					<h1>Body Settings</h1>
 				</Header>
 				<WideCardContainer>
 					<CardHeader>
@@ -99,33 +86,12 @@ export default function DietSettings() {
 					<CardContent>
 						<Form
 							ref={formTargetsRef}
-							initialData={{ carbohydrates: user.carbohydrates, proteins: user.proteins, fats: user.fats, calories: user.calories }}
+							initialData={{ weight: user.weight }}
 							onSubmit={handleSubmitTargets}
 						>
-							<div className="form__three__columns">
-								<Input
-									name="carbohydrates"
-									labelName="Carbohydrates"
-									type="number"
-									step="0.01"
-									required={true}
-								/>
-								<Input
-									name="proteins"
-									labelName="Proteins"
-									type="number"
-									step="0.01"
-								/>
-								<Input
-									name="fats"
-									labelName="Fats"
-									type="number"
-									step="0.01"
-								/>
-							</div>
 							<Input
-								name="calories"
-								labelName="Calories"
+								name="weight"
+								labelName="Weight (kg)"
 								type="number"
 								step="0.01"
 							/>

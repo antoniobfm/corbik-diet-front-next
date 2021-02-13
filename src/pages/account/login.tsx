@@ -72,8 +72,9 @@ export default function Login() {
 					<Form ref={formRef} onSubmit={handleSignIn}>
 						<Input
 							name="email"
+							autoCapitalize="no"
 							labelName="Email"
-							type="input"
+							type="email"
 							onChange={(e) => setEmailInput(e.target.value)}
 						/>
 						<Input

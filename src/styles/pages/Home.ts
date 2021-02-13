@@ -215,18 +215,6 @@ export const Logs = styled.div`
 		max-height: 50px;
 		max-width: 100vw;
 	}
-
-	.search-first {
-		flex: 1;
-
-		h4 {
-			font-size: 13px;
-			text-align: center;
-			font-weight: 600;
-			color: var(--low-emphasis);
-			padding: 24px 0;
-		}
-	}
 `;
 
 interface IBigCardHeader {
@@ -423,6 +411,23 @@ export const Calendar = styled.aside`
   }
 `;
 
+export const WideCardContainer = styled.div`
+	width: calc(100%);
+	height: auto;
+	margin-bottom: 16px;
+	padding: 0 0 16px;
+
+	background: #181A1B;
+	border: 1px solid #222425;
+	border-left: none;
+	border-right: none;
+
+	#test-chart {
+		padding: 16px 4px 0px;
+		max-height: 200px;
+	}
+`;
+
 export const CardContainer = styled.div`
 	width: calc(100% - 16px);
 	height: auto;
@@ -444,6 +449,12 @@ export const CardHeader = styled.div`
 
 	h3 {
 		font-size: 18px;
+		line-height: 27px;
+		color: var(--high-emphasis);
+	}
+
+	h2 {
+		font-size: 1.414rem;
 		line-height: 27px;
 		color: var(--high-emphasis);
 	}
@@ -500,6 +511,7 @@ export const Mission = styled.div<MissionProps>`
 		box-shadow: 0px 0px 4px ${props => props.isDone ? 'var(--corbik-green)' : 'transparent'}, 0px 0px 12px ${props => props.isDone ? 'var(--corbik-green)' : 'transparent'};
 
 		svg {
+			opacity: ${props => props.isDone ? 1 : 0};
 			position: absolute;
 			margin-top: 1px;
 			margin-left: 1px;

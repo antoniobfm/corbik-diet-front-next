@@ -9,7 +9,7 @@ import { useAuth } from '@/hooks/auth';
 import Menu from '@/components/Menu';
 import WholePageTransition from '@/components/WholePageTransition';
 import { endOfDay, startOfDay } from 'date-fns';
-import { Header } from '@/styles/pages/Home';
+import { CardHeader, Header, WideCardContainer } from '@/styles/pages/Home';
 import { useRouter } from 'next/router';
 import { FiSettings } from 'react-icons/fi';
 import { Line } from 'react-chartjs-2';
@@ -101,7 +101,7 @@ export default function Home() {
 				const today = new Date();
 				const start = startOfDay(today).getTime();
 				const end = endOfDay(today).getTime();
-				const response = await api.post('/food/log/30days', {start, end});
+				const response = await api.post('/food/log/30days', { start, end });
 
 				handleData(response.data);
 			} catch (err) {
@@ -119,7 +119,7 @@ export default function Home() {
 				const start = startOfDay(today).getTime();
 				const end = endOfDay(today).getTime();
 
-				const response = await api.post('/body/log/30days', {start, end});
+				const response = await api.post('/body/log/30days', { start, end });
 
 				handleData2(response.data);
 			} catch (err) {
@@ -199,14 +199,14 @@ export default function Home() {
 		datasets: [{
 			data: [300, 50, 100],
 			backgroundColor: [
-			'#EB5757',
-			'#2D9CDB',
-			'#F2C94C'
+				'#EB5757',
+				'#2D9CDB',
+				'#F2C94C'
 			],
 			hoverBackgroundColor: [
-			'#EB5757',
-			'#2D9CDB',
-			'#F2C94C'
+				'#EB5757',
+				'#2D9CDB',
+				'#F2C94C'
 			]
 		}]
 	};
@@ -217,71 +217,77 @@ export default function Home() {
 		maintainAspectRatio: false,
 		legend: {
 			display: false,
-				labels: {
-				}
+			labels: {
+			}
 		},
 		scales: {
 			yAxes: [{
 				display: false,
 				gridLines: {
-					display: false ,
+					display: false,
 					color: "#FFFFFF"
 				},
 				ticks: {
-						beginAtZero: false,
-						fontColor: '#747676',
-						fontFamily: 'Poppins',
-						fontSize: 6,
-						borderColor: 'red'
+					beginAtZero: false,
+					fontColor: '#747676',
+					fontFamily: 'Poppins',
+					fontSize: 6,
+					borderColor: 'red'
 				},
 			}],
 			xAxes: [{
 				display: false,
 				gridLines: {
-					display: false ,
+					display: false,
 					color: "#FFFFFF"
 				},
 				ticks: {
-						fontColor: '#747676',
-						fontFamily: 'Poppins',
-						fontSize: 6
+					fontColor: '#747676',
+					fontFamily: 'Poppins',
+					fontSize: 6
 				},
 			}]
 		}
 	}
+
 	const router = useRouter();
 
 	return (
 		<>
 			<Menu currentRoute="Home" />
 			<WholePageTransition>
-			<Container>
-				<Header>
-					<button
-					id="diet--home--change--date"
-					type="button"
-					onClick={() => {}}>
-						Home
+				<Container>
+					<Header>
+						<button
+							id="diet--home--change--date"
+							type="button"
+							onClick={() => { }}>
+							Home
 					</button>
-					<button
-					id="diet--home--settings--button"
-					onClick={() => {router.push('/settings')}}>
-						<FiSettings />
-					</button>
-				</Header>
-				<Chartzin>
-					<LineChart extractName="calories" logData={logData} baseColor="#27AE60" />
-				</Chartzin>
-				<Chartzin>
-					<LineChart extractName="weight" logData={logData2} baseColor="#27AE60" />
-				</Chartzin>
-			</Container>
+						<button
+							id="diet--home--settings--button"
+							onClick={() => { router.push('/settings') }}>
+							<FiSettings />
+						</button>
+					</Header>
+					<WideCardContainer>
+						<CardHeader>
+							<h3>Calory intake variation</h3>
+						</CardHeader>
+						<div id="test-chart">
+							<LineChart extractName="calories" logData={logData} baseColor="#27AE60" />
+						</div>
+					</WideCardContainer>
+					<WideCardContainer>
+						<CardHeader>
+							<h3>Weight variation</h3>
+						</CardHeader>
+						<div id="test-chart">
+							<LineChart extractName="weight" logData={logData2} baseColor="#27AE60" />
+						</div>
+					</WideCardContainer>
+				</Container>
 			</WholePageTransition>
-			<Link href="/settings">
-				<a>
-					<h4 style={{ opacity: 0.5, fontWeight: 400, textAlign: 'center', paddingTop: 40, paddingBottom: 40 }}>Settings</h4>
-				</a>
-			</Link>
 		</>
 	)
 }

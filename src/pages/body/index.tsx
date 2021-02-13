@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic'
 import Link from 'next/link';
-import { BigCardHeader, Calories, Container, Header, Log, Logs, Macro, Macros } from "@/styles/pages/Home";
+import { BigCardHeader, Calories, CardContainer, CardContent, CardHeader, Container, Header, Log, Logs, Macro, Macros, Mission } from "@/styles/pages/Home";
 import { createRef, useCallback, useEffect, useState } from 'react';
 import api from '@/services/api';
 import 'react-day-picker/lib/style.css';
@@ -10,10 +10,12 @@ import Skeleton from 'react-loading-skeleton';
 import Menu from '@/components/Menu';
 import WholePageTransition from '@/components/WholePageTransition';
 import { useRouter } from 'next/router';
-import { FiChevronDown, FiList, FiSettings } from 'react-icons/fi';
+import { FiCheck, FiChevronDown, FiList, FiSettings } from 'react-icons/fi';
 import LogsHorizontalScroll from '@/components/Logs/Body/HorizontalScroll';
 import LogsVerticalScroll from '@/components/Logs/Body/VerticalScroll';
 import Chart from "chart.js";
+import CardMessage from '@/components/Card/CardMessage';
+import LineChart from '@/components/Charts/LineChart';
 
 const LoginModal = dynamic(() => import('@/components/LoginModal'),
 	{ loading: () => <div className="blurred__background"><h1>Loading</h1></div> })
@@ -44,6 +46,7 @@ interface IDayResume {
 export default function Home() {
 	const [logData, setLogData] = useState<IDayResume | null>(null);
 	const [chartData, setChartData] = useState<IDayResume[]>(null);
+	const [chartRawData, setChartRawData] = useState<IDayResume[]>(null);
 	const [loading, setLoading] = useState(true);
 	const [isHorizontal, setIsHorizontal] = useState(true);
 	const [showCalendar, setShowCalendar] = useState(false);
@@ -104,6 +107,18 @@ export default function Home() {
 		setIsHorizontal(!isHorizontal);
 	}, [isHorizontal]);
 
+	useEffect(() => {
+		async function loadData() {
+			const today = new Date();
+			const start = startOfDay(today).getTime();
+			const end = endOfDay(today).getTime();
+			const response_chart = await api.post('/body/log/30days', {start, end});
+			setChartRawData(response_chart.data);
+		}
+
+		loadData();
+	}, [logData])
+
 	return (
 		<>
 			<Menu currentRoute="body" />
@@ -118,7 +133,7 @@ export default function Home() {
 						</button>
 						<button
 						id="diet--home--settings--button"
-						onClick={() => {router.push('/food/settings')}}>
+						onClick={() => {router.push('/body/settings')}}>
 							<FiSettings />
 						</button>
 					</Header>
@@ -126,21 +141,21 @@ export default function Home() {
 						<Macro macro="carb">
 							<div>
 								<h4>Muscle</h4>
-								<span>{!loading && logData ? logData.currentMuscle : `0`}<span>/{user && parseInt(user.muscle)}%</span></span>
+								<span>{!loading && logData ? logData.currentMuscle : `0`}%{/*<span>/{user && parseInt(user.muscle)}%</span>*/}</span>
 							</div>
 							<progress id="carbs" value={logData ? logData.currentMuscle : `0`} max={user && user.muscle} />
 						</Macro>
 						<Macro macro="protein">
 							<div>
 								<h4>Water</h4>
-								<span>{!loading && logData ? logData.currentWater : `0`}<span>/{user && parseInt(user.water)}%</span></span>
+								<span>{!loading && logData ? logData.currentWater : `0`}%{/*<span>/{user && parseInt(user.water)}%</span>*/}</span>
 							</div>
 							<progress id="carbs" value={logData ? logData.currentWater : `0`} max={user && user.water} />
 						</Macro>
 						<Macro macro="fat">
 							<div>
 								<h4>Fat</h4>
-								<span>{!loading && logData ? logData.currentFat : `0`}<span>/{user && parseInt(user.fat)}%</span></span>
+								<span>{!loading && logData ? logData.currentFat : `0`}%{/*<span>/{user && parseInt(user.fat)}%</span>*/}</span>
 							</div>
 							<progress id="carbs" value={logData ? logData.currentFat : `0`} max={user && user.fat} />
 						</Macro>
@@ -163,9 +178,9 @@ export default function Home() {
 							{!loading ? logData && logData.logs ?
 								isHorizontal ? <LogsHorizontalScroll data={logData.logs} /> : <LogsVerticalScroll data={logData.logs} />
 								:
-								<div className="search-first">
+								<CardMessage borderBottom={false}>
 									<h4>NO LOGS</h4>
-								</div>
+								</CardMessage>
 								:
 								<Skeleton count={4} duration={2} height={64} width='92.5%' style={{ marginLeft: 16, marginRight: 16 }} />
 							}
@@ -181,6 +196,37 @@ export default function Home() {
 							ref={chartRef}
 						/>
 					</Logs>
+					<CardContainer>
+						<CardHeader>
+							<h3>Welcome to the body page</h3>
+							<p>Here you will track how your body composition change through time.</p>
+						</CardHeader>
+						<CardContent>
+							<h4>Getting started</h4>
+							<div id="missions-container">
+								<Mission isDone={true}>
+									<div className="is-done">
+										<FiCheck />
+									</div>
+									<h5>Add your first log</h5>
+								</Mission>
+								<Mission isDone={!!user.calories && !!user.carbohydrates && !!user.proteins && !!user.carbohydrates && !!user.fats}>
+									<div className="is-done">
+										<FiCheck />
+									</div>
+									<h5>Set your body composition target</h5>
+								</Mission>
+							</div>
+						</CardContent>
+					</CardContainer>
+					<CardContainer>
+						<CardHeader>
+							<h3>Weight variation</h3>
+						</CardHeader>
+						<div id="test-chart">
+							<LineChart extractName="weight" logData={chartRawData} baseColor="#27AE60"/>
+						</div>
+					</CardContainer>
 				</Container>
 			</WholePageTransition>
 		</>

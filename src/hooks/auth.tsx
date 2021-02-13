@@ -94,17 +94,24 @@ const AuthProvider: React.FC = ({ children }) => {
 	const signIn = useCallback(async ({ email, password }) => {
 		setLoadingAction(true);
 		try {
-		const response = await api.post('sessions', {
-			email,
-			password,
-		});
+			const response = await api.post('sessions', {
+				email,
+				password,
+			});
 
-		const { user } = response.data;
+			console.log(response.data);
 
-		localStorage.setItem('@Corbik:User', JSON.stringify(user));
+			const { user } = response.data;
 
-		setData({ user });
+			localStorage.setItem('@Corbik:User', JSON.stringify(user));
+
+			setData({ user });
+			router.push('/');
 		} catch (err) {
+			addToast({
+				title: 'Incorrect email/password combination',
+				type: 'error'
+			});
 			router.push('/');
 		}
 		setLoadingAction(false);
@@ -112,14 +119,19 @@ const AuthProvider: React.FC = ({ children }) => {
 
 	const signOut = useCallback(async () => {
 		try {
-		await api.post('/sessions/logout');
+			await api.post('/sessions/logout');
 
-		localStorage.removeItem('@Corbik:User');
+			localStorage.removeItem('@Corbik:User');
 
-		setData({} as AuthState);
+			setData({} as AuthState);
+
+			addToast({
+				title: 'Logged out with success',
+				type: 'success'
+			});
 		} catch (err) {
 			localStorage.removeItem('@Corbik:User');
-			router.reload();
+			router.push('/');
 		}
 	}, []);
 

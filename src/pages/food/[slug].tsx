@@ -13,6 +13,7 @@ import { Form } from "@unform/web";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
+import CardMessage from "@/components/Card/CardMessage";
 
 interface IFoodVersion {
 	food_id: string;
@@ -190,7 +191,7 @@ export default function Food() {
 							<h3>History</h3>
 						</div>
 						<div className="history__container">
-							{foodHistory && foodHistory.map(log =>
+							{foodHistory && foodHistory.length >= 1 ? foodHistory.map(log =>
 								<div className="history__item">
 									<div className="history__item__title">
 										{log.when}
@@ -199,7 +200,13 @@ export default function Food() {
 										{log.amount}
 									</div>
 								</div>
-							)}
+							) :
+							(
+								<CardMessage borderBottom={false}>
+									<h4>You haven't logged this food yet</h4>
+								</CardMessage>
+							)
+							}
 						</div>
 					</Details>
 					<Floating>

@@ -4,11 +4,11 @@ import GoBack from "@/components/GoBack";
 import WholePageTransition from "@/components/WholePageTransition";
 import api from "@/services/api";
 import { Container, BarcodeButton, CreateButton, Floating, Food, Foods, Header, Icon, Menu } from "@/styles/pages/food/search";
+import CardMessage from '@/components/Card/CardMessage';
 import handleEnter from "@/utils/blurOnEnter";
 import Link from "next/link";
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useRef, useState } from "react";
-import { IoIosAddCircleOutline, IoMdAddCircleOutline } from "react-icons/io";
 import { IoBarcodeOutline } from "react-icons/io5";
 import { RiAddLine } from "react-icons/ri";
 
@@ -117,11 +117,11 @@ export default function Search() {
 						</div>
 					</Food>
 				) : (
-					<div className="search-first">
+					<CardMessage>
 						<h4>We didn't find it here 👀<br />Check out the Public Library below</h4>
-					</div>
+					</CardMessage>
 				)
-				) : (initialLoad ? (initialLoad.map(result =>
+				) : (initialLoad && initialLoad.length >= 1 ? (initialLoad.map(result =>
 					<Food key={result.id} onClick={() => router.push(`/food/${result.id}`)}>
 						<div className="name-maker-and-quantity">
 							<div className="name-maker">
@@ -135,9 +135,9 @@ export default function Search() {
 					</Food>))
 					:
 					(
-					<div className="search-first">
-						<h4>You don't have any food! (yet)<br />Get a food from the Public Library or <i>Create your own</i></h4>
-					</div>
+					<CardMessage>
+						<h4>You don't have any food! (yet)<br />Get a food from the Public Library or <b onClick={() => router.push('/food/create')}>Create your own</b></h4>
+					</CardMessage>
 					)
 				)}
       </Foods>
@@ -159,14 +159,14 @@ export default function Search() {
 						</div>
 					</Food>
         ) : (
-					<div className="search-first">
+					<CardMessage>
 						<h4>We didn't find anything 😖<br />Help us out by adding it here<br /><button><div><RiAddLine size={16} /></div><span>CREATE FOOD</span></button></h4>
-					</div>
+					</CardMessage>
 				)
 				) : (
-					<div className="search-first">
+					<CardMessage>
 						<h4>Search something 😁</h4>
-					</div>
+					</CardMessage>
 				)}
       </Foods>
     </Container>

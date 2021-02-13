@@ -23,6 +23,7 @@ import { AnimatePresence } from 'framer-motion';
 import * as d3 from 'd3';
 import { Chartzin } from '@/styles/pages/home/home';
 import LineChart from '@/components/Charts/LineChart';
+import CardMessage from '@/components/Card/CardMessage';
 
 const LoginModal = dynamic(() => import('@/components/LoginModal'),
 	{ loading: () => <div className="blurred__background"><h1>Loading</h1></div> })
@@ -230,9 +231,9 @@ export default function Home({tururu}) {
 						{!loading ? logData && logData.logs ?
 							isHorizontal ? <LogsHorizontalScroll data={logData.logs} /> : <LogsVerticalScroll data={logData.logs} />
 							:
-							<div className="search-first">
+							<CardMessage borderBottom={false}>
 								<h4>NO LOGS TODAY</h4>
-							</div>
+							</CardMessage>
 							:
 							<Skeleton count={4} duration={2} height={64} width='92.5%' style={{ marginLeft: 16, marginRight: 16 }} />
 						}
@@ -263,18 +264,25 @@ export default function Home({tururu}) {
 								</div>
 								<h5>Create your first food</h5>
 							</Mission>
-							<Mission isDone={false}>
-								<div className="is-done" />
+							<Mission isDone={!!user.calories && !!user.carbohydrates && !!user.proteins && !!user.carbohydrates && !!user.fats}>
+								<div className="is-done">
+									<FiCheck />
+								</div>
 								<h5>Add your first food log</h5>
 							</Mission>
-							<Mission isDone={false}>
-								<div className="is-done" />
+							<Mission isDone={!!user.calories && !!user.carbohydrates && !!user.proteins && !!user.carbohydrates && !!user.fats}>
+								<div className="is-done">
+									<FiCheck />
+								</div>
 								<h5>Set your macro’s target</h5>
 							</Mission>
 						</div>
 					</CardContent>
 				</CardContainer>
 				<CardContainer>
+					<CardHeader>
+						<h3>Calory intake variation</h3>
+					</CardHeader>
 					<div id="test-chart">
 						<LineChart extractName="calories" logData={chartRawData} baseColor="#27AE60"/>
 					</div>

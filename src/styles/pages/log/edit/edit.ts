@@ -281,9 +281,10 @@ export const Footer = styled.footer`
 		background: none;
 		outline: none;
 		border: none;
+		color: var(--low-emphasis);
 
 		svg {
-			color: white;
+			color: var(--high-emphasis);
 			opacity: 0.5;
 		}
 	}
