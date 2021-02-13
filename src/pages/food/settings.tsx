@@ -58,7 +58,7 @@ export default function DietSettings() {
 					calories: parseInt(calories, 10)
 				};
 
-				const response = await api.put('/profile/targets', formData);
+				const response = await api.put('/profile/diet-targets', formData);
 
 				updateUser(response.data);
 
