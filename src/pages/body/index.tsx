@@ -204,7 +204,7 @@ export default function Home() {
 						<CardContent>
 							<h4>Getting started</h4>
 							<div id="missions-container">
-								<Mission isDone={logData.logs.length >= 1}>
+								<Mission isDone={logData ? logData.logs.length >= 1 : false}>
 									<div className="is-done">
 										<FiCheck />
 									</div>
