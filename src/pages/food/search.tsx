@@ -12,6 +12,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { IoBarcodeOutline } from "react-icons/io5";
 import { RiAddLine } from "react-icons/ri";
 import IndexedDb from '../../utils/Indexed'
+import { useLog } from "@/hooks/logs";
 
 interface ISearchResult {
 	own_library: any[];
@@ -26,6 +27,7 @@ export default function Search() {
 	const [showBarcodeScanner, setShowBarcodeScanner] = useState(false);
 
   const router = useRouter();
+	const initial = useLog().logs;
 
   useEffect(() => {
     async function initialLoad() {
@@ -132,7 +134,7 @@ export default function Search() {
 						<h4>We didn't find it here 👀<br />Check out the Public Library below</h4>
 					</CardMessage>
 				)
-				) : (initialLoad && initialLoad.length >= 1 ? (initialLoad.map(result =>
+				) : (initial && initial.length >= 1 ? (initial.map(result =>
 					<Food key={result.id} onClick={() => router.push(`/food/${result.id}`)}>
 						<div className="name-maker-and-quantity">
 							<div className="name-maker">

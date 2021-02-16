@@ -1,9 +1,11 @@
 /* eslint-disable camelcase */
+import IndexedDb from '@/utils/Indexed';
 import React, {
 	createContext,
 	useCallback,
 	useState,
 	useContext,
+	useEffect,
 } from 'react';
 
 import api from '../services/api';
@@ -25,23 +27,42 @@ interface ILog {
 }
 
 interface LogContextData {
-	logs: ILog[] | null;
-	getDaysLogs(day: number): Promise<void>;
+	logs: any[] | null;
 }
 
 const LogContext = createContext<LogContextData>({} as LogContextData);
 
 const LogProvider: React.FC = ({ children }) => {
-	const [data, setData] = useState<ILog[] | null>(null);
+	const [data, setData] = useState<any[] | null>(null);
 
-	const getDaysLogs = useCallback(async day => {
-		const response = await api.get(`/food/log/${day}`);
+	useEffect(() => {
+    async function initialLoad() {
+			const indexedDb = new IndexedDb('test');
+			await indexedDb.createObjectStore(['books', 'initialLoadSearch']);
+			const items = await indexedDb.getAllValue('books');
 
-		setData(response.data);
-	}, []);
+			if (items.length >= 1) {
+				const cachedData = await indexedDb.getAllValue('books');
+				setData(cachedData);
+			}
+
+      const {data} = await api.get(`/food-library/`);
+
+			await indexedDb.putBulkValue('books', data);
+      setData(data);
+    }
+
+		initialLoad();
+  }, []);
+
+	// const getDaysLogs = useCallback(async day => {
+	// 	const response = await api.get(`/food/log/${day}`);
+
+	// 	setData(response.data);
+	// }, []);
 
 	return (
-		<LogContext.Provider value={{ logs: data, getDaysLogs }}>
+		<LogContext.Provider value={{ logs: data }}>
 			{children}
 		</LogContext.Provider>
 	);
