@@ -224,7 +224,7 @@ export default function Home() {
 							<h3>Weight variation</h3>
 						</CardHeader>
 						<div id="test-chart">
-							<LineChart extractName="weight" logData={chartRawData} baseColor="#27AE60"/>
+							<LineChart name="weightvariation" datasets={[{extractName: "weight", baseColor: "#27AE60"}]} logData={chartRawData} />
 						</div>
 					</CardContainer>
 				</Container>

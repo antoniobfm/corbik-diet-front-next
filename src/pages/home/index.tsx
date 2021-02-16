@@ -275,7 +275,7 @@ export default function Home() {
 							<h3>Calory intake variation</h3>
 						</CardHeader>
 						<div id="test-chart">
-							<LineChart extractName="calories" logData={logData} baseColor="#27AE60" />
+							<LineChart name="caloryintakevariation" datasets={[{extractName: "calories", baseColor: "#27AE60"}]} logData={logData} />
 						</div>
 					</WideCardContainer>
 					<WideCardContainer>
@@ -283,7 +283,7 @@ export default function Home() {
 							<h3>Weight variation</h3>
 						</CardHeader>
 						<div id="test-chart">
-							<LineChart extractName="weight" logData={logData2} baseColor="#27AE60" />
+							<LineChart name="weightvariation" datasets={[{extractName: "weight", baseColor: "#27AE60"}]} logData={logData2} />
 						</div>
 					</WideCardContainer>
 				</Container>

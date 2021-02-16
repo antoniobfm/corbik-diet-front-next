@@ -49,6 +49,10 @@ export const FloatingButton = styled(motion.button)<Props>`
 
 	position: absolute;
 	right: 0;
+	@supports (-webkit-touch-callout: none) {
+  	/* CSS specific to iOS devices */
+		margin-bottom: 280px;
+	}
 	margin-bottom: 140px;
 	margin-right: 16px;
 	width: 48px;

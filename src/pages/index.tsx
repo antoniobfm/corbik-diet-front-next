@@ -284,7 +284,15 @@ export default function Home({tururu}) {
 						<h3>Calory intake variation</h3>
 					</CardHeader>
 					<div id="test-chart">
-						<LineChart extractName="calories" logData={chartRawData} baseColor="#27AE60"/>
+						<LineChart datasets={[{extractName: "calories", baseColor: "#27AE60"}]} logData={chartRawData} name="caloryintakevariation" />
+					</div>
+				</CardContainer>
+				<CardContainer>
+					<CardHeader>
+						<h3>Macros intake variation</h3>
+					</CardHeader>
+					<div id="test-chart">
+						<LineChart datasets={[{extractName: "carbohydrates", baseColor: "#EB5757"}, {extractName: "proteins", baseColor: "#2D9CDB"}, {extractName: "fats", baseColor: "#F2C94C"}]} logData={chartRawData} name="macrointakevariation" />
 					</div>
 				</CardContainer>
 			</Container>
