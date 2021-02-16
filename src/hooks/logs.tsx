@@ -2,7 +2,6 @@
 import IndexedDb from '@/utils/Indexed';
 import React, {
 	createContext,
-	useCallback,
 	useState,
 	useContext,
 	useEffect,
@@ -54,12 +53,6 @@ const LogProvider: React.FC = ({ children }) => {
 
 		initialLoad();
   }, []);
-
-	// const getDaysLogs = useCallback(async day => {
-	// 	const response = await api.get(`/food/log/${day}`);
-
-	// 	setData(response.data);
-	// }, []);
 
 	return (
 		<LogContext.Provider value={{ logs: data }}>

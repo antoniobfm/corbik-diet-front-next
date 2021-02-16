@@ -57,7 +57,7 @@ interface IDayResume {
 }
 
 
-export default function Home({tururu}) {
+export default function Home() {
 	const [logData, setLogData] = useState<IDayResume | null>(null);
 	const [chartData, setChartData] = useState<IDayResume[]>(null);
 	const [chartRawData, setChartRawData] = useState<IDayResume[]>(null);
@@ -241,7 +241,7 @@ export default function Home({tururu}) {
 					</div>
 					<div className="add-log">
 						<button onClick={() => router.push(`/food/search`)}>
-							ADD LOG {tururu}
+							ADD LOG
 						</button>
 					</div>
 					{/* <canvas
@@ -311,17 +311,17 @@ export default function Home({tururu}) {
 		</>
 	)
 }
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  try {
-    const cookies = nookies.get(context);
-    console.log(cookies);
-		console.log('tururuu');
-    return {
-			props: {tururu: ''}
-		};
-  } catch (err) {
-    context.res.writeHead(302, { Location: "/account/login" });
-    context.res.end();
-    return { props: {} };
-  }
-}
+// export async function getServerSideProps(context: GetServerSidePropsContext) {
+//   try {
+//     const cookies = nookies.get(context);
+//     console.log(cookies);
+// 		console.log('tururuu');
+//     return {
+// 			props: {tururu: ''}
+// 		};
+//   } catch (err) {
+//     context.res.writeHead(302, { Location: "/account/login" });
+//     context.res.end();
+//     return { props: {} };
+//   }
+// }
