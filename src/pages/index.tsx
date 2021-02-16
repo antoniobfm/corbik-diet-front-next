@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic'
 import Link from 'next/link';
-import { BigCardHeader, Calendar, Calories, Container, Header, Log, Logs, Macro, Macros, CardContainer, CardHeader, CardContent, Mission } from "@/styles/pages/Home";
+import { BigCardHeader, Calendar, Calories, Container, Header, Log, Logs, Macro, Macros, WideCardContainer, CardHeader, CardContent, Mission } from "@/styles/pages/Home";
 import { createRef, useCallback, useEffect, useState } from 'react';
 import api from '@/services/api';
 import DayPicker from 'react-day-picker';
@@ -106,7 +106,6 @@ export default function Home({tururu}) {
 		setLogData(newLogs);
 		setLoading(false);
 	}, [logData]);
-
 	useEffect(() => {
 		async function loadData() {
 			try {
@@ -141,6 +140,7 @@ export default function Home({tururu}) {
 	}, [isHorizontal]);
 
 	useEffect(() => {
+
 		const data4: Chart.ChartData = {
 			labels: chartRawData && chartRawData.map(item => item.day),
 			datasets: [
@@ -250,7 +250,7 @@ export default function Home({tururu}) {
 						ref={chartRef}
 					/> */}
 				</Logs>
-				<CardContainer>
+				<WideCardContainer>
 					<CardHeader>
 						<h3>Welcome to the diet page</h3>
 						<p>Your diet is everything you eat, inside or outside of your planning.</p>
@@ -278,23 +278,23 @@ export default function Home({tururu}) {
 							</Mission>
 						</div>
 					</CardContent>
-				</CardContainer>
-				<CardContainer>
+				</WideCardContainer>
+				<WideCardContainer>
 					<CardHeader>
 						<h3>Calory intake variation</h3>
 					</CardHeader>
 					<div id="test-chart">
 						<LineChart datasets={[{extractName: "calories", baseColor: "#27AE60"}]} logData={chartRawData} name="caloryintakevariation" />
 					</div>
-				</CardContainer>
-				<CardContainer>
+				</WideCardContainer>
+				<WideCardContainer>
 					<CardHeader>
 						<h3>Macros intake variation</h3>
 					</CardHeader>
 					<div id="test-chart">
 						<LineChart datasets={[{extractName: "carbohydrates", baseColor: "#EB5757"}, {extractName: "proteins", baseColor: "#2D9CDB"}, {extractName: "fats", baseColor: "#F2C94C"}]} logData={chartRawData} name="macrointakevariation" />
 					</div>
-				</CardContainer>
+				</WideCardContainer>
 			</Container>
 			</WholePageTransition>
 

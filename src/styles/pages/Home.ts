@@ -178,6 +178,7 @@ export const Calories = styled.div`
 export const Logs = styled.div`
 	position: relative;
   padding-bottom: 16px;
+	margin-bottom: 16px;
   // border-radius: 6px;
   background: #181A1B;
 	border-top: 1px solid var(--stroke-color);

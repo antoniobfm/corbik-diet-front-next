@@ -11,6 +11,7 @@ import { useRouter } from 'next/router'
 import { useCallback, useEffect, useRef, useState } from "react";
 import { IoBarcodeOutline } from "react-icons/io5";
 import { RiAddLine } from "react-icons/ri";
+import IndexedDb from '../../utils/Indexed'
 
 interface ISearchResult {
 	own_library: any[];
@@ -28,8 +29,18 @@ export default function Search() {
 
   useEffect(() => {
     async function initialLoad() {
+			const indexedDb = new IndexedDb('test');
+			await indexedDb.createObjectStore(['books', 'initialLoadSearch']);
+			const items = await indexedDb.getAllValue('books');
+
+			if (items.length >= 1) {
+				const cachedData = await indexedDb.getAllValue('books');
+				setInitialLoad(cachedData);
+			}
+
       const {data} = await api.get(`/food-library/`);
-      console.log(data);
+
+			await indexedDb.putBulkValue('books', data);
       setInitialLoad(data);
     }
 

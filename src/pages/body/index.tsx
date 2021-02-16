@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic'
 import Link from 'next/link';
-import { BigCardHeader, Calories, CardContainer, CardContent, CardHeader, Container, Header, Log, Logs, Macro, Macros, Mission } from "@/styles/pages/Home";
+import { BigCardHeader, Calories, WideCardContainer, CardContent, CardHeader, Container, Header, Log, Logs, Macro, Macros, Mission } from "@/styles/pages/Home";
 import { createRef, useCallback, useEffect, useState } from 'react';
 import api from '@/services/api';
 import 'react-day-picker/lib/style.css';
@@ -196,7 +196,7 @@ export default function Home() {
 							ref={chartRef}
 						/>
 					</Logs>
-					<CardContainer>
+					<WideCardContainer>
 						<CardHeader>
 							<h3>Welcome to the body page</h3>
 							<p>Here you will track how your body composition change through time.</p>
@@ -218,15 +218,15 @@ export default function Home() {
 								</Mission>
 							</div>
 						</CardContent>
-					</CardContainer>
-					<CardContainer>
+					</WideCardContainer>
+					<WideCardContainer>
 						<CardHeader>
 							<h3>Weight variation</h3>
 						</CardHeader>
 						<div id="test-chart">
 							<LineChart name="weightvariation" datasets={[{extractName: "weight", baseColor: "#27AE60"}]} logData={chartRawData} />
 						</div>
-					</CardContainer>
+					</WideCardContainer>
 				</Container>
 			</WholePageTransition>
 		</>
