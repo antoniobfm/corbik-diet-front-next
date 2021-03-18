@@ -74,9 +74,9 @@ export default function Search() {
 	// Auto Focus on search bar
 	let inputRef = useRef<HTMLInputElement>();
 
-	// useEffect(() => {
-	// 	inputRef.current.focus();
-	// }, [inputRef]);
+	useEffect(() => {
+		inputRef.current.focus();
+	}, [inputRef]);
 
 	function loadMore() {
 		if (window.innerHeight + document.documentElement.scrollTop === document.scrollingElement.scrollHeight) {
