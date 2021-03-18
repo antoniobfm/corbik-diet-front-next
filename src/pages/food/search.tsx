@@ -79,6 +79,7 @@ export default function Search() {
 	}, [inputRef]);
 
 	function loadMore() {
+		console.log(document.scrollingElement.scrollTop);
 		if (window.innerHeight + document.documentElement.scrollTop === document.scrollingElement.scrollHeight) {
 			console.log(document.scrollingElement.scrollHeight);
 		}
@@ -147,7 +148,7 @@ export default function Search() {
 							<div className="name-maker-and-quantity">
 								<div className="name-maker">
 									<h5>{result.brand}</h5>
-									<h4>{result.name}{index}</h4>
+									<h4>{result.name}</h4>
 								</div>
 								<h5>{result.quantity_amount}g</h5>
 							</div>
@@ -161,6 +162,7 @@ export default function Search() {
 						</CardMessage>
 					)
 					) : (search && search.length >= 1 ? (search.map((page, indexPage) => {
+						if (indexPage === 0) {
 						return page.map((result, index) =>
 							<Food key={result.id} onClick={() => router.push(`/food/${result.id}`)}>
 								<div className="name-maker-and-quantity">
@@ -173,6 +175,7 @@ export default function Search() {
 									<h5>C{result.carbohydrates}   P{result.proteins}   F{result.fats}</h5>
 								</div>
 							</Food>)
+							}
 					}
 					))
 						:

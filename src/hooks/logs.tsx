@@ -91,6 +91,7 @@ const LogProvider: React.FC = ({ children }) => {
 
 			await indexedDb.putBulkValue('search', data);
 			const paginateAll = await paginate({ arr: data, size: 10 });
+			console.log(paginateAll);
 
       setData(paginateAll);
     }

@@ -101,6 +101,7 @@ export default createGlobalStyle`
   button {
     font-family: Poppins, Arial, Helvetica, sans-serif;
   }
+
 	body:not(.user-is-tabbing) button:focus,
 	body:not(.user-is-tabbing) input:focus,
 	body:not(.user-is-tabbing) select:focus,
