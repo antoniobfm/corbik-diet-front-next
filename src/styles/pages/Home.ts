@@ -291,10 +291,9 @@ export const Log = styled.div`
 `;
 
 export const Calendar = styled.aside`
-  background-color: rgba(0, 0, 0, 0.8);
-  position: fixed;
+  background-color: rgba(0, 0, 0, 0);
   width: 100vw;
-  height: 100vh;
+  height: auto;
   z-index: 5;
   top: 0;
 
@@ -304,7 +303,6 @@ export const Calendar = styled.aside`
   justify-content: space-between;
   flex-direction: column;
 
-  padding-top: 24px;
   padding-bottom: 24px;
 
   > button {
@@ -363,15 +361,15 @@ export const Calendar = styled.aside`
 
 
   .DayPicker-Day {
-
     -webkit-tap-highlight-color: transparent;
     outline: none;
-    border-radius: 16px;
+    border-radius: 42px;
     font-size: 16px;
     font-family: Poppins, Arial, Helvetica, sans-serif;
     font-weight: 400;
     opacity: 0.5;
     background-color: #181A1B;
+		border: 1.5px solid transparent;
     padding: 6px 10px;
   }
 
@@ -392,7 +390,8 @@ export const Calendar = styled.aside`
     font-weight: normal;
     color: #FFFFFF;
     border-radius: 42px;
-    box-shadow: inset 0 0 1px white, inset 0 0 1px white, inset 0 0 1px white;
+    /* box-shadow: inset 0 0 1px #f2f2f2, inset 0 0 1px #f2f2f2, inset 0 0 1px #f2f2f2; */
+		border: 1.5px solid #f2f2f2;
   }
 
   .DayPicker-Day--disabled {
@@ -402,7 +401,8 @@ export const Calendar = styled.aside`
   .DayPicker-Day--selected {
     background: #05151E !important;
     color: #2D9CDB !important;
-    box-shadow: inset 0 0 1px #2D9CDB, inset 0 0 1px #2D9CDB, inset 0 0 1px #2D9CDB;
+    /* box-shadow: inset 0 0 1px #2D9CDB, inset 0 0 1px #2D9CDB, inset 0 0 1px #2D9CDB; */
+		border: 1.5px solid #2d9cdb;
     opacity: 1;
   }
 

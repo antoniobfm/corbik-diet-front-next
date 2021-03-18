@@ -25,6 +25,23 @@ class IndexedDb {
         }
     }
 
+    public async deleteObjectStore(tableNames: string) {
+        try {
+            this.db = await openDB(this.database, 1, {
+                upgrade(db: IDBPDatabase) {
+                    for (const tableName of tableNames) {
+                        if (db.objectStoreNames.contains(tableName)) {
+                            continue;
+                        }
+                        db.deleteObjectStore(tableName);
+                    }
+                },
+            });
+        } catch (error) {
+            return false;
+        }
+    }
+
     public async getValue(tableName: string, id: number) {
         const tx = this.db.transaction(tableName, 'readonly');
         const store = tx.objectStore(tableName);
@@ -37,7 +54,7 @@ class IndexedDb {
         const tx = this.db.transaction(tableName, 'readonly');
         const store = tx.objectStore(tableName);
         const result = await store.getAll();
-        console.log('Get All Data', JSON.stringify(result));
+        // console.log('Get All Data', JSON.stringify(result));
         return result;
     }
 

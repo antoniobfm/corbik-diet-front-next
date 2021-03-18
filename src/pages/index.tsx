@@ -71,7 +71,6 @@ export default function Home() {
 
 	let chartRef = createRef<HTMLCanvasElement>();
 
-
 	const { isAuthenticated, user, signOut } = useAuth();
 	if (!isAuthenticated) return <LoginModal />;
 
@@ -106,6 +105,7 @@ export default function Home() {
 		setLogData(newLogs);
 		setLoading(false);
 	}, [logData]);
+
 	useEffect(() => {
 		async function loadData() {
 			try {
@@ -189,6 +189,16 @@ export default function Home() {
 						<FiSettings />
 					</button>
 				</Header>
+				{showCalendar &&
+					<Calendar>
+						<button type="button" onClick={e => handleCalendar(e)} />
+							<DayPicker
+								onDayClick={handleDateChange}
+								selectedDays={selectedDate}
+							/>
+						<button type="button" onClick={e => handleCalendar(e)} />
+					</Calendar>
+				}
 				<Macros>
 					<Macro macro="carb">
 						<div>
@@ -297,17 +307,6 @@ export default function Home() {
 				</WideCardContainer>
 			</Container>
 			</WholePageTransition>
-
-			{showCalendar &&
-				<Calendar>
-					<button type="button" onClick={e => handleCalendar(e)} />
-						<DayPicker
-							onDayClick={handleDateChange}
-							selectedDays={selectedDate}
-						/>
-					<button type="button" onClick={e => handleCalendar(e)} />
-				</Calendar>
-			}
 		</>
 	)
 }

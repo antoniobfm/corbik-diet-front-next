@@ -51,6 +51,7 @@ export default function ResetPassword() {
 				if (typeof token === 'string') {
 					await resetPassword({ token, password, password_confirmation, setState: setPasswordReseted });
 				}
+
 			} catch (err) {
 				if (err instanceof Yup.ValidationError) {
 					const errors = getValidationErrors(err);

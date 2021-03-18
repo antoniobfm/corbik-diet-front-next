@@ -14,7 +14,7 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import Skeleton from 'react-loading-skeleton';
 import { AnimatePresence } from "framer-motion";
-import { FiSettings } from "react-icons/fi";
+import History from '@/components/Card/History';
 import { format } from "date-fns";
 
 interface ILog {
@@ -233,26 +233,7 @@ export default function Edit(food: string) {
 							</div>
 						</StaticMenu>
 					</Details>
-					<Details>
-						<div className="header">
-							<h3>History</h3>
-							{/* <button onClick={() => {router.push('/food/create')}}>
-								<FiSettings />
-							</button> */}
-						</div>
-						<div className="history__container">
-							{foodHistory && foodHistory.map(log =>
-								<div className="history__item">
-									<div className="history__item__title">
-										{log.when}
-									</div>
-									<div className="history__item__subtitle">
-										{log.amount}
-									</div>
-								</div>
-							)}
-						</div>
-					</Details>
+					<History foodHistory={foodHistory} />
 					<Footer>
 						<button type="button" onClick={handleConfirmation}>
 							<DeleteIcon />
