@@ -47,6 +47,7 @@ export default function Home() {
 	const [logData, setLogData] = useState<IDayResume | null>(null);
 	const [chartData, setChartData] = useState<IDayResume[]>(null);
 	const [chartRawData, setChartRawData] = useState<IDayResume[]>(null);
+	const [chartAllTimeRawData, setChartAllTimeRawData] = useState<IDayResume[]>(null);
 	const [loading, setLoading] = useState(true);
 	const [isHorizontal, setIsHorizontal] = useState(true);
 	const [showCalendar, setShowCalendar] = useState(false);
@@ -100,7 +101,21 @@ export default function Home() {
 				console.log('err');
 			}
 		}
+
+		async function loadDataAllTime() {
+			try {
+				// Chart AllTime
+				const today = new Date();
+				const start = startOfDay(today).getTime();
+				const end = endOfDay(today).getTime();
+				const response_chart = await api.post('/body/log/alltime', {start, end});
+				setChartAllTimeRawData(response_chart.data);
+				} catch (err) {
+				console.log('err');
+			}
+		}
 		loadData();
+		loadDataAllTime();
 	}, [selectedDate]);
 
 	const handleLogsDirection = useCallback(() => {
@@ -225,6 +240,14 @@ export default function Home() {
 						</CardHeader>
 						<div id="test-chart">
 							<LineChart name="weightvariation" datasets={[{extractName: "weight", baseColor: "#27AE60"}]} logData={chartRawData} />
+						</div>
+					</WideCardContainer>
+					<WideCardContainer>
+						<CardHeader>
+							<h3>All time variation</h3>
+						</CardHeader>
+						<div id="test-chart">
+							<LineChart name="weightalltimevariation" datasets={[{extractName: "weight", baseColor: "#27AE60"}]} logData={chartAllTimeRawData} />
 						</div>
 					</WideCardContainer>
 				</Container>
