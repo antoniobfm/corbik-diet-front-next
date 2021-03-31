@@ -144,7 +144,7 @@ export default function Search() {
 				</Header>
 				<Foods>
 					<div className="header">
-						<h3>My Library {pageScroll} {maxPages}</h3>
+						<h3>My Library</h3>
 					</div>
 					{searchInput ? (searchResult && searchResult.own_library.length >= 1 ? searchResult.own_library.map((result, index) =>
 						<Food key={result.id} onClick={() => router.push(`/food/${result.id}`)}>
@@ -191,7 +191,7 @@ export default function Search() {
 				</Foods>
 				<Foods>
 					<div className="header">
-						<h3>Public Library {pageScroll} {maxPages}</h3>
+						<h3>Public Library</h3>
 					</div>
 					{searchInput ? (searchResult && searchResult.public_library.length >= 1 ? searchResult.public_library.map(result =>
 						<Food key={result.id} onClick={() => router.push(`/food/${result.id}`)}>
