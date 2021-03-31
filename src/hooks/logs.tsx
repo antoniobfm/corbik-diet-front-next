@@ -94,6 +94,7 @@ const LogProvider: React.FC = ({ children }) => {
 			console.log(paginateAll);
 
       setData(paginateAll);
+			console.log(data);
     }
 
     async function initialLoad() {

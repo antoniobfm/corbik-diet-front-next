@@ -25,7 +25,7 @@ export default function Search() {
 	const [searchInput, setSearchInput] = useState<string | null>(null);
 	const [isTyping, setIsTyping] = useState(false);
 	const [maxPages, setMaxPages] = useState(0);
-	const [pageScroll, setPageScroll] = useState(0);
+	const [pageScroll, setPageScroll] = useState(`0`);
 
 	const [showBarcodeScanner, setShowBarcodeScanner] = useState(false);
 
@@ -79,9 +79,12 @@ export default function Search() {
 	}, [inputRef]);
 
 	function loadMore() {
-		console.log(document.scrollingElement.scrollTop);
-		if (window.innerHeight + document.documentElement.scrollTop === document.scrollingElement.scrollHeight) {
-			console.log(document.scrollingElement.scrollHeight);
+		// console.log(document.scrollingElement.scrollTop);
+			setPageScroll(`${document.scrollingElement.scrollHeight} - ${Math.floor(window.innerHeight + document.documentElement.scrollTop)}`);
+		if (window.innerHeight + document.documentElement.scrollTop >= document.scrollingElement.scrollHeight - 5) {
+			setPageScroll(`${document.scrollingElement.scrollHeight}`);
+			const newPages = maxPages + 1;
+			setMaxPages(newPages);
 		}
 	}
 
@@ -91,7 +94,7 @@ export default function Search() {
 		return () => {
 			window.removeEventListener('scroll', loadMore);
 		};
-	}, []);
+	}, [maxPages]);
 
 	useEffect(() => {
 		setIsTyping(true);
@@ -141,7 +144,7 @@ export default function Search() {
 				</Header>
 				<Foods>
 					<div className="header">
-						<h3>My Library</h3>
+						<h3>My Library {pageScroll} {maxPages}</h3>
 					</div>
 					{searchInput ? (searchResult && searchResult.own_library.length >= 1 ? searchResult.own_library.map((result, index) =>
 						<Food key={result.id} onClick={() => router.push(`/food/${result.id}`)}>
@@ -162,7 +165,7 @@ export default function Search() {
 						</CardMessage>
 					)
 					) : (search && search.length >= 1 ? (search.map((page, indexPage) => {
-						if (indexPage === 0) {
+						if (indexPage <= maxPages) {
 						return page.map((result, index) =>
 							<Food key={result.id} onClick={() => router.push(`/food/${result.id}`)}>
 								<div className="name-maker-and-quantity">
@@ -188,7 +191,7 @@ export default function Search() {
 				</Foods>
 				<Foods>
 					<div className="header">
-						<h3>Public Library</h3>
+						<h3>Public Library {pageScroll} {maxPages}</h3>
 					</div>
 					{searchInput ? (searchResult && searchResult.public_library.length >= 1 ? searchResult.public_library.map(result =>
 						<Food key={result.id} onClick={() => router.push(`/food/${result.id}`)}>
