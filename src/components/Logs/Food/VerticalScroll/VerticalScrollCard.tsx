@@ -1,26 +1,7 @@
 import { Container } from "@/styles/components/Logs/Food/VerticalScroll/VerticalScrollCard";
 import { Log } from "@/styles/pages/Home";
 import { useRouter } from "next/router";
-
-interface ILog {
-	id: number;
-	name: string;
-	calories: string;
-	carbohydrates: string;
-	fats: string;
-	proteins: string;
-	quantity_amount: string;
-	quantity_type: string;
-
-	hour: string | number;
-	minute: string | number;
-
-	food_id: string;
-	user_id: string;
-	when: Date;
-	created_at: Date;
-	updated_at: Date;
-}
+import { ILog } from "../HorizontalScroll";
 
 interface IProps {
 	data: ILog;
@@ -40,7 +21,7 @@ export default function VerticalScrollCard({ data }: IProps) {
 				</div>
 				<div className="name-and-quantity">
 					<h4>{data.name}</h4>
-					<h5>{data.quantity_amount}g</h5>
+					<h5>{data.amount}{data.unit_abbreviation}</h5>
 				</div>
 				<div className="macros">
 					<h5>C{carbohydrates}   P{proteins}   F{fats}</h5>

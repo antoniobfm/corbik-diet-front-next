@@ -3,15 +3,15 @@ import React from 'react';
 import LogsHorizontalScrollCards from "./HorizontalScrollCards";
 
 
-interface ILog {
+export interface ILog {
 	id: number;
 	name: string;
 	calories: string;
 	carbohydrates: string;
 	fats: string;
 	proteins: string;
-	quantity_amount: string;
-	quantity_type: string;
+	amount: string;
+	unit_abbreviation: string;
 
 	hour: string | number;
 	minute: string | number;

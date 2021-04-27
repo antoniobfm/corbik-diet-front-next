@@ -7,7 +7,7 @@ interface ICardMessageProps {
 
 const CardMessage = ({ children, borderBottom = true }: ICardMessageProps) => {
   return (
-		<Container borderBottom={borderBottom}>
+		<Container className="card-message-container" borderBottom={borderBottom}>
 			{children}
 		</Container>
   )

@@ -16,22 +16,7 @@ import Skeleton from 'react-loading-skeleton';
 import { AnimatePresence } from "framer-motion";
 import History from '@/components/Card/History';
 import { format } from "date-fns";
-
-interface ILog {
-	id: number;
-	name: string;
-	calories: number;
-	carbohydrates: number;
-	fats: number;
-	proteins: number;
-	quantity_amount: number;
-	quantity_type: string;
-	when: Date;
-	food_id: string;
-	created_at: Date;
-	updated_at: Date;
-	user_id: string;
-}
+import CardMessage from "@/components/Card/CardMessage";
 
 export default function Edit(food: string) {
 	const router = useRouter();
@@ -41,11 +26,12 @@ export default function Edit(food: string) {
 	const [logData, setLogData] = useState<any>();
 	const [foodHistory, setFoodHistory] = useState<any>([]);
 
-	const [amount, setAmount] = useState('');
+	const [amountTemp, setAmount] = useState('');
 	const [carbs, setCarbs] = useState<number | null>(0);
 	const [prots, setProts] = useState<number | null>(0);
 	const [fats, setFats] = useState<number | null>(0);
 	const [calories, setCalories] = useState<number | null>(0);
+	const [ingredients, setIngredients] = useState<any[] | null>([]);
 
 	const [date, setDate] = useState<Date>(new Date());
 
@@ -65,20 +51,21 @@ export default function Edit(food: string) {
 		data.food.foodLogs.map(log => {
 			tempFoodLogs.push({
 				when: format(new Date(log.when), 'dd/MM'),
-				amount: log.quantity_amount
+				amount: log.amount
 			});
 		});
 
 		setFoodHistory(tempFoodLogs);
 		console.log(data.food.foodLogs);
-		const { quantity_amount } = data;
+		const { amount } = data;
 
-		setFats(toFixedNumber(parseFloat(quantity_amount) * data.fats / quantity_amount, 2, 10));
-		setCarbs(toFixedNumber(parseFloat(quantity_amount) * data.carbohydrates / quantity_amount, 2, 10));
-		setProts(toFixedNumber(parseFloat(quantity_amount) * data.proteins / quantity_amount, 2, 10));
-		setCalories(toFixedNumber(parseFloat(quantity_amount) * data.calories / quantity_amount, 2, 10));
+		setIngredients(data.ingredients);
+		setFats(toFixedNumber(parseFloat(amount) * data.fats / amount, 2, 10));
+		setCarbs(toFixedNumber(parseFloat(amount) * data.carbohydrates / amount, 2, 10));
+		setProts(toFixedNumber(parseFloat(amount) * data.proteins / amount, 2, 10));
+		setCalories(toFixedNumber(parseFloat(amount) * data.calories / amount, 2, 10));
 		setDate(new Date(data.when));
-		setAmount(quantity_amount % 1 === 0 ? `${parseInt(quantity_amount, 10)}` : `${quantity_amount}`);
+		setAmount(amount % 1 === 0 ? `${parseInt(amount, 10)}` : `${amount}`);
 	}, []);
 
 	useEffect(() => {
@@ -95,12 +82,24 @@ export default function Edit(food: string) {
 
 	useEffect(() => {
 		if (logData) {
-			setFats(toFixedNumber(parseFloat(amount) * logData.fats / logData.quantity_amount, 2, 10));
-			setCarbs(toFixedNumber(parseFloat(amount) * logData.carbohydrates / logData.quantity_amount, 2, 10));
-			setProts(toFixedNumber(parseFloat(amount) * logData.proteins / logData.quantity_amount, 2, 10));
-			setCalories(toFixedNumber(parseFloat(amount) * logData.calories / logData.quantity_amount, 2, 10));
+			setFats(toFixedNumber(parseFloat(amountTemp) * logData.fats / logData.amount, 2, 10));
+			setCarbs(toFixedNumber(parseFloat(amountTemp) * logData.carbohydrates / logData.amount, 2, 10));
+			setProts(toFixedNumber(parseFloat(amountTemp) * logData.proteins / logData.amount, 2, 10));
+			setCalories(toFixedNumber(parseFloat(amountTemp) * logData.calories / logData.amount, 2, 10));
+
+			if(ingredients && logData.ingredients && logData.ingredients.length >= 1) {
+				const newIngredients = logData.ingredients.map((item, index) => {
+					return {
+						...item,
+						amount: toFixedNumber(parseFloat(amountTemp) * logData.ingredients[index].amount / logData.amount, 2, 10)
+					}
+				})
+
+				setIngredients(newIngredients);
+			}
+
 		}
-	}, [logData, amount]);
+	}, [logData, amountTemp]);
 
 	const { addToast } = useToast();
 
@@ -122,15 +121,11 @@ export default function Edit(food: string) {
 
 	const handleEdit = useCallback((e) => {
 		e.preventDefault()
-		async function editFood() {
+		async function editLog() {
 			const log = {
 				id: logData.id,
 				brand: logData.brand,
-				quantity_amount: parseFloat(amount),
-				carbohydrates: carbs,
-				proteins: prots,
-				fats: fats,
-				calories: calories,
+				amount: parseFloat(amountTemp),
 				when: date,
 			};
 			console.log(date);
@@ -145,8 +140,13 @@ export default function Edit(food: string) {
 			router.push(`/`);
 		}
 
-		editFood();
-	}, [logData, carbs, prots, fats, calories, date, amount]);
+		editLog();
+	}, [logData, carbs, prots, fats, calories, date, amountTemp]);
+
+	// function getSelectedUnit() {
+  //   var d = document.getElementById("select_amount").value;
+	// 	setSelectedUnitType(d);
+	// }
 
 	return (
 		<>
@@ -219,19 +219,45 @@ export default function Edit(food: string) {
 									<input
 										type="number"
 										placeholder="Amount"
-										defaultValue={amount}
+										defaultValue={amountTemp}
 										onChange={e => setAmount(e.target.value)}
 										step="0.01"
 									/>
 								</div>
 								<div className="unit">
-									<select name="select">
-										<option value="gram">Grams</option>
+									{/* <select name="select" id="select_amount" onChange={getSelectedUnit}>
+										{logData && logData.units.length >= 1 && logData.units.map(item => <option value={item.id}>{item.name[0].toUpperCase() + item.name.slice(1)}s</option>)}
+									</select>									 */}
+									<select name="select" id="select_amount">
+										{logData && <option value={logData.current_unit.id}>{logData.current_unit.name[0].toUpperCase() + logData.current_unit.name.slice(1)}s</option>}
 									</select>
 								</div>
 								<EditButton onClick={handleEdit}>EDIT</EditButton>
 							</div>
 						</StaticMenu>
+					</Details>
+					<Details>
+						<div className="header">
+							<h3>Ingredients</h3>
+						</div>
+						<div className="history__container">
+							{ingredients && ingredients.length >= 1 ? ingredients.map(ingredient =>
+								<div className="history__item">
+									<div className="history__item__title">
+										{ingredient.name}
+									</div>
+									<div className="history__item__subtitle">
+										{ingredient.amount}
+									</div>
+								</div>
+							) :
+							(
+								<CardMessage borderBottom={false}>
+									<h4>Doesn't have ingredients</h4>
+								</CardMessage>
+							)
+							}
+						</div>
 					</Details>
 					<History foodHistory={foodHistory} />
 					<Footer>

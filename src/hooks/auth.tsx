@@ -15,6 +15,12 @@ import api from '../services/api';
 import nookies from "nookies";
 import { GetServerSidePropsContext } from 'next';
 
+export interface IUnit {
+	id: string;
+	name: string;
+	amount: number;
+}
+
 interface User {
 	id: string;
 	name: string;
@@ -31,6 +37,8 @@ interface User {
 	muscle: string;
 	fat: string;
 	bones: string;
+
+	// units: IUnit[];
 }
 
 interface AuthState {

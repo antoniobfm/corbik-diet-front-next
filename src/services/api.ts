@@ -2,7 +2,7 @@ import Axios from "axios";
 
 let urls = {
     test: `https://api.corbik.com/`,
-    development: 'http://localhost:3333',
+    development: `http://localhost:${process.env.NEXT_PUBLIC_BACK_DEV_PORT}`,
     production: 'https://api.corbik.com/'
 }
 const api = Axios.create({

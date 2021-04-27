@@ -57,17 +57,17 @@ export default function Food() {
 		data.foodLogs.map(log => {
 			tempFoodLogs.push({
 				when: format(new Date(log.when), 'dd/MM'),
-				amount: log.quantity_amount
+				amount: log.amount
 			});
 		});
 
 		setFoodHistory(tempFoodLogs);
 
-		setAmount(data.quantity_amount);
-		setFats(toFixedNumber(parseFloat(data.quantity_amount) * data.fats / data.quantity_amount, 2, 10));
-		setCarbs(toFixedNumber(parseFloat(data.quantity_amount) * data.carbohydrates / data.quantity_amount, 2, 10));
-		setProts(toFixedNumber(parseFloat(data.quantity_amount) * data.proteins / data.quantity_amount, 2, 10));
-		setCalories(toFixedNumber(parseFloat(data.quantity_amount) * data.calories / data.quantity_amount, 2, 10));
+		setAmount(data.amount);
+		setFats(toFixedNumber(parseFloat(data.amount) * data.fats / data.amount, 2, 10));
+		setCarbs(toFixedNumber(parseFloat(data.amount) * data.carbohydrates / data.amount, 2, 10));
+		setProts(toFixedNumber(parseFloat(data.amount) * data.proteins / data.amount, 2, 10));
+		setCalories(toFixedNumber(parseFloat(data.amount) * data.calories / data.amount, 2, 10));
 	}, []);
 
 	useEffect(() => {
@@ -123,10 +123,10 @@ export default function Food() {
 	}, [foodData, carbs, prots, fats, calories, date, amount]);
 
 	useEffect(() => {
-		setFats(toFixedNumber(parseFloat(amount) * foodData.fats / foodData.quantity_amount, 2, 10));
-		setCarbs(toFixedNumber(parseFloat(amount) * foodData.carbohydrates / foodData.quantity_amount, 2, 10));
-		setProts(toFixedNumber(parseFloat(amount) * foodData.proteins / foodData.quantity_amount, 2, 10));
-		setCalories(toFixedNumber(parseFloat(amount) * foodData.calories / foodData.quantity_amount, 2, 10));
+		setFats(toFixedNumber(parseFloat(amount) * foodData.fats / foodData.amount, 2, 10));
+		setCarbs(toFixedNumber(parseFloat(amount) * foodData.carbohydrates / foodData.amount, 2, 10));
+		setProts(toFixedNumber(parseFloat(amount) * foodData.proteins / foodData.amount, 2, 10));
+		setCalories(toFixedNumber(parseFloat(amount) * foodData.calories / foodData.amount, 2, 10));
 	}, [foodData, amount]);
 
 	if (foodId) {
