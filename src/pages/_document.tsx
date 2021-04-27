@@ -41,7 +41,11 @@ export default class MyDocument extends Document {
 					<meta httpEquiv="X-UA-Compatible" content="IE=edge" />
 					<meta name="description" content="Description" />
 					<meta name="keywords" content="Keywords" />
-					<script id="mcjs">!function(c,h,i,m,p){m = c.createElement(h), p = c.getElementsByTagName(h)[0], m.async = 1, m.src = i, p.parentNode.insertBefore(m, p)}(document,"script","https://chimpstatic.com/mcjs-connected/js/users/b1a337258225c471b23863b3c/ed8600647ad99293b96d43cf5.js");</script>
+					<script id="mcjs"
+						dangerouslySetInnerHTML={{
+							__html: `!function(c,h,i,m,p){m=c.createElement(h),p=c.getElementsByTagName(h)[0],m.async=1,m.src=i,p.parentNode.insertBefore(m,p)}(document,"script","https://chimpstatic.com/mcjs-connected/js/users/b1a337258225c471b23863b3c/ed8600647ad99293b96d43cf5.js");`,
+						}}
+					/>
 					<link rel="manifest" href="/manifest.json" />
 					<link
 						href="/icons/favicon_16x16.png"
