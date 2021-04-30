@@ -32,7 +32,8 @@ export default function Login() {
 
 	const [isFocused, setIsFocused] = useState(false);
 	const [isFilled, setIsFilled] = useState(false);
-	const [showLogin, setShowLogin] = useState(true);
+	const [showLogin, setShowLogin] = useState(false);
+	const [loading, setLoading] = useState(false);
 
 	const handleInputFocus = useCallback(() => {
 		setIsFocused(true);
@@ -44,6 +45,14 @@ export default function Login() {
 		console.log(inputRef.current?.value);
 
 		setIsFilled(!!inputRef.current?.value);
+	}, []);
+
+	const handleEnterWaitlist = useCallback(async () => {
+		try {
+
+		} else {
+
+		}
 	}, []);
 
 	return (
