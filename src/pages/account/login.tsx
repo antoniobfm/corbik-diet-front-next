@@ -50,7 +50,7 @@ export default function Login() {
 	const handleEnterWaitlist = useCallback(async () => {
 		try {
 
-		} else {
+		} catch (err) {
 
 		}
 	}, []);
