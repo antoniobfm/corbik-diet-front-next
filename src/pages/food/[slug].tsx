@@ -15,37 +15,56 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 import CardMessage from "@/components/Card/CardMessage";
 
-interface IFoodVersion {
+interface ICreateFoodLog {
 	food_id: string;
+	//
+	name: string;
+	unit_type: string;
+	amount: number;
+	//
 	carbohydrates: number;
 	proteins: number;
 	fats: number;
 	calories: number;
-	quantity_amount: number;
-	quantity_type: string;
+	//
+	when: string;
+}
+
+interface IUnit {
+	id: string;
+	abbreviation: string;
+	amount: number;
+	name: string;
+	property: string;
+	unit_system: string;
 }
 
 interface IFood {
 	food_id: string;
 	name: string;
+	amount: number;
+	//
 	carbohydrates: number;
 	proteins: number;
 	fats: number;
 	calories: number;
-	quantity_amount: number;
-	quantity_type: string;
+	//
+	units: IUnit[];
 	when: Date;
-	foodVersionDefault: IFoodVersion;
 }
 
 export default function Food() {
 	const [foodData, setFoodData] = useState<any>([]);
 	const [foodHistory, setFoodHistory] = useState<any>([]);
+
+	const [selectedUnitType, setSelectedUnitType] = useState<IUnit & {amount: number}>();
+
 	const [amount, setAmount] = useState('');
 	const [carbs, setCarbs] = useState(0);
 	const [prots, setProts] = useState(0);
 	const [fats, setFats] = useState(0);
 	const [calories, setCalories] = useState(0);
+	const [ingredients, setIngredients] = useState<any[] | null>([]);
 
 	const [date, setDate] = useState<Date>(new Date());
 
@@ -59,28 +78,34 @@ export default function Food() {
 
 	const handleData = useCallback((data: any) => {
 		setFoodData(data);
+		setSelectedUnitType(data.units[0]);
+		setAmount(data.units[0].amount);
 
 		const tempFoodLogs = [];
+
 		data.foodLogs.map(log => {
 			tempFoodLogs.push({
 				when: format(new Date(log.when), 'dd/MM'),
-				amount: log.quantity_amount
+				amount: log.amount,
 			});
 		});
 
+		console.log(tempFoodLogs);
+
 		setFoodHistory(tempFoodLogs);
 
-		setAmount(data.foodVersionDefault.quantity_amount);
-		setFats(toFixedNumber(parseFloat(data.foodVersionDefault.quantity_amount) * data.foodVersionDefault.fats / data.foodVersionDefault.quantity_amount, 2, 10));
-		setCarbs(toFixedNumber(parseFloat(data.foodVersionDefault.quantity_amount) * data.foodVersionDefault.carbohydrates / data.foodVersionDefault.quantity_amount, 2, 10));
-		setProts(toFixedNumber(parseFloat(data.foodVersionDefault.quantity_amount) * data.foodVersionDefault.proteins / data.foodVersionDefault.quantity_amount, 2, 10));
-		setCalories(toFixedNumber(parseFloat(data.foodVersionDefault.quantity_amount) * data.foodVersionDefault.calories / data.foodVersionDefault.quantity_amount, 2, 10));
+		setIngredients(data.ingredients);
+		setFats(toFixedNumber(parseFloat(data.units[0].amount) * data.fats / data.units[0].amount, 2, 10));
+		setCarbs(toFixedNumber(parseFloat(data.units[0].amount) * data.carbohydrates / data.units[0].amount, 2, 10));
+		setProts(toFixedNumber(parseFloat(data.units[0].amount) * data.proteins / data.units[0].amount, 2, 10));
+		setCalories(toFixedNumber(parseFloat(data.units[0].amount) * data.calories / data.units[0].amount, 2, 10));
 	}, []);
 
 	useEffect(() => {
 		async function loadData() {
 			if (foodId) {
 				const response = await api.get(`/food-library/food/${foodId}`);
+				console.log('aAAAAAAAAAA');
 				console.log(response.data);
 				handleData(response.data);
 			}
@@ -94,16 +119,14 @@ export default function Food() {
 			const food: IFood = {
 				food_id: foodData.id,
 				name: foodData.name,
-				quantity_type: `grams`,
-				quantity_amount: parseFloat(amount),
+				unit_type: selectedUnitType.id,
+				amount: parseFloat(amount),
 				carbohydrates: carbs,
 				proteins: prots,
 				fats: fats,
 				calories: calories,
 				when: date,
 			};
-
-			console.log(food.foodVersionDefault);
 
 			await api.post(`/food/log`, food);
 
@@ -119,11 +142,24 @@ export default function Food() {
 	}, [foodData, carbs, prots, fats, calories, date, amount]);
 
 	useEffect(() => {
-		setFats(toFixedNumber(parseFloat(amount) * foodData.fats / foodData.quantity_amount, 2, 10));
-		setCarbs(toFixedNumber(parseFloat(amount) * foodData.carbohydrates / foodData.quantity_amount, 2, 10));
-		setProts(toFixedNumber(parseFloat(amount) * foodData.proteins / foodData.quantity_amount, 2, 10));
-		setCalories(toFixedNumber(parseFloat(amount) * foodData.calories / foodData.quantity_amount, 2, 10));
-	}, [foodData, amount]);
+		if(selectedUnitType) {
+			setFats(toFixedNumber(parseFloat(amount) * foodData.fats / selectedUnitType.amount, 2, 10));
+			setCarbs(toFixedNumber(parseFloat(amount) * foodData.carbohydrates / selectedUnitType.amount, 2, 10));
+			setProts(toFixedNumber(parseFloat(amount) * foodData.proteins / selectedUnitType.amount, 2, 10));
+			setCalories(toFixedNumber(parseFloat(amount) * foodData.calories / selectedUnitType.amount, 2, 10));
+
+			if(ingredients && foodData.ingredients && foodData.ingredients.length >= 1) {
+				const newIngredients = foodData.ingredients.map((item, index) => {
+					return {
+						...item,
+						amount: toFixedNumber(parseFloat(amount) * item.amount / selectedUnitType.amount, 2, 10)
+					}
+				})
+
+				setIngredients(newIngredients);
+			}
+		}
+	}, [foodData, amount, selectedUnitType]);
 
 	// Auto Focus on search bar
   let inputRef = useRef<HTMLInputElement>();
@@ -133,6 +169,12 @@ export default function Food() {
 			inputRef.current.focus();
 		}
   }, [inputRef]);
+
+	function getSelectedUnit() {
+    var d = document.getElementById("select_amount").value;
+		setSelectedUnitType(foodData.units[d]);
+		setAmount(foodData.units[d].amount);
+	}
 
 	if (foodId) {
 		return (
@@ -188,6 +230,29 @@ export default function Food() {
 					</Details>
 					<Details>
 						<div className="header">
+							<h3>Ingredients</h3>
+						</div>
+						<div className="history__container">
+							{ingredients && ingredients.length >= 1 ? ingredients.map(ingredient =>
+								<div className="history__item">
+									<div className="history__item__title">
+										{ingredient.name}
+									</div>
+									<div className="history__item__subtitle">
+										{ingredient.amount}
+									</div>
+								</div>
+							) :
+							(
+								<CardMessage borderBottom={false}>
+									<h4>Doesn't have ingredients</h4>
+								</CardMessage>
+							)
+							}
+						</div>
+					</Details>
+					<Details>
+						<div className="header">
 							<h3>History</h3>
 						</div>
 						<div className="history__container">
@@ -198,6 +263,7 @@ export default function Food() {
 									</div>
 									<div className="history__item__subtitle">
 										{log.amount}
+										{foodData.units[0].abbreviation}
 									</div>
 								</div>
 							) :
@@ -224,8 +290,8 @@ export default function Food() {
 									/>
 								</div>
 								<div className="unit">
-									<select name="select">
-										<option value="gram">Grams</option>
+									<select name="select" id="select_amount" onChange={getSelectedUnit}>
+										{foodData && foodData.units && foodData.units.length >= 1 && foodData.units.map((item, index) => <option value={index}>{item.name[0].toUpperCase() + item.name.slice(1)}s</option>)}
 									</select>
 								</div>
 								<CreateButton onClick={handleSubmit}>LOG IT</CreateButton>

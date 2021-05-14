@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 
 import api from '../services/api';
+import {useAuth} from './auth';
 
 interface ErrorContextData {
 	handleError(error: Error): Promise<void>;
@@ -17,10 +18,11 @@ const ErrorContext = createContext<ErrorContextData>({} as ErrorContextData);
 
 const ErrorProvider: React.FC = ({ children }) => {
 	const router = useRouter();
+	const {signOut} = useAuth();
 
 	const handleError = useCallback(async error => {
 		if (error.response.status === 401) {
-			localStorage.removeItem('@Corbik:User');
+			signOut();
 			router.reload();
 		}
 	}, []);

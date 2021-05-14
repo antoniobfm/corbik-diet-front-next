@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { FiChevronLeft } from 'react-icons/fi';
 import styled from 'styled-components';
 
@@ -5,6 +6,10 @@ export const Container = styled.div`
 	background: linear-gradient(346.65deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.03) 100%), #0A0A0B;
 	min-height: 100vh;
 	padding-bottom: 56px;
+
+	.type {
+		padding-bottom: 16px;
+	}
 `;
 
 export const FormContainer = styled.div`
@@ -50,6 +55,36 @@ export const FormContainer = styled.div`
 			}
 		}
 	}
+
+	.type-container {
+		width: 100%;
+
+		background: var(--stroke-color);
+		border-radius: 6px;
+
+		display: flex;
+		flex-direction: row;
+	}
+
+	.ingredients-container {
+		display: flex;
+		flex-direction: column;
+
+		::-webkit-scrollbar {
+			display: none;
+		}
+	}
+
+	.add-ingredient {
+		button {
+			background: transparent;
+			border: none;
+			outline: none;
+			color: white;
+			width: 100%;
+			height: 56px;
+		}
+	}
 `;
 
 export const Menu = styled.div`
@@ -91,4 +126,26 @@ export const CreateButton = styled.button`
   font-size: 12px;
   font-weight: 600;
   color: #D5F6E3;
+`;
+
+interface ICreateFoodType {
+	selected: boolean;
+}
+
+export const CreateFoodType = styled.button<ICreateFoodType>`
+	flex: 1;
+	height: 32px;
+
+	outline: none;
+	background: ${props => props.selected ? '#2D5EDB' : 'transparent'};
+	border: none;
+
+	border-radius: 6px;
+
+	font-family: Poppins;
+	font-style: normal;
+	font-weight: 600;
+	font-size: 12px;
+	line-height: 18px;
+	color: ${props => props.selected ? '#E1E9F4' : '#5B5C5D'};
 `;

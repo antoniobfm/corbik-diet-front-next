@@ -35,8 +35,8 @@ interface ILog {
 	carbohydrates: string;
 	fats: string;
 	proteins: string;
-	quantity_amount: string;
-	quantity_type: string;
+	amount: string;
+	unit_abbreviation: string;
 
 	hour: string | number;
 	minute: string | number;

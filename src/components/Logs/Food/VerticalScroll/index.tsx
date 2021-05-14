@@ -1,25 +1,6 @@
 import { Container } from "@/styles/components/Logs/Food/HorizontalScroll/home";
+import { ILog } from "../HorizontalScroll";
 import VerticalScrollCard from "./VerticalScrollCard";
-
-interface ILog {
-	id: number;
-	name: string;
-	calories: string;
-	carbohydrates: string;
-	fats: string;
-	proteins: string;
-	quantity_amount: string;
-	quantity_type: string;
-
-	hour: string | number;
-	minute: string | number;
-
-	food_id: string;
-	user_id: string;
-	when: Date;
-	created_at: Date;
-	updated_at: Date;
-}
 
 interface IProps {
 	data: ILog[] | undefined;

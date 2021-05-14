@@ -2,26 +2,7 @@ import useLongPress from "@/components/useLogPress";
 import { Container } from "@/styles/components/Logs/Food/HorizontalScroll/HorizontalScrollCards";
 import { useRouter } from "next/router";
 import { useState } from "react";
-
-interface ILog {
-	id: number;
-	name: string;
-	calories: string;
-	carbohydrates: string;
-	fats: string;
-	proteins: string;
-	quantity_amount: string;
-	quantity_type: string;
-
-	hour: string | number;
-	minute: string | number;
-
-	food_id: string;
-	user_id: string;
-	when: Date;
-	created_at: Date;
-	updated_at: Date;
-}
+import { ILog } from ".";
 
 interface IProps {
 	data: ILog;
@@ -73,7 +54,7 @@ export default function LogsHorizontalScrollCards({ data }: IProps) {
 				<span>{data.hour}:{data.minute}</span>
 			</div>
 			<div className="details2">
-				<span>{data.quantity_amount}g - {data.calories}kcal</span>
+				<span>{data.amount}{data.unit_abbreviation} - {data.calories}kcal</span>
 			</div>
 			<div className="card--macros">
 				<h4 style={{ color: "#EB5757" }}>C{carbohydrates}</h4>

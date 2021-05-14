@@ -88,13 +88,14 @@ const LogProvider: React.FC = ({ children }) => {
 			}
 
       const {data} = await api.get(`/food-library/`);
+			console.log(data);
 
 			await indexedDb.putBulkValue('search', data);
 			const paginateAll = await paginate({ arr: data, size: 10 });
-			console.log(paginateAll);
+			// console.log(paginateAll);
 
       setData(paginateAll);
-			console.log(data);
+			// console.log(data);
     }
 
     async function initialLoad() {
