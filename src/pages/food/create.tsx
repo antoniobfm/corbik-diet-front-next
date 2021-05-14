@@ -80,7 +80,7 @@ export default function Create() {
 	const [showUnitSelector, setShowUnitSelector] = useState(false);
 	const [showAddUnit, setShowAddUnit] = useState(false);
 	const [selectedUnit, setSelectedUnit] = useState({ index: 0, id: '', name: '', amount: 0 });
-	const [units, setUnits] = useState<Array<IUnit & {amount: number}>>([{ id: "b57322d7-18ef-402d-830b-86ed92bac556", name: "gram", abbreviation: "g", factor: "0.00",  property: "mass", unit_system: "metric", amount: 30 }]);
+	const [units, setUnits] = useState<Array<IUnit & {amount: number}>>([{ id: "8c9287cb-f65a-4067-9c3b-8f82b4a9bc96", name: "gram", abbreviation: "g", factor: "0.00",  property: "mass", unit_system: "metric", amount: 30 }]);
 
 	const [showIngredientSelector, setShowIngredientSelector] = useState(false);
 	const [ingredients, setIngredients] = useState([]);
