@@ -17,16 +17,32 @@ import Food from "@/components/Ingredients/Food";
 import Unit from '@/components/FormComponents/Unit';
 import { AnimatePresence } from "framer-motion";
 
+interface IUnitFormData {
+	unit_id: string;
+	amount: string;
+}
+
+interface IIngredientFormData {
+	id: string;
+	food_source_id: string;
+	food_unit: string;
+	amount: string;
+}
+
 interface IFoodFormData {
 	name: string;
 	brand?: string;
 	barcode?: string;
+	//
 	carbohydrates: string;
 	proteins: string;
 	fats: string;
 	calories: string;
-	amount: string;
-	quantity_type: string;
+	//
+	is_recipe: boolean;
+	ingredients: IIngredientFormData[];
+	//
+	units: IUnitFormData[];
 }
 
 export interface IUnit {
@@ -39,7 +55,7 @@ export interface IUnit {
 }
 
 interface IIngredient {
-	food_version_source: string;
+	food_source_id: string;
 	food_unit: string;
 	amount: number;
 }
@@ -48,13 +64,16 @@ interface IFood {
 	name: string;
 	brand?: string;
 	barcode?: string;
+	//
 	carbohydrates: number;
 	proteins: number;
 	fats: number;
 	calories: number;
+	//
 	is_recipe: boolean;
-	units: Array<IUnit & {amount: number}>;
 	ingredients?: IIngredient[];
+	//
+	units: Array<IUnit & {amount: number}>;
 }
 
 export default function Create() {
@@ -80,8 +99,14 @@ export default function Create() {
 			try {
 				formRef.current?.setErrors({});
 
+				console.log(ingredientsProjection);
+
 				const ingredientsFormmated = ingredientsProjection.map(item => {
-					return { food_version_source: item.food_version_source, amount: item.amount, food_unit: item.food_unit, id: item.id }
+					return { food_source_id: item.id, amount: item.amount, food_unit: item.food_unit, id: item.id }
+				})
+
+				const unitsFormmated: IUnitFormData = units.map(item => {
+					return { unit_id: item.id, amount: item.amount }
 				})
 
 				const schema = Yup.object().shape({
@@ -98,15 +123,18 @@ export default function Create() {
 					abortEarly: false,
 				});
 
-				const food: IFood = {
+				const food: IFoodFormData = {
 					name: data.name,
 					brand: data?.brand,
 					barcode: data?.barcode,
+					//
 					carbohydrates: parseFloat(data.carbohydrates),
 					proteins: parseFloat(data.proteins),
 					fats: parseFloat(data.fats),
 					calories: parseFloat(data.calories),
-					units: units,
+					//
+					units: unitsFormmated,
+					//
 					is_recipe: type === 'recipe',
 					ingredients: ingredientsFormmated,
 				};
@@ -213,10 +241,8 @@ export default function Create() {
 	const handleAddIngredient = useCallback((food) => {
 		const { carbohydrates, proteins, fats, calories } = food;
 		const { amount } = food.current_unit;
-		const food_version_id = food.foodVersionDefault.id;
-		const food_unit_id = food.foodVersionDefault.units[0].id;
 		const newIngredients = ingredients;
-		const newProjection = { carbohydrates, proteins, fats, calories, amount, food_version_source: food_version_id, food_unit: food_unit_id, id: food.id };
+		const newProjection = { carbohydrates, proteins, fats, calories, amount, food_unit: food.units[0].id, id: food.id };
 
 		newIngredients.push(food);
 

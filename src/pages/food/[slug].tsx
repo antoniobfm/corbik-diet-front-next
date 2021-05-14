@@ -15,6 +15,21 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 import CardMessage from "@/components/Card/CardMessage";
 
+interface ICreateFoodLog {
+	food_id: string;
+	//
+	name: string;
+	unit_type: string;
+	amount: number;
+	//
+	carbohydrates: number;
+	proteins: number;
+	fats: number;
+	calories: number;
+	//
+	when: string;
+}
+
 interface IUnit {
 	id: string;
 	abbreviation: string;
@@ -24,27 +39,18 @@ interface IUnit {
 	unit_system: string;
 }
 
-interface IFoodVersion {
-	food_id: string;
-	carbohydrates: number;
-	proteins: number;
-	fats: number;
-	calories: number;
-	amount: number;
-	units: IUnit[];
-}
-
 interface IFood {
 	food_id: string;
 	name: string;
 	amount: number;
+	//
 	carbohydrates: number;
 	proteins: number;
 	fats: number;
 	calories: number;
+	//
+	units: IUnit[];
 	when: Date;
-	foodVersionDefault: IFoodVersion;
-	unit_type: string;
 }
 
 export default function Food() {
@@ -89,10 +95,10 @@ export default function Food() {
 		setFoodHistory(tempFoodLogs);
 
 		setIngredients(data.ingredients);
-		setFats(toFixedNumber(parseFloat(data.units[0].amount) * data.foodVersionDefault.fats / data.units[0].amount, 2, 10));
-		setCarbs(toFixedNumber(parseFloat(data.units[0].amount) * data.foodVersionDefault.carbohydrates / data.units[0].amount, 2, 10));
-		setProts(toFixedNumber(parseFloat(data.units[0].amount) * data.foodVersionDefault.proteins / data.units[0].amount, 2, 10));
-		setCalories(toFixedNumber(parseFloat(data.units[0].amount) * data.foodVersionDefault.calories / data.units[0].amount, 2, 10));
+		setFats(toFixedNumber(parseFloat(data.units[0].amount) * data.fats / data.units[0].amount, 2, 10));
+		setCarbs(toFixedNumber(parseFloat(data.units[0].amount) * data.carbohydrates / data.units[0].amount, 2, 10));
+		setProts(toFixedNumber(parseFloat(data.units[0].amount) * data.proteins / data.units[0].amount, 2, 10));
+		setCalories(toFixedNumber(parseFloat(data.units[0].amount) * data.calories / data.units[0].amount, 2, 10));
 	}, []);
 
 	useEffect(() => {
@@ -121,8 +127,6 @@ export default function Food() {
 				calories: calories,
 				when: date,
 			};
-
-			console.log(food.foodVersionDefault);
 
 			await api.post(`/food/log`, food);
 
