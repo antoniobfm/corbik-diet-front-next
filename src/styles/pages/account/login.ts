@@ -199,8 +199,8 @@ export const GetNotifiedContainer = styled.div`
 	#all-set {
 		z-index: 3;
 
-		width: 100vw;
-		height: 111%;
+		width: 111%;
+		height: 105%;
 		margin-left: 0%;
 		margin-top: 0%;
 
