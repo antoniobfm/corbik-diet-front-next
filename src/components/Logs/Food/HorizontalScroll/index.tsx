@@ -4,30 +4,39 @@ import LogsHorizontalScrollCards from "./HorizontalScrollCards";
 
 
 export interface ILog {
-	id: number;
-	name: string;
-	calories: string;
-	carbohydrates: string;
-	fats: string;
-	proteins: string;
-	amount: string;
-	unit_abbreviation: string;
-
-	hour: string | number;
-	minute: string | number;
-
 	food_id: string;
 	user_id: string;
+	//
+	id: number;
+	name: string;
+	brand: string;
+	//
+	carbohydrates: string;
+	proteins: string;
+	fats: string;
+	calories: string;
+	//
+	amount: string;
+	unit_abbreviation: string;
+	//
+	day: string;
+	month: string;
+	year: string;
+	hour: string | number;
+	minute: string | number;
+	//
 	when: Date;
+	//
 	created_at: Date;
 	updated_at: Date;
 }
 
 interface IProps {
 	data: ILog[] | undefined;
+	handleQuickEditModal: any;
 }
 
-const LogsHorizontalScroll: React.FC<IProps> = ({data}: IProps) => {
+const LogsHorizontalScroll: React.FC<IProps> = ({data, handleQuickEditModal}: IProps) => {
 
 	return (
 		<Container
@@ -39,7 +48,7 @@ const LogsHorizontalScroll: React.FC<IProps> = ({data}: IProps) => {
 			<div className="scrolly2">
 				<div className="scrolly-container">
 					{data && data.map(log =>
-						<LogsHorizontalScrollCards key={log.id} data={log} />
+						<LogsHorizontalScrollCards key={log.id} data={log} handleQuickEditModal={handleQuickEditModal} />
 					)}
 				</div>
 			</div>

@@ -100,7 +100,7 @@ export default function Search() {
 								</div>
 								<input
 									ref={inputRef}
-									type="text"
+									type="search"
 									placeholder="Search"
 									onChange={e => setSearchInput(e.target.value)}
 									onKeyDown={e => handleEnter(e)}

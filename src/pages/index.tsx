@@ -24,26 +24,34 @@ import * as d3 from 'd3';
 import { Chartzin } from '@/styles/pages/home/home';
 import LineChart from '@/components/Charts/LineChart';
 import CardMessage from '@/components/Card/CardMessage';
+import QuickEditModal from '@/components/Modals/QuickEditModal';
 
 const LoginModal = dynamic(() => import('@/components/LoginModal'),
 	{ loading: () => <div className="blurred__background"><h1>Loading</h1></div> })
 
 interface ILog {
+	food_id: string;
+	user_id: string;
 	id: number;
+	//
 	name: string;
+	brand?: string;
+	//
 	calories: string;
 	carbohydrates: string;
 	fats: string;
 	proteins: string;
+	//
 	amount: string;
 	unit_abbreviation: string;
-
+	//
+	day: string;
+	month: string;
+	year: string;
 	hour: string | number;
 	minute: string | number;
-
-	food_id: string;
-	user_id: string;
 	when: Date;
+	//
 	created_at: Date;
 	updated_at: Date;
 }
@@ -65,6 +73,14 @@ export default function Home() {
 	const [isHorizontal, setIsHorizontal] = useState(true);
 	const [showCalendar, setShowCalendar] = useState(false);
 	const [selectedDate, setSelectedDate] = useState<Date>(setHours(new Date(), 12));
+
+	const [dataShowQuickEditModal, setDataShowQuickEditModal] = useState([]);
+	const [showQuickEditModal, setShowQuickEditModal] = useState(false);
+
+	const handleQuickEditModal = useCallback((data) => {
+		setShowQuickEditModal(true);
+		setDataShowQuickEditModal(data);
+	}, [showQuickEditModal]);
 
 	const router = useRouter();
 	const {handleError} = useError();
@@ -173,6 +189,7 @@ export default function Home() {
 
 	return (
 		<>
+			{showQuickEditModal && <QuickEditModal setState={setShowQuickEditModal} handleChangeUnit={() => {}} logData={dataShowQuickEditModal} />}
 			<Menu currentRoute="Diet" />
 			<WholePageTransition>
 			<Container>
@@ -239,7 +256,7 @@ export default function Home() {
 					<div>
 						<AnimatePresence>
 						{!loading ? logData && logData.logs ?
-							isHorizontal ? <LogsHorizontalScroll data={logData.logs} /> : <LogsVerticalScroll data={logData.logs} />
+							isHorizontal ? <LogsHorizontalScroll data={logData.logs} handleQuickEditModal={handleQuickEditModal} /> : <LogsVerticalScroll data={logData.logs} />
 							:
 							<CardMessage borderBottom={false}>
 								<h4>NO LOGS TODAY</h4>

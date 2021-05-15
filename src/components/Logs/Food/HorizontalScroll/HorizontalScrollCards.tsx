@@ -6,9 +6,10 @@ import { ILog } from ".";
 
 interface IProps {
 	data: ILog;
+	handleQuickEditModal: any;
 }
 
-export default function LogsHorizontalScrollCards({ data }: IProps) {
+export default function LogsHorizontalScrollCards({ data, handleQuickEditModal }: IProps) {
 	const router = useRouter();
 	const {carbohydrates, proteins, fats} = data;
 
@@ -24,6 +25,22 @@ export default function LogsHorizontalScrollCards({ data }: IProps) {
 
   const onLongPress = () => {
 		// router.push(`/log/edit/${data.id}`)
+		handleQuickEditModal(
+			{
+				id: data.id,
+				name: data.name,
+				brand: data.brand,
+				//
+				amount: data.amount,
+				unit_name: data.unit_abbreviation,
+				//
+				day: data.day,
+				month: data.month,
+				year: data.year,
+				hour: data.hour,
+				minute: data.minute,
+				when: data.when,
+			});
     setlongPressCount(longPressCount + 1);
   };
 
@@ -35,11 +52,10 @@ export default function LogsHorizontalScrollCards({ data }: IProps) {
 
   const defaultOptions = {
     shouldPreventDefault: true,
-    delay: 50,
+    delay: 350,
   };
 
   const longPressEvent = useLongPress(onLongPress, onClick, defaultOptions);
-
 
 	return (
 		<Container
