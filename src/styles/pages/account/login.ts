@@ -4,9 +4,9 @@ import styled, { css } from 'styled-components';
 export const Container = styled.div`
 	margin: auto;
 	max-width: 900px;
-	/* min-height: 100vh; */
-  /* display: flex;
-  flex-direction: column; */
+	min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 	/* background-image: url('/icons/screens.png');
 	background-repeat: no-repeat;
 	background-size: contain;
@@ -141,8 +141,8 @@ export const MiddleContent = styled.div`
 `;
 
 export const Footer = styled.footer`
-	width: 100vw;
-	height: 50vh;
+	flex: 1;
+	min-width: 100%;
 
 	background-image: url('/icons/screens.png');
 	background-repeat: no-repeat;
@@ -200,7 +200,7 @@ export const GetNotifiedContainer = styled.div`
 		z-index: 3;
 
 		width: 100vw;
-		height: 105%;
+		height: 111%;
 		margin-left: 0%;
 		margin-top: 0%;
 
@@ -232,7 +232,7 @@ export const GetNotifiedContainer = styled.div`
 			display: flex;
 			align-items: center;
 			text-align: center;
-			/* text-transform: uppercase; */
+			text-transform: uppercase;
 
 			color: #FFFFFF;
 
