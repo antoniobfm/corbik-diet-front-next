@@ -4,9 +4,9 @@ import styled, { css } from 'styled-components';
 export const Container = styled.div`
 	margin: auto;
 	max-width: 900px;
-	height: 100vh;
-  display: flex;
-  flex-direction: column;
+	/* min-height: 100vh; */
+  /* display: flex;
+  flex-direction: column; */
 	/* background-image: url('/icons/screens.png');
 	background-repeat: no-repeat;
 	background-size: contain;
@@ -141,8 +141,8 @@ export const MiddleContent = styled.div`
 `;
 
 export const Footer = styled.footer`
-	flex: 1;
-	min-width: 100%;
+	width: 100vw;
+	height: 50vh;
 
 	background-image: url('/icons/screens.png');
 	background-repeat: no-repeat;
@@ -154,15 +154,12 @@ export const Footer = styled.footer`
 	}
 `;
 
-interface ContainerProps {
-	isFocused: boolean;
-	isFilled: boolean;
-}
-
-export const GetNotifiedContainer = styled.div<ContainerProps>`
+export const GetNotifiedContainer = styled.div`
 	max-width: 80%;
 	padding-left: 10%;
 	padding-top: 40px;
+
+	position: relative;
 
 	h3 {
 		font-family: Poppins;
@@ -174,78 +171,6 @@ export const GetNotifiedContainer = styled.div<ContainerProps>`
 
 		text-align: center;
 		letter-spacing: 0.2px;
-	}
-
-	#get-notification-container {
-		background: linear-gradient(92.01deg, rgba(255, 255, 255, 0.03) 0%, rgba(24, 26, 27, 0) 62.45%);
-		border: 1.5px solid #222425;
-		box-sizing: border-box;
-		filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.25));
-		border-radius: 6px;
-		padding-left: 16px;
-		margin-top: 8px;
-		margin-bottom: 16px;
-
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-
-		transition: 0.3s all;
-
-		svg {
-			min-width: 20px;
-			color: rgba(255, 255, 255, 0.4);
-			font-size: 14px;
-		}
-
-		input {
-			flex: 1;
-			padding: 16px 16px 16px 8px;
-			background: none;
-			border: none;
-			outline: none;
-
-			font-family: Poppins;
-			font-style: normal;
-			font-weight: normal;
-			font-size: 14px;
-			line-height: 19px;
-			text-align: left;
-
-			color: var(--high-emphasis);
-		}
-
-		${props =>
-			props.isFocused &&
-			css`
-				color: rgba(255, 255, 255, 0.95);
-				border-color: rgba(255, 255, 255, 0.95);
-				background: linear-gradient(92.01deg, rgba(255, 255, 255, 0.06) 0%, rgba(24, 26, 27, 0.03) 62.45%);
-				svg {
-					color: rgba(255, 255, 255, 0.95);
-				}
-			`}
-
-		${props =>
-			props.isFilled &&
-			css`
-				color: rgba(255, 255, 255, 0.5);
-				border-color: rgba(255, 255, 255, 0.4);
-				svg {
-					color: rgba(255, 255, 255, 0.95);
-				}
-			`}
-
-		${props =>
-			props.isFocused && props.isFilled &&
-			css`
-				color: rgba(255, 255, 255, 0.95);
-				border-color: rgba(255, 255, 255, 0.95);
-				background: linear-gradient(92.01deg, rgba(255, 255, 255, 0.06) 0%, rgba(24, 26, 27, 0.03) 62.45%);
-				svg {
-					color: rgba(255, 255, 255, 0.95);
-				}
-			`}
 	}
 
 	#get-notified-button {
@@ -268,6 +193,94 @@ export const GetNotifiedContainer = styled.div<ContainerProps>`
 			line-height: 15px;
 
 			color: #D5E0F6;
+		}
+	}
+
+	#all-set {
+		z-index: 3;
+
+		width: 100vw;
+		height: 105%;
+		margin-left: 0%;
+		margin-top: 0%;
+
+		left: 0;
+		top: 0;
+
+		position: absolute;
+
+		background: rgba(10, 10, 11, 0.9);
+		backdrop-filter: blur(6px);
+		/* Note: backdrop-filter has minimal browser support */
+
+
+		/* overflow: hidden; */
+
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+
+		h4 {
+			font-family: Poppins;
+			font-style: normal;
+			font-weight: 600;
+			font-size: 16px;
+			line-height: 18px;
+			/* identical to box height */
+
+			display: flex;
+			align-items: center;
+			text-align: center;
+			/* text-transform: uppercase; */
+
+			color: #FFFFFF;
+
+			padding-top: 32px;
+		}
+
+		p {
+			font-family: Poppins;
+			font-style: normal;
+			font-weight: normal;
+			font-size: 14px;
+			line-height: 18px;
+			letter-spacing: 0.002em;
+			/* identical to box height */
+
+			display: flex;
+			align-items: center;
+			text-align: center;
+
+			color: #FFFFFF;
+
+			padding-top: 4px;
+		}
+
+		.is-done {
+			width: 48px;
+			height: 48px;
+
+			position: relative;
+
+			background-color: var(--corbik-green);
+
+			animation-name: breath-animation;
+			animation-duration: 8s;
+			animation-iteration-count: infinite;
+
+			box-shadow: 0px 4px 24px rgba(24, 26, 27, 0.5), 0px 0px 18.2857px var(--corbik-green), 0px 0px 55px var(--corbik-green), inset 0px 4px 12px rgba(0, 0, 0, 0.25);
+
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			svg {
+				position: absolute;
+				font-size: 27px;
+				filter: drop-shadow(0px 2px 5px #fff);
+				stroke-width: 4px;
+			}
 		}
 	}
 `

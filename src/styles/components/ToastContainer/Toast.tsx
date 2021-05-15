@@ -19,21 +19,21 @@ const toastTypeVariations = {
 	`,
 
   error: css`
-		background: #EB575799;
+		background: #b32828;
 		color: rgba(255, 255, 255, 0.95);
 	`,
 };
 
 export const Container = styled(motion.div) <ContainerProps>`
-	width: 95vw;
-	margin-right: 2.5vw;
-	margin-top: 2vh;
+	width: 100vw;
+	/* margin-right: 2.5vw; */
+	/* margin-top: 2vh; */
   backdrop-filter: blur(3px);
   text-align: center;
   box-sizing: border-box;
 	position: relative;
 	padding: 0;
-	border-radius: 6px;;
+	/* border-radius: 6px;; */
 	/* margin: 30px;
 	border-radius: 10px; */
 	box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);

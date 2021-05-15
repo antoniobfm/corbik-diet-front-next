@@ -116,7 +116,7 @@ export default function Food() {
 	const handleSubmit = useCallback((e) => {
 		e.preventDefault()
 		async function createFoodLog() {
-			const food: IFood = {
+			const food: ICreateFoodLog = {
 				food_id: foodData.id,
 				name: foodData.name,
 				unit_type: selectedUnitType.id,

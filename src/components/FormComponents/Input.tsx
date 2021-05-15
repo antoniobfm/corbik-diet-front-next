@@ -26,8 +26,10 @@ export default function Input({
 	...rest
 }: InputProps) {
 	const inputRef = useRef<HTMLInputElement>(null);
+
 	const [isFocused, setIsFocused] = useState(false);
 	const [isFilled, setIsFilled] = useState(false);
+
 	const { fieldName, defaultValue, error, registerField } = useField(name);
 
 	const handleInputFocus = useCallback(() => {
