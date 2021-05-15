@@ -105,7 +105,7 @@ export default function Login() {
 				<h2>Lose weight without cutting the fast food, understand what is going on with your body and why so you can act uppon hard data.</h2>
 			</MiddleContent>
 			<GetNotifiedContainer>
-				{!waitlisted &&
+				{waitlisted &&
 				<motion.div id="all-set"
 					initial={{ opacity: 0 }}
 					transition={{ duration: 0.3 }}
