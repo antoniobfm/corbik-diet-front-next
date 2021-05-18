@@ -216,21 +216,21 @@ export default function Home() {
 					<Macro macro="carb">
 						<div>
 							<h4>Carbs</h4>
-							<span>{!loading && logData ? logData.carbohydrates : `0`}{user && user.carbohydrates && <span>/{parseInt(user.carbohydrates)}</span>}</span>
+							<span>{logData ? logData.carbohydrates : `0`}{user && user.carbohydrates && <span>/{parseInt(user.carbohydrates)}</span>}</span>
 						</div>
 						<progress id="carbs" value={logData ? logData.carbohydrates : `0`} max={user && user.carbohydrates}>30%</progress>
 					</Macro>
 					<Macro macro="protein">
 						<div>
 							<h4>Prots</h4>
-							<span>{!loading && logData ? logData.proteins : `0`}{user && user.proteins && <span>/{parseInt(user.proteins)}</span>}</span>
+							<span>{logData ? logData.proteins : `0`}{user && user.proteins && <span>/{parseInt(user.proteins)}</span>}</span>
 						</div>
 						<progress id="carbs" value={logData ? logData.proteins : `0`} max={user && user.proteins}>30%</progress>
 					</Macro>
 					<Macro macro="fat">
 						<div>
 							<h4>Fat</h4>
-							<span>{!loading && logData ? logData.fats : `0`}{user && user.fats && <span>/{parseInt(user.fats)}</span>}</span>
+							<span>{logData ? logData.fats : `0`}{user && user.fats && <span>/{parseInt(user.fats)}</span>}</span>
 						</div>
 						<progress id="carbs" value={logData ? logData.fats : `0`} max={user && user.fats}>30%</progress>
 					</Macro>
@@ -238,7 +238,7 @@ export default function Home() {
 				<Calories>
 					<div>
 						<h4>Calories</h4>
-						<span>{!loading && logData ? logData.calories : `0`}{user && user.calories && <span>/{parseInt(user.calories)}</span>}</span>
+						<span>{logData ? logData.calories : `0`}{user && user.calories && <span>/{parseInt(user.calories)}</span>}</span>
 					</div>
 					<progress id="carbs" value={logData ? logData.calories : `0`} max={user && user.calories}>30%</progress>
 				</Calories>
