@@ -1,6 +1,6 @@
 import { Container, FloatingButton } from "@/styles/components/Menu";
 import { useRouter } from "next/router";
-import { IoBarbell, IoBody, IoHome, IoRestaurant } from 'react-icons/io5';
+import { IoBarbell, IoBody, IoHome, IoRestaurant, IoSearch } from 'react-icons/io5';
 import { RiAddLine } from 'react-icons/ri'
 import { Button } from "@/styles/components/Menu";
 
@@ -13,11 +13,19 @@ const Menu = ({ currentRoute }: IMenuProps) => {
 
   return (
 		<Container>
+
 			<Button
 			type="button"
-			onClick={() => router.push('/home')}
-			isSelected={'Home' === currentRoute}>
-				<IoHome />
+			onClick={() => router.push('/')}
+			isSelected={'Diet' === currentRoute}>
+				<IoRestaurant />
+			</Button>
+
+			<Button
+			type="button"
+			onClick={() => router.push('/food/search')}
+			isSelected={'Search' === currentRoute}>
+				<IoSearch size={16} />
 			</Button>
 
 			<Button
@@ -26,7 +34,8 @@ const Menu = ({ currentRoute }: IMenuProps) => {
 			isSelected={'body' === currentRoute}>
 				<IoBody />
 			</Button>
-			{'Home' === currentRoute &&
+
+			{/* {'Home' === currentRoute &&
 				<FloatingButton
 					type="button"
 					onClick={() => router.push('/body/log/add')}
@@ -46,7 +55,7 @@ const Menu = ({ currentRoute }: IMenuProps) => {
 					whileTap={{ scale: 0.9 }}>
 					<RiAddLine size={16} />
 				</FloatingButton>
-			}
+			} */}
 			{'body' === currentRoute &&
 				<FloatingButton
 					type="button"
@@ -57,19 +66,12 @@ const Menu = ({ currentRoute }: IMenuProps) => {
 				</FloatingButton>
 			}
 
-			<Button
-			type="button"
-			onClick={() => router.push('/')}
-			isSelected={'Diet' === currentRoute}>
-				<IoRestaurant />
-			</Button>
-
-			<Button
+			{/* <Button
 			type="button"
 			onClick={() => {}}
 			isSelected={'Lifting' === currentRoute}>
 				<IoBarbell />
-			</Button>
+			</Button> */}
 		</Container>
   )
 }

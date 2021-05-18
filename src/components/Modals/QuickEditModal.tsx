@@ -1,8 +1,10 @@
 /* eslint-disable camelcase */
 import { useLog } from "@/hooks/logs";
+import { useToast } from "@/hooks/toast";
 import api from "@/services/api";
 import { ModalContainer, ModalContent, SpecificUnit } from "@/styles/components/Modals/QuickEditModal";
 import { capitalize } from "@/utils/capitalize";
+import { isoFormat, isoParse } from "d3-time-format";
 import { AnimateSharedLayout, motion } from "framer-motion";
 import React, {
 	useCallback,
@@ -39,6 +41,11 @@ const QuickEditModal: React.FC<IProps> = ({
 	logData
 }: IProps) => {
 	const [unitData, setUnitData] = useState([]);
+	const [timeTemp, setTimeTemp] = useState(`${logData.hour}:${logData.minute}`);
+	const [amountTemp, setAmountTemp] = useState(`${logData.amount}`);
+	const [dateTemp, setDateTemp] = useState(`${logData.year}-${logData.month}-${logData.day}`);
+
+	const { updateLog } = useLog();
 
 	//: Unit Manamgent
   useEffect(() => {
@@ -50,23 +57,29 @@ const QuickEditModal: React.FC<IProps> = ({
 
 		initialLoad();
 	}, []);
+	const { addToast } = useToast();
+
+	const handleEdit = useCallback(async () => {
+	}, [logData, timeTemp, dateTemp, amountTemp]);
 
 	//: Modal Management
   const node = useRef<HTMLDivElement>();
 
   const [open, setOpen] = useState(true);
-	const { search } = useLog();
 
-  const handleClickOutside = e => {
+  const handleClickOutside = useCallback(async (e) => {
     if (node.current.contains(e.target)) {
       console.log("clicking inside");
       return;
     }
+		updateLog({id: logData.id, when: `${isoFormat(new Date(`${inputDateRef.current.value}T${inputTimeRef.current.value}`))}`, amount: inputRef.current.value});
     // outside click
     setState(false);
-  };
+  }, [dateTemp, timeTemp, amountTemp]);
 
 	let inputRef = useRef<HTMLInputElement>();
+	let inputDateRef = useRef<HTMLInputElement>();
+	let inputTimeRef = useRef<HTMLInputElement>();
 
 	useEffect(() => {
 		setTimeout(() => {
@@ -86,6 +99,12 @@ const QuickEditModal: React.FC<IProps> = ({
     };
 	}, [open]);
 
+	const handleChangeAmount = useCallback((e) => {
+		console.log(e.target.value)
+		setAmountTemp(e.target.value)
+	}, [amountTemp])
+
+	if (logData && timeTemp && dateTemp)
 	return (
     <AnimateSharedLayout>
 			<ModalContainer
@@ -103,25 +122,9 @@ const QuickEditModal: React.FC<IProps> = ({
 				ref={node}
 				>
 					<ModalContent>
-					{/* <Floating>
-						<FiPackage />
-						<input
-							type="text"
-							ref={inputRef}
-							placeholder="Add custom unit"
-							onFocus={() => setInputFocused(true)}
-							onBlur={() => setInputFocused(false)}
-							onChange={e => setSearchInput(e.target.value)}
-							onKeyDown={e => handleEnter(e)} />
-							<button type="button">
-								<FiPlus />
-							</button>
-					</Floating> */}
 						<motion.div
 						className="scroll"
 						id="scroll"
-						// drag="y"
-						// dragConstraints={{bottom: 0}}
 						>
 							<div className="header">
 								<h4>{logData.brand}</h4>
@@ -131,24 +134,19 @@ const QuickEditModal: React.FC<IProps> = ({
 								<div className="mini-form-section">
 									<h5>Amount</h5>
 									<div className="mini-form-section-inputs">
-										<input type="number" ref={inputRef} defaultValue={logData.amount} placeholder={`${logData.amount}`} style={{ gridColumn: 'col / span 4' }} />
+										<input type="number" ref={inputRef} value={amountTemp} onChange={handleChangeAmount} placeholder={`${logData.amount}`} style={{ gridColumn: 'col / span 4' }} />
 										<input type="text" value="Grams" style={{ gridColumn: 'col 5 / span 4' }} />
 									</div>
 								</div>
 								<div className="mini-form-section">
 									<h5>When</h5>
 									<div className="mini-form-section-inputs">
-										<input type="date" defaultValue={`${logData.year}-${logData.month}-${logData.day}`} style={{ gridColumn: 'col / span 3' }} />
-										<input type="time" defaultValue={`${logData.hour}:${logData.minute}`} style={{ gridColumn: 'col 4 / span 3' }} />
+										<input type="date" ref={inputDateRef} defaultValue={dateTemp && dateTemp} style={{ gridColumn: 'col / span 3' }} />
+										<input type="time" ref={inputTimeRef} defaultValue={timeTemp && timeTemp} style={{ gridColumn: 'col 4 / span 3' }} />
 										<button type="button" style={{ gridColumn: 'col 7 / span 2' }}>NOW</button>
 									</div>
 								</div>
 							</div>
-							{/* {unitData && unitData.map((item) =>
-								<SpecificUnit onClick={() => handleChangeUnit({data: item})} key={item.name}>
-									<span>{capitalize(item.name)}s</span>
-								</SpecificUnit>
-							)} */}
 						</motion.div>
 					</ModalContent>
 				</motion.div>

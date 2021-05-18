@@ -1,7 +1,7 @@
 import useLongPress from "@/components/useLogPress";
 import { Container } from "@/styles/components/Logs/Food/HorizontalScroll/HorizontalScrollCards";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ILog } from ".";
 
 interface IProps {
@@ -23,7 +23,7 @@ export default function LogsHorizontalScrollCards({ data, handleQuickEditModal }
   const [clickCount, setClickCount] = useState(0)
 
 
-  const onLongPress = () => {
+  const onLongPress = (event) => {
 		// router.push(`/log/edit/${data.id}`)
 		handleQuickEditModal(
 			{
@@ -52,14 +52,41 @@ export default function LogsHorizontalScrollCards({ data, handleQuickEditModal }
 
   const defaultOptions = {
     shouldPreventDefault: true,
-    delay: 350,
+    timeToBeClick: 350,
+		timeToOpenModal: 650
   };
 
   const longPressEvent = useLongPress(onLongPress, onClick, defaultOptions);
 
+	// const getClickPosition = useCallback(() => {
+	// 	const div: HTMLElement = document.getElementById(`${data.id}`);
+	// 	console.log('OKOKOK')
+
+	// 	if (div) {
+	// 		console.log(div.clientHeight);
+	// 	}
+
+	// 	// if (div) {
+	// 	// 	div.removeEventListener('scroll', getClickPosition, true);
+	// 	// }
+	// }, []);
+
+	// const getMovement = useCallback((e) => {
+	// 	console.log(e)
+	// }, []);
+
+	// useEffect(() => {
+	// 	const div: HTMLElement = document.getElementById(`${data.id}`);
+
+	// 	if (div) {
+  //     div.addEventListener('touchstart', getClickPosition, true);
+	// 	}
+	// }, [getClickPosition])
+
 	return (
 		<Container
 			{...longPressEvent}
+			id={`${data.id}`}
 			carbPerc={Math.floor(carbPerc)}
 			protsPerc={Math.floor(protsPerc)}
 			fatPerc={Math.floor(fatPerc)}

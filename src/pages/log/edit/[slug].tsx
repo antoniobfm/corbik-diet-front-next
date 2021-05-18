@@ -17,6 +17,7 @@ import { AnimatePresence } from "framer-motion";
 import History from '@/components/Card/History';
 import { format } from "date-fns";
 import CardMessage from "@/components/Card/CardMessage";
+import { useLog } from "@/hooks/logs";
 
 export default function Edit(food: string) {
 	const router = useRouter();
@@ -37,6 +38,8 @@ export default function Edit(food: string) {
 
 	const { user, loading } = useAuth();
 
+	const { updateLog } = useLog();
+
 	const logId = router.query.slug;
 
 	const handleConfirmation = useCallback((e) => {
@@ -46,7 +49,6 @@ export default function Edit(food: string) {
 	}, [showConfirmation]);
 
 	const handleData = useCallback((data: any) => {
-
 		const tempFoodLogs = [];
 		data.food.foodLogs.map(log => {
 			tempFoodLogs.push({
@@ -121,26 +123,7 @@ export default function Edit(food: string) {
 
 	const handleEdit = useCallback((e) => {
 		e.preventDefault()
-		async function editLog() {
-			const log = {
-				id: logData.id,
-				brand: logData.brand,
-				amount: parseFloat(amountTemp),
-				when: date,
-			};
-			console.log(date);
-
-			await api.put(`/food/log`, log);
-
-			addToast({
-				type: 'success',
-				title: 'Modified your log with success',
-			});
-
-			router.push(`/`);
-		}
-
-		editLog();
+		updateLog({id: logData.id, amount: amountTemp, when: date})
 	}, [logData, carbs, prots, fats, calories, date, amountTemp]);
 
 	// function getSelectedUnit() {

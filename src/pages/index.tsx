@@ -25,6 +25,8 @@ import { Chartzin } from '@/styles/pages/home/home';
 import LineChart from '@/components/Charts/LineChart';
 import CardMessage from '@/components/Card/CardMessage';
 import QuickEditModal from '@/components/Modals/QuickEditModal';
+import Head from 'next/head';
+import { useLog } from '@/hooks/logs';
 
 const LoginModal = dynamic(() => import('@/components/LoginModal'),
 	{ loading: () => <div className="blurred__background"><h1>Loading</h1></div> })
@@ -66,7 +68,7 @@ interface IDayResume {
 
 
 export default function Home() {
-	const [logData, setLogData] = useState<IDayResume | null>(null);
+	// const [logData, setLogData] = useState<IDayResume | null>(null);
 	const [chartData, setChartData] = useState<IDayResume[]>(null);
 	const [chartRawData, setChartRawData] = useState<IDayResume[]>(null);
 	const [loading, setLoading] = useState(true);
@@ -74,16 +76,10 @@ export default function Home() {
 	const [showCalendar, setShowCalendar] = useState(false);
 	const [selectedDate, setSelectedDate] = useState<Date>(setHours(new Date(), 12));
 
-	const [dataShowQuickEditModal, setDataShowQuickEditModal] = useState([]);
-	const [showQuickEditModal, setShowQuickEditModal] = useState(false);
-
-	const handleQuickEditModal = useCallback((data) => {
-		setShowQuickEditModal(true);
-		setDataShowQuickEditModal(data);
-	}, [showQuickEditModal]);
-
 	const router = useRouter();
 	const {handleError} = useError();
+
+	const { logData } = useLog();
 
 	let chartRef = createRef<HTMLCanvasElement>();
 
@@ -156,7 +152,6 @@ export default function Home() {
 	}, [isHorizontal]);
 
 	useEffect(() => {
-
 		const data4: Chart.ChartData = {
 			labels: chartRawData && chartRawData.map(item => item.day),
 			datasets: [
@@ -189,9 +184,10 @@ export default function Home() {
 
 	return (
 		<>
-			{showQuickEditModal && <QuickEditModal setState={setShowQuickEditModal} handleChangeUnit={() => {}} logData={dataShowQuickEditModal} />}
+			<Head>
+				<title>Corbik</title>
+			</Head>
 			<Menu currentRoute="Diet" />
-			<WholePageTransition>
 			<Container>
 				<Header>
 					<button
@@ -220,21 +216,21 @@ export default function Home() {
 					<Macro macro="carb">
 						<div>
 							<h4>Carbs</h4>
-							<span>{!loading && logData ? logData.carbohydrates : `0`}<span>/{user && parseInt(user.carbohydrates)}</span></span>
+							<span>{!loading && logData ? logData.carbohydrates : `0`}{user && user.carbohydrates && <span>/{parseInt(user.carbohydrates)}</span>}</span>
 						</div>
 						<progress id="carbs" value={logData ? logData.carbohydrates : `0`} max={user && user.carbohydrates}>30%</progress>
 					</Macro>
 					<Macro macro="protein">
 						<div>
 							<h4>Prots</h4>
-							<span>{!loading && logData ? logData.proteins : `0`}<span>/{user && parseInt(user.proteins)}</span></span>
+							<span>{!loading && logData ? logData.proteins : `0`}{user && user.proteins && <span>/{parseInt(user.proteins)}</span>}</span>
 						</div>
 						<progress id="carbs" value={logData ? logData.proteins : `0`} max={user && user.proteins}>30%</progress>
 					</Macro>
 					<Macro macro="fat">
 						<div>
 							<h4>Fat</h4>
-							<span>{!loading && logData ? logData.fats : `0`}<span>/{user && parseInt(user.fats)}</span></span>
+							<span>{!loading && logData ? logData.fats : `0`}{user && user.fats && <span>/{parseInt(user.fats)}</span>}</span>
 						</div>
 						<progress id="carbs" value={logData ? logData.fats : `0`} max={user && user.fats}>30%</progress>
 					</Macro>
@@ -242,7 +238,7 @@ export default function Home() {
 				<Calories>
 					<div>
 						<h4>Calories</h4>
-						<span>{!loading && logData ? logData.calories : `0`}<span>/{user && parseInt(user.calories)}</span></span>
+						<span>{!loading && logData ? logData.calories : `0`}{user && user.calories && <span>/{parseInt(user.calories)}</span>}</span>
 					</div>
 					<progress id="carbs" value={logData ? logData.calories : `0`} max={user && user.calories}>30%</progress>
 				</Calories>
@@ -255,14 +251,12 @@ export default function Home() {
 					</BigCardHeader>
 					<div>
 						<AnimatePresence>
-						{!loading ? logData && logData.logs ?
-							isHorizontal ? <LogsHorizontalScroll data={logData.logs} handleQuickEditModal={handleQuickEditModal} /> : <LogsVerticalScroll data={logData.logs} />
+						{logData && logData.logs ?
+							isHorizontal ? <LogsHorizontalScroll data={logData.logs} /> : <LogsVerticalScroll data={logData.logs} />
 							:
 							<CardMessage borderBottom={false}>
 								<h4>NO LOGS TODAY</h4>
 							</CardMessage>
-							:
-							<Skeleton count={4} duration={2} height={64} width='92.5%' style={{ marginLeft: 16, marginRight: 16 }} />
 						}
 						</AnimatePresence>
 					</div>
@@ -323,7 +317,6 @@ export default function Home() {
 					</div>
 				</WideCardContainer>
 			</Container>
-			</WholePageTransition>
 		</>
 	)
 }

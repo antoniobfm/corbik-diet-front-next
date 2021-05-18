@@ -12,9 +12,9 @@ export const Container = styled.div`
 
 	width: 100vw;
 	height:	48px;
-	background: rgba(11, 11, 12, 0.6);
+	background: rgba(11, 11, 12, 0.8);
 	/* border-top: 1px solid rgba(34, 36, 37, 0.6); */
-	backdrop-filter: blur(6px);
+	backdrop-filter: blur(12px);
 
 	display: flex;
 	flex-direction: row;

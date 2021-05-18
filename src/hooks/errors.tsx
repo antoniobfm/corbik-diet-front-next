@@ -21,7 +21,7 @@ const ErrorProvider: React.FC = ({ children }) => {
 	const {signOut} = useAuth();
 
 	const handleError = useCallback(async error => {
-		if (error.response.status === 401) {
+		if (error && error.response && error.response.status === 401) {
 			signOut();
 			router.reload();
 		}

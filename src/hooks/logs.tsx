@@ -2,7 +2,7 @@
 import addZeroBefore from '@/utils/addZeroBefore';
 import IndexedDb from '@/utils/Indexed';
 import paginate from '@/utils/paginate';
-import { endOfDay, formatISO, setHours, startOfDay } from 'date-fns';
+import { endOfDay, formatISO, isSameDay, setHours, startOfDay } from 'date-fns';
 import React, {
 	createContext,
 	useState,
@@ -12,6 +12,7 @@ import React, {
 } from 'react';
 
 import api from '../services/api';
+import { useToast } from './toast';
 
 interface ILog {
 	id: number;
@@ -34,6 +35,7 @@ interface ILog {
 }
 
 interface IDayResume {
+	when: number;
 	carbohydrates: string;
 	proteins: string;
 	fats: string;
@@ -41,9 +43,16 @@ interface IDayResume {
 	logs: ILog[] | undefined;
 }
 
+interface IUpdateLog {
+	id: string;
+	amount: string;
+	when: string;
+}
+
 interface LogContextData {
 	search: any[] | null;
-	log: IDayResume | null;
+	logData: IDayResume | null;
+	updateLog(data: IUpdateLog): void;
 }
 
 const LogContext = createContext<LogContextData>({} as LogContextData);
@@ -52,7 +61,10 @@ const LogProvider: React.FC = ({ children }) => {
 	const [logData, setLogData] = useState<IDayResume | null>(null);
 	const [data, setData] = useState<any[] | null>(null);
 
+	const { addToast } = useToast();
+
 	const handleData = useCallback(async (data) => {
+		console.log(data);
 		const indexedDb = new IndexedDb('test4');
 		await indexedDb.createObjectStore(['DayResume']);
 
@@ -75,6 +87,42 @@ const LogProvider: React.FC = ({ children }) => {
 		setLogData(newLogs);
 	}, [logData]);
 
+	const updateLog = useCallback(async ({id, amount, when}: IUpdateLog) => {
+		try {
+			const log = {
+				id: id,
+				amount: amount,
+				when: when,
+			};
+
+			await api.put(`/food/log`, log);
+
+			addToast({
+				type: 'success',
+				title: 'Modified your log with success',
+			});
+
+			const indexedDb = new IndexedDb('test4');
+			await indexedDb.createObjectStore(['DayResume']);
+			const items = await indexedDb.getAllValue('DayResume');
+
+			const okok = items.filter(item => isSameDay(new Date(item.id), new Date()));
+			setLogData(okok[0])
+
+			const start = formatISO(startOfDay(setHours(new Date(), 12)));
+			const end = formatISO(endOfDay(setHours(new Date(), 12)));
+
+			const { data } = await api.post('/food/log/day', { start, end });
+			await handleData(data);
+		} catch (err) {
+
+			addToast({
+				type: 'error',
+				title: 'Something went wrong',
+			});
+		}
+	}, [])
+
 	useEffect(() => {
     async function initialLoadSearch() {
 			const indexedDb = new IndexedDb('test2');
@@ -88,7 +136,6 @@ const LogProvider: React.FC = ({ children }) => {
 			}
 
       const {data} = await api.get(`/food-library/`);
-			console.log(data);
 
 			await indexedDb.putBulkValue('search', data);
 			const paginateAll = await paginate({ arr: data, size: 10 });
@@ -103,13 +150,17 @@ const LogProvider: React.FC = ({ children }) => {
 			await indexedDb.createObjectStore(['DayResume']);
 			const items = await indexedDb.getAllValue('DayResume');
 
+			const okok = items.filter(item => isSameDay(new Date(item.id), new Date()));
+			setLogData(okok[0])
+
 			const start = formatISO(startOfDay(setHours(new Date(), 12)));
 			const end = formatISO(endOfDay(setHours(new Date(), 12)));
 
-			if (items.length >= 1) {
-				const cachedData = await indexedDb.getAllValue('DayResume');
-				setLogData(cachedData);
-			}
+			// if (items.length >= 1) {
+			// 	const cachedData = await indexedDb.getAllValue('DayResume');
+			// 	console.log(cachedData);
+			// 	setLogData(cachedData[0]);
+			// }
 
       const { data } = await api.post('/food/log/day', { start, end });
 			await handleData(data);
@@ -120,7 +171,7 @@ const LogProvider: React.FC = ({ children }) => {
   }, []);
 
 	return (
-		<LogContext.Provider value={{ search: data, log: logData }}>
+		<LogContext.Provider value={{ search: data, logData: logData, updateLog }}>
 			{ children }
 		</LogContext.Provider>
 	);

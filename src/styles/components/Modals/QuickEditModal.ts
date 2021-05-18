@@ -4,6 +4,8 @@ import styled, { css } from 'styled-components';
 
 export const ModalContainer = styled(motion.div)`
   position: fixed;
+	top: 0;
+	left: 0;
   width: 100%;
   height: 100%;
   z-index: 5;

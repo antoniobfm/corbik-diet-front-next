@@ -137,7 +137,6 @@ export default function Home() {
 	return (
 		<>
 			<Menu currentRoute="body" />
-			<WholePageTransition>
 				<Container>
 					<Header>
 						<button
@@ -190,14 +189,12 @@ export default function Home() {
 							</div>
 						</BigCardHeader>
 						<div>
-							{!loading ? logData && logData.logs ?
+							{logData && logData.logs ?
 								isHorizontal ? <LogsHorizontalScroll data={logData.logs} /> : <LogsVerticalScroll data={logData.logs} />
 								:
 								<CardMessage borderBottom={false}>
 									<h4>NO LOGS</h4>
 								</CardMessage>
-								:
-								<Skeleton count={4} duration={2} height={64} width='92.5%' style={{ marginLeft: 16, marginRight: 16 }} />
 							}
 						</div>
 						<div className="add-log">
@@ -251,7 +248,6 @@ export default function Home() {
 						</div>
 					</WideCardContainer>
 				</Container>
-			</WholePageTransition>
 		</>
 	)
 }

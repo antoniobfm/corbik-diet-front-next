@@ -28,7 +28,8 @@ interface IProps {
 export default function LogsHorizontalScroll({ data }: IProps) {
 	return (
 		<Container
-			initial={{ opacity: 0, height: data.length * 64 }}
+			// initial={{ opacity: 0, height: data.length * 64 }}
+			initial={{ opacity: 1, height: 80 }}
 			animate={{ opacity: 1, height: 80 }}
 			transition={{ duration: 0.3 }}
 			exit={{ opacity: 0 }}>

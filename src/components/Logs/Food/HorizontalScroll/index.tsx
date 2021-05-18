@@ -1,5 +1,6 @@
+import QuickEditModal from "@/components/Modals/QuickEditModal";
 import { Container } from "@/styles/components/Logs/Food/HorizontalScroll/home";
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import LogsHorizontalScrollCards from "./HorizontalScrollCards";
 
 
@@ -31,16 +32,40 @@ export interface ILog {
 	updated_at: Date;
 }
 
-interface IProps {
-	data: ILog[] | undefined;
-	handleQuickEditModal: any;
+interface ILogData {
+	id: string;
+	name: string;
+	brand: string;
+	//
+	amount: number;
+	unit_name: string;
+	//
+	day: string;
+	month: string;
+	year: string;
+	hour: string;
+	minute: string;
+	when: string;
 }
 
-const LogsHorizontalScroll: React.FC<IProps> = ({data, handleQuickEditModal}: IProps) => {
+interface IProps {
+	data: ILog[] | undefined;
+}
 
+const LogsHorizontalScroll: React.FC<IProps> = ({data}: IProps) => {
+	const [dataShowQuickEditModal, setDataShowQuickEditModal] = useState<ILogData>();
+	const [showQuickEditModal, setShowQuickEditModal] = useState(false);
+
+	const handleQuickEditModal = useCallback((data2) => {
+		setDataShowQuickEditModal(data2);
+		setShowQuickEditModal(true);
+	}, [showQuickEditModal]);
 	return (
+		<>
+		{showQuickEditModal && dataShowQuickEditModal && <QuickEditModal setState={setShowQuickEditModal} handleChangeUnit={() => {}} logData={dataShowQuickEditModal} />}
 		<Container
-			initial={{ opacity: 0, height: data.length * 64 }}
+			// initial={{ opacity: 0, height: data.length * 64 }}
+			initial={{ opacity: 1, height: 80 }}
 			animate={{ opacity: 1, height: 80 }}
 			transition={{ duration: 0.3 }}
 			exit={{ opacity: 0 }}
@@ -53,6 +78,7 @@ const LogsHorizontalScroll: React.FC<IProps> = ({data, handleQuickEditModal}: IP
 				</div>
 			</div>
 		</Container>
+		</>
 	)
 }
 export default LogsHorizontalScroll;

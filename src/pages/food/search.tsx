@@ -1,11 +1,12 @@
 import BarcodeScannerComponent from "@/components/BarcodeScanner";
 import WholePageTransition from "@/components/WholePageTransition";
 import api from "@/services/api";
-import { Container, BarcodeButton, CreateButton, Floating, Food, Foods, Header, Icon, Menu } from "@/styles/pages/food/search";
+import { Container, BarcodeButton, CreateButton, Floating, Food, Foods, Header, Icon, Menu, Floating2 } from "@/styles/pages/food/search";
 import CardMessage from '@/components/Card/CardMessage';
 import handleEnter from "@/utils/blurOnEnter";
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useRef, useState } from "react";
+import Menu2 from '@/components/Menu';
 import { IoBarcodeOutline } from "react-icons/io5";
 import { RiAddLine } from "react-icons/ri";
 import { useLog } from "@/hooks/logs";
@@ -51,9 +52,9 @@ export default function Search() {
 	// Auto Focus on search bar
 	let inputRef = useRef<HTMLInputElement>();
 
-	useEffect(() => {
-		inputRef.current.focus();
-	}, [inputRef]);
+	// useEffect(() => {
+	// 	inputRef.current.focus();
+	// }, [inputRef]);
 
 	function loadMore() {
 		if (window.innerHeight + document.documentElement.scrollTop >= document.scrollingElement.scrollHeight - 5) {
@@ -86,12 +87,20 @@ export default function Search() {
 	}, [searchInput]);
 
 	return (
-		<WholePageTransition>
+		<>
 			{showBarcodeScanner &&
 				<BarcodeScannerComponent setVisibility={setShowBarcodeScanner} />
 			}
+			<Menu2 currentRoute="Search" />
+
 			<Container>
-				<Floating>
+				<Header>
+					<h1>Log Food</h1>
+					<button onClick={() => { router.push('/food/create') }}>
+						CREATE FOOD
+					</button>
+				</Header>
+				<Floating2>
 					<div>
 						<Menu>
 							<div className="search">
@@ -109,13 +118,7 @@ export default function Search() {
 							<BarcodeButton onClick={handleBarcode}><div><IoBarcodeOutline /></div><span>BARCODE</span></BarcodeButton>
 						</Menu>
 					</div>
-				</Floating>
-				<Header>
-					<h1>Log Food</h1>
-					<button onClick={() => { router.push('/food/create') }}>
-						CREATE FOOD
-					</button>
-				</Header>
+				</Floating2>
 				<Foods>
 					<div className="header">
 						<h3>My Library</h3>
@@ -191,6 +194,6 @@ export default function Search() {
 					)}
 				</Foods>
 			</Container>
-		</WholePageTransition>
+		</>
 	)
 }
