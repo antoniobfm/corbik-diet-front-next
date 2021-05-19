@@ -135,7 +135,7 @@ export default function Edit(food: string) {
 	return (
 		<>
 			<Head>
-				<title>{logData.name} - Corbik</title>
+				<title>{logData && logData.name} - Corbik</title>
 			</Head>
     	<AnimatePresence>
 			{showConfirmation &&
