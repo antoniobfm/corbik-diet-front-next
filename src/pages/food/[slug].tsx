@@ -14,6 +14,8 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 import CardMessage from "@/components/Card/CardMessage";
+import Head from "next/head";
+import { useLog } from "@/hooks/logs";
 
 interface ICreateFoodLog {
 	food_id: string;
@@ -57,7 +59,7 @@ export default function Food() {
 	const [foodData, setFoodData] = useState<any>([]);
 	const [foodHistory, setFoodHistory] = useState<any>([]);
 
-	const [selectedUnitType, setSelectedUnitType] = useState<IUnit & {amount: number}>();
+	const [selectedUnitType, setSelectedUnitType] = useState<IUnit & { amount: number }>();
 
 	const [amount, setAmount] = useState('');
 	const [carbs, setCarbs] = useState(0);
@@ -75,6 +77,8 @@ export default function Food() {
 	const foodId = router.query.slug;
 
 	const { addToast } = useToast();
+
+	const { addLog } = useLog();
 
 	const handleData = useCallback((data: any) => {
 		setFoodData(data);
@@ -115,40 +119,31 @@ export default function Food() {
 
 	const handleSubmit = useCallback((e) => {
 		e.preventDefault()
-		async function createFoodLog() {
-			const food: ICreateFoodLog = {
-				food_id: foodData.id,
-				name: foodData.name,
-				unit_type: selectedUnitType.id,
-				amount: parseFloat(amount),
-				carbohydrates: carbs,
-				proteins: prots,
-				fats: fats,
-				calories: calories,
-				when: date,
-			};
+		const food: ICreateFoodLog = {
+			food_id: foodData.id,
+			name: foodData.name,
+			unit_type: selectedUnitType.id,
+			amount: parseFloat(amount),
+			carbohydrates: carbs,
+			proteins: prots,
+			fats: fats,
+			calories: calories,
+			when: date,
+		};
 
-			await api.post(`/food/log`, food);
+		addLog(food)
 
-			addToast({
-				type: 'success',
-				title: 'Logged with success',
-			});
-
-			router.push(`/`);
-		}
-
-		createFoodLog();
+		router.push(`/`);
 	}, [foodData, carbs, prots, fats, calories, date, amount]);
 
 	useEffect(() => {
-		if(selectedUnitType) {
+		if (selectedUnitType) {
 			setFats(toFixedNumber(parseFloat(amount) * foodData.fats / selectedUnitType.amount, 2, 10));
 			setCarbs(toFixedNumber(parseFloat(amount) * foodData.carbohydrates / selectedUnitType.amount, 2, 10));
 			setProts(toFixedNumber(parseFloat(amount) * foodData.proteins / selectedUnitType.amount, 2, 10));
 			setCalories(toFixedNumber(parseFloat(amount) * foodData.calories / selectedUnitType.amount, 2, 10));
 
-			if(ingredients && foodData.ingredients && foodData.ingredients.length >= 1) {
+			if (ingredients && foodData.ingredients && foodData.ingredients.length >= 1) {
 				const newIngredients = foodData.ingredients.map((item, index) => {
 					return {
 						...item,
@@ -162,23 +157,26 @@ export default function Food() {
 	}, [foodData, amount, selectedUnitType]);
 
 	// Auto Focus on search bar
-  let inputRef = useRef<HTMLInputElement>();
+	let inputRef = useRef<HTMLInputElement>();
 
-  useEffect(() => {
-		if(inputRef.current) {
+	useEffect(() => {
+		if (inputRef.current) {
 			inputRef.current.focus();
 		}
-  }, [inputRef]);
+	}, [inputRef]);
 
 	function getSelectedUnit() {
-    var d = document.getElementById("select_amount").value;
+		var d = document.getElementById("select_amount").value;
 		setSelectedUnitType(foodData.units[d]);
 		setAmount(foodData.units[d].amount);
 	}
 
 	if (foodId) {
 		return (
-			<WholePageTransition>
+			<>
+				<Head>
+					<title>{foodData.name} - Corbik</title>
+				</Head>
 				<Container>
 					<Header>
 						<h3>{foodData.brand}</h3>
@@ -228,12 +226,13 @@ export default function Food() {
 								onChange={e => setDate(new Date(e.target.value))} />
 						</Form>
 					</Details>
-					<Details>
+					<Details hasContent={!!ingredients}>
 						<div className="header">
 							<h3>Ingredients</h3>
+							{!ingredients || ingredients.length === 0 && <h4>Doesn't have ingredients</h4>}
 						</div>
 						<div className="history__container">
-							{ingredients && ingredients.length >= 1 ? ingredients.map(ingredient =>
+							{ingredients && ingredients.length >= 1 && ingredients.map(ingredient =>
 								<div className="history__item">
 									<div className="history__item__title">
 										{ingredient.name}
@@ -242,21 +241,17 @@ export default function Food() {
 										{ingredient.amount}
 									</div>
 								</div>
-							) :
-							(
-								<CardMessage borderBottom={false}>
-									<h4>Doesn't have ingredients</h4>
-								</CardMessage>
 							)
 							}
 						</div>
 					</Details>
-					<Details>
+					<Details hasContent={!!foodHistory}>
 						<div className="header">
 							<h3>History</h3>
+							{!foodHistory || foodHistory.length === 0 && <h4>You haven't logged this food yet</h4>}
 						</div>
 						<div className="history__container">
-							{foodHistory && foodHistory.length >= 1 ? foodHistory.map(log =>
+							{foodHistory && foodHistory.length >= 1 && foodHistory.map(log =>
 								<div className="history__item">
 									<div className="history__item__title">
 										{log.when}
@@ -266,11 +261,6 @@ export default function Food() {
 										{foodData.units[0].abbreviation}
 									</div>
 								</div>
-							) :
-							(
-								<CardMessage borderBottom={false}>
-									<h4>You haven't logged this food yet</h4>
-								</CardMessage>
 							)
 							}
 						</div>
@@ -300,13 +290,13 @@ export default function Food() {
 					</Floating>
 					<Footer>
 						{foodData.isOwner &&
-							<button type="button" onClick={() => {router.push(`/food/edit/${foodData.id}`)}}>
+							<button type="button" onClick={() => { router.push(`/food/edit/${foodData.id}`) }}>
 								<SettingsIcon />
 							</button>
 						}
 					</Footer>
 				</Container>
-			</WholePageTransition>
+			</>
 		);
 	} else {
 		return <p>Loading...</p>;

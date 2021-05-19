@@ -72,7 +72,9 @@ const QuickEditModal: React.FC<IProps> = ({
       console.log("clicking inside");
       return;
     }
-		updateLog({id: logData.id, when: `${isoFormat(new Date(`${inputDateRef.current.value}T${inputTimeRef.current.value}`))}`, amount: inputRef.current.value});
+		if (amountTemp !== inputRef.current.value || `${isoFormat(new Date(`${inputDateRef.current.value}T${inputTimeRef.current.value}`))}` !== `${isoFormat(new Date(`${dateTemp}T${timeTemp}`))}`) {
+			updateLog({id: logData.id, when: `${isoFormat(new Date(`${inputDateRef.current.value}T${inputTimeRef.current.value}`))}`, amount: inputRef.current.value});
+		}
     // outside click
     setState(false);
   }, [dateTemp, timeTemp, amountTemp]);

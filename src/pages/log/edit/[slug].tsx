@@ -18,6 +18,7 @@ import History from '@/components/Card/History';
 import { format } from "date-fns";
 import CardMessage from "@/components/Card/CardMessage";
 import { useLog } from "@/hooks/logs";
+import Head from "next/head";
 
 export default function Edit(food: string) {
 	const router = useRouter();
@@ -133,7 +134,9 @@ export default function Edit(food: string) {
 
 	return (
 		<>
-			<WholePageTransition>
+			<Head>
+				<title>{logData.name} - Corbik</title>
+			</Head>
     	<AnimatePresence>
 			{showConfirmation &&
 				<ConfirmActionModal
@@ -219,12 +222,13 @@ export default function Edit(food: string) {
 							</div>
 						</StaticMenu>
 					</Details>
-					<Details>
+					<Details hasContent={!!ingredients}>
 						<div className="header">
 							<h3>Ingredients</h3>
+							{!ingredients || ingredients.length === 0 && <h4>Doesn't have ingredients</h4>}
 						</div>
 						<div className="history__container">
-							{ingredients && ingredients.length >= 1 ? ingredients.map(ingredient =>
+							{ingredients && ingredients.length >= 1 && ingredients.map(ingredient =>
 								<div className="history__item">
 									<div className="history__item__title">
 										{ingredient.name}
@@ -233,11 +237,6 @@ export default function Edit(food: string) {
 										{ingredient.amount}
 									</div>
 								</div>
-							) :
-							(
-								<CardMessage borderBottom={false}>
-									<h4>Doesn't have ingredients</h4>
-								</CardMessage>
 							)
 							}
 						</div>
@@ -252,7 +251,6 @@ export default function Edit(food: string) {
 						</button>
 					</Footer>
 				</Container>
-			</WholePageTransition>
 		</>
 	);
 }

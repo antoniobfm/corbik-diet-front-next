@@ -191,14 +191,15 @@ export const Floating = styled.div`
 `;
 
 export const Floating2 = styled.div`
-  width: calc(100vw);
+  max-width: calc(100vw);
+	overflow: hidden;
   height: 56px;
 	margin-bottom: 32px;
 
   z-index: 2;
 	bottom: 0;
 
-	::before {
+	/* ::before {
 		content: '';
 		width: 150vw;
 		height: 124px;
@@ -211,10 +212,11 @@ export const Floating2 = styled.div`
   	-webkit-mask: linear-gradient(transparent, #181A1B 50%, #181A1B);
 		background: linear-gradient(180deg, rgba(10, 10, 11, 0) 0%, #0A0A0B 100%);
 		backdrop-filter: blur(5px);
-	}
+	} */
 
 	> div {
 		position: relative;
+		box-sizing: border-box;
 		border: 1px solid #222425;
 		width: 100%;
 		height: 100%;
@@ -333,15 +335,17 @@ export const CreateButton = styled.button`
 
 export const BarcodeButton = styled.button`
   width: 35%;
-  height: 58px;
+  height: 56px;
 	margin-top: -1px;
-	margin-right: -14px;
+		box-sizing: border-box;
+	/* margin-right: -14px; */
 	position: relative;
 	z-index: 1;
 
   background: linear-gradient(111.07deg, #2755AE 0%, rgba(39, 84, 174, 0.5) 100%), #181A1B;
 	border: 1px solid #1E4085;
-  border-radius: 6px;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
 
 	display: flex;
 	flex-direction: row;

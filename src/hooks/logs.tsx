@@ -34,6 +34,21 @@ interface ILog {
 	updated_at: Date;
 }
 
+interface IAddFoodLog {
+	food_id: string;
+	//
+	name: string;
+	unit_type: string;
+	amount: number;
+	//
+	carbohydrates: number;
+	proteins: number;
+	fats: number;
+	calories: number;
+	//
+	when: string;
+}
+
 interface IDayResume {
 	when: number;
 	carbohydrates: string;
@@ -52,6 +67,7 @@ interface IUpdateLog {
 interface LogContextData {
 	search: any[] | null;
 	logData: IDayResume | null;
+	addLog(dataToAdd: IAddFoodLog): void;
 	updateLog(data: IUpdateLog): void;
 }
 
@@ -123,6 +139,29 @@ const LogProvider: React.FC = ({ children }) => {
 		}
 	}, [])
 
+	const addLog = useCallback(async (dataToAdd: IAddFoodLog) => {
+		try {
+			await api.post(`/food/log`, dataToAdd);
+
+			addToast({
+				type: 'success',
+				title: 'Logged with success',
+			});
+
+			const start = formatISO(startOfDay(setHours(new Date(), 12)));
+			const end = formatISO(endOfDay(setHours(new Date(), 12)));
+
+			const { data } = await api.post('/food/log/day', { start, end });
+			await handleData(data);
+		} catch (err) {
+
+			addToast({
+				type: 'error',
+				title: 'Something went wrong',
+			});
+		}
+	}, [])
+
 	useEffect(() => {
     async function initialLoadSearch() {
 			const indexedDb = new IndexedDb('test2');
@@ -171,7 +210,7 @@ const LogProvider: React.FC = ({ children }) => {
   }, []);
 
 	return (
-		<LogContext.Provider value={{ search: data, logData: logData, updateLog }}>
+		<LogContext.Provider value={{ search: data, logData: logData, updateLog, addLog }}>
 			{ children }
 		</LogContext.Provider>
 	);

@@ -10,6 +10,7 @@ import Menu2 from '@/components/Menu';
 import { IoBarcodeOutline } from "react-icons/io5";
 import { RiAddLine } from "react-icons/ri";
 import { useLog } from "@/hooks/logs";
+import Head from "next/head";
 
 interface ISearchResult {
 	own_library: any[];
@@ -88,6 +89,9 @@ export default function Search() {
 
 	return (
 		<>
+			<Head>
+				<title>Corbik</title>
+			</Head>
 			{showBarcodeScanner &&
 				<BarcodeScannerComponent setVisibility={setShowBarcodeScanner} />
 			}

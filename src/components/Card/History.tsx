@@ -23,7 +23,7 @@ interface IFood {
 	quantity_amount: number;
 	quantity_type: string;
 	when: Date;
-	foodVersionDefault: IFoodVersion;
+	food: any;
 }
 
 interface IProps {
@@ -31,29 +31,26 @@ interface IProps {
 }
 
 
-const History: React.FC<IProps> = ({foodHistory}: IProps) => {
+const History: React.FC<IProps> = ({ foodHistory }: IProps) => {
 	const [collapse, setCollapse] = useState(true);
 
 	return (
-		<Details>
+		<Details hasContent={!!foodHistory}>
 			<div className="header">
 				<h3>History</h3>
+				{!foodHistory || foodHistory.length === 0 && <h4>You haven't logged this food yet</h4>}
 			</div>
 			<div className="history__container">
-				{foodHistory && foodHistory.length >= 1 ? foodHistory.map(log =>
+				{foodHistory && foodHistory.length >= 1 && foodHistory.map(log =>
 					<div className="history__item">
 						<div className="history__item__title">
 							{log.when}
 						</div>
 						<div className="history__item__subtitle">
 							{log.amount}
+							{/* {foodHistory.foodUnit.unitDefault.abbreviation} */}
 						</div>
 					</div>
-				) :
-				(
-					<CardMessage borderBottom={false}>
-						<h4>You haven't logged this food yet</h4>
-					</CardMessage>
 				)
 				}
 			</div>

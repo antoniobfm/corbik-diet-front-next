@@ -1,14 +1,26 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { FiSettings, FiTrash } from 'react-icons/fi';
 
 export const Container = styled.div`
 	background: linear-gradient(346.65deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.03) 100%), #0A0A0B;
 	min-height: 100vh;
 `;
-export const Details = styled.div`
+
+interface IDetails {
+	hasContent?: boolean
+}
+
+export const Details = styled.div<IDetails>`
 	margin-bottom: 16px;
   height: auto;
 	padding: 16px 16px 32px;
+
+	${props =>
+		props.hasContent &&
+		css`
+			padding: 16px 16px 16px;
+	`}
+
 	box-sizing: border-box;
   background: #181A1B;
 	border: 1px solid #222425;
@@ -67,9 +79,7 @@ export const Details = styled.div`
 
 			border-bottom: 1px solid #222425;
 
-			:nth-last-child() {
-				border-bottom: none;
-			}
+
 
 			.history__item__title {
 				font-family: "Poppins";
@@ -83,10 +93,20 @@ export const Details = styled.div`
 				color: #7E7E7F;
 			}
 		}
+		.history__item:last-child {
+			border-bottom: none;
+		}
 	}
 
 	.header {
 		padding-bottom: 16px;
+
+		${props =>
+			props.hasContent &&
+			css`
+				padding-bottom: 0px;
+		`}
+
 		height: 32px;
 
 		display: flex;
@@ -100,6 +120,14 @@ export const Details = styled.div`
 				font-size: 10px;
 				color: #7E7E7E;
 			}
+		}
+
+		h4 {
+			text-align: right;
+			font-weight: 400;
+			font-size: 10px;
+			color: #545454;
+			text-transform: uppercase;
 		}
 
 		button {
