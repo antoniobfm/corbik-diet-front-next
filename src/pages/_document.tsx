@@ -54,6 +54,7 @@ export default class MyDocument extends Document {
 						type="image/png"
 						sizes="32x32"
 					/>
+					<meta name="google-site-verification" content="f1VAh8_uqfqqJW5fBdlH-ANfrSog3YLPZ6w0IvcZNmU" />
 					<link rel="apple-touch-icon" href="/icons/apple-icon.png" />
 					<meta name="theme-color" content="#0d0d0d" />
 					<meta name="mobile-web-app-capable" content="yes" />
