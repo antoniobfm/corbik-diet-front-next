@@ -14,6 +14,7 @@ import { useToast } from '@/hooks/toast'
 import api from '../services/api';
 import nookies from "nookies";
 import { GetServerSidePropsContext } from 'next';
+import { useLog } from './logs';
 
 export interface IUnit {
 	id: string;
@@ -78,6 +79,7 @@ const AuthProvider: React.FC = ({ children }) => {
 
 	const { addToast } = useToast();
 	const router = useRouter();
+	const { updateLogStorage } = useLog();
 
 	useEffect(() => {
 		async function loadUserFromLocalStorageOrGetFromServer() {
@@ -114,6 +116,9 @@ const AuthProvider: React.FC = ({ children }) => {
 			localStorage.setItem('@Corbik:User', JSON.stringify(user));
 
 			setData({ user });
+
+			updateLogStorage();
+
 			router.push('/');
 		} catch (err) {
 			addToast({

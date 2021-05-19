@@ -68,6 +68,7 @@ interface LogContextData {
 	search: any[] | null;
 	logData: IDayResume | null;
 	addLog(dataToAdd: IAddFoodLog): void;
+	updateLogStorage(): void;
 	updateLog(data: IUpdateLog): void;
 }
 
@@ -103,6 +104,21 @@ const LogProvider: React.FC = ({ children }) => {
 		setLogData(newLogs);
 	}, [logData]);
 
+	const updateLogStorage = useCallback(async () => {
+		const indexedDb = new IndexedDb('test4');
+		await indexedDb.createObjectStore(['DayResume']);
+		const items = await indexedDb.getAllValue('DayResume');
+
+		const okok = items.filter(item => isSameDay(new Date(item.id), new Date()));
+		setLogData(okok[0])
+
+		const start = formatISO(startOfDay(setHours(new Date(), 12)));
+		const end = formatISO(endOfDay(setHours(new Date(), 12)));
+
+		const { data } = await api.post('/food/log/day', { start, end });
+		await handleData(data);
+	}, [])
+
 	const updateLog = useCallback(async ({id, amount, when}: IUpdateLog) => {
 		try {
 			const log = {
@@ -113,23 +129,13 @@ const LogProvider: React.FC = ({ children }) => {
 
 			await api.put(`/food/log`, log);
 
+			updateLogStorage();
+
 			addToast({
 				type: 'success',
 				title: 'Modified your log with success',
 			});
 
-			const indexedDb = new IndexedDb('test4');
-			await indexedDb.createObjectStore(['DayResume']);
-			const items = await indexedDb.getAllValue('DayResume');
-
-			const okok = items.filter(item => isSameDay(new Date(item.id), new Date()));
-			setLogData(okok[0])
-
-			const start = formatISO(startOfDay(setHours(new Date(), 12)));
-			const end = formatISO(endOfDay(setHours(new Date(), 12)));
-
-			const { data } = await api.post('/food/log/day', { start, end });
-			await handleData(data);
 		} catch (err) {
 
 			addToast({
@@ -210,7 +216,7 @@ const LogProvider: React.FC = ({ children }) => {
   }, []);
 
 	return (
-		<LogContext.Provider value={{ search: data, logData: logData, updateLog, addLog }}>
+		<LogContext.Provider value={{ search: data, logData: logData, updateLog, updateLogStorage, addLog }}>
 			{ children }
 		</LogContext.Provider>
 	);
