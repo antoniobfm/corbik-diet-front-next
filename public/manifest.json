@@ -1,10 +1,10 @@
 {
   "name": "Corbik",
   "short_name": "Corbik",
-  "description": "Corbik the stonks lifestyle",
+  "description": "Understand what is going on with your body and why so you can act uppon hard data.",
   "display": "standalone",
   "orientation": "portrait",
-  "theme_color": "#317EFB",
+  "theme_color": "#4452FE",
   "background_color": "#000",
   "start_url": "/",
   "scope": "/",
