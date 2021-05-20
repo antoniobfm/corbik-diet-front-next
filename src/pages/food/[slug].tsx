@@ -175,7 +175,8 @@ export default function Food() {
 		return (
 			<>
 				<Head>
-					<title>{foodData.name} - Corbik</title>
+					<meta name="description" key="description" content={`${foodData.name} | Nutrition Facts: Carbs: ${carbs ? carbs : '0'}, Prot: ${prots ? prots : '0'}, Fats: ${fats ? fats : '0'}, Calories: ${calories ? calories : '0'}${!!ingredients && ingredients.length >= 1 ? ` | Ingredients:${ingredients.map(item => ` ${item.name}`)}` : ''} | Micronutri...`}/>
+					<title>{foodData.name} - {foodData.brand} | Nutrition Facts | Corbik</title>
 				</Head>
 				<Container>
 					<Header>

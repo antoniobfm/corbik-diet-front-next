@@ -17,6 +17,7 @@ import { FiChevronDown, FiChevronLeft } from "react-icons/fi";
 import { FormHandles } from "@unform/core";
 import * as Yup from 'yup';
 import Button from "@/components/FormComponents/Button";
+import Head from "next/head";
 
 interface IUpdateFood {
 	food_id: string;
@@ -132,6 +133,11 @@ export default function Food() {
 	if (foodId) {
 		return (
 			<WholePageTransition>
+				<Head>
+					<title>{foodData.name} Settings | Corbik</title>
+					<meta name="robots" content="noindex" />
+					<meta name="googlebot" content="noindex" />
+				</Head>
 				<Container>
 				<Header>
 					<h1>Edit Food</h1>

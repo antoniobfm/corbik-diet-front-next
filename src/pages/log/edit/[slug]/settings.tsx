@@ -16,6 +16,7 @@ import { AnimatePresence } from "framer-motion";
 import { FiChevronDown, FiChevronLeft } from "react-icons/fi";
 import Button from "@/components/FormComponents/Button";
 import SpecialDropdownModal from "@/components/Modals/SpecialDropdownModal";
+import Head from "next/head";
 
 interface ILog {
 	id: number;
@@ -141,6 +142,11 @@ export default function EditLogSettings(food: string) {
 			{showConfirmation &&
 				<SpecialDropdownModal setState={setShowConfirmation} logData={logData} />
 			}
+			<Head>
+				<title>Log Settings | Corbik</title>
+				<meta name="robots" content="noindex" />
+				<meta name="googlebot" content="noindex" />
+			</Head>
 			</AnimatePresence>
 				<Container>
 					<Header>

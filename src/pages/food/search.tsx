@@ -90,13 +90,12 @@ export default function Search() {
 	return (
 		<>
 			<Head>
-				<title>Corbik</title>
+				<title>Search Food {'&'} Recipes | Corbik</title>
 			</Head>
 			{showBarcodeScanner &&
 				<BarcodeScannerComponent setVisibility={setShowBarcodeScanner} />
 			}
 			<Menu2 currentRoute="Search" />
-
 			<Container>
 				<Header>
 					<h1>Log Food</h1>

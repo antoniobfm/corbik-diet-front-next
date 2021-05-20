@@ -12,6 +12,7 @@ import * as Yup from 'yup';
 import { useToast } from "@/hooks/toast";
 import WholePageTransition from "@/components/WholePageTransition";
 import { FiSettings } from "react-icons/fi";
+import Head from "next/head";
 
 interface IFoodFormData {
   name: string;
@@ -106,6 +107,11 @@ export default function Create() {
 
   return (
 		<WholePageTransition>
+		<Head>
+			<title>Corbik</title>
+			<meta name="robots" content="noindex" />
+			<meta name="googlebot" content="noindex" />
+		</Head>
     <Container>
       <Header>
         <h1>Create new version</h1>

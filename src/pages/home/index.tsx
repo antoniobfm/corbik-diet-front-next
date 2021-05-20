@@ -14,6 +14,7 @@ import { useRouter } from 'next/router';
 import { FiSettings } from 'react-icons/fi';
 import { Line } from 'react-chartjs-2';
 import LineChart from '@/components/Charts/LineChart';
+import Head from 'next/head';
 
 const LoginModal = dynamic(() => import('@/components/LoginModal'),
 	{ loading: () => <div className="blurred__background"><h1>Loading</h1></div> })
@@ -254,6 +255,9 @@ export default function Home() {
 
 	return (
 		<>
+		<Head>
+			<title>Corbik</title>
+		</Head>
 			<Menu currentRoute="Home" />
 			<WholePageTransition>
 				<Container>

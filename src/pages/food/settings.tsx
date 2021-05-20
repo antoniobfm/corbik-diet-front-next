@@ -12,6 +12,7 @@ import GoBack from "@/components/GoBack";
 import Button from "@/components/FormComponents/Button";
 import { useToast } from "@/hooks/toast";
 import WholePageTransition from "@/components/WholePageTransition";
+import Head from "next/head";
 
 interface TargetsFormData {
 	carbohydrates: string;
@@ -87,6 +88,11 @@ export default function DietSettings() {
 
 	return (
 		<WholePageTransition>
+			<Head>
+				<title>Corbik</title>
+				<meta name="robots" content="noindex" />
+				<meta name="googlebot" content="noindex" />
+			</Head>
 			<GoBack />
 			<Container>
 				<Header>

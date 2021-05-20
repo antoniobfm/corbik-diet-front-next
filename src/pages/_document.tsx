@@ -39,7 +39,6 @@ export default class MyDocument extends Document {
 				<Head>
 					<meta charSet="UTF-8" />
 					<meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-					<meta name="description" content="Description" />
 					<meta name="keywords" content="Keywords" />
 					<link rel="manifest" href="/manifest.json" />
 					<link

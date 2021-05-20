@@ -105,11 +105,14 @@ export default function Edit(food: string) {
 	}, [logData, amountTemp]);
 
 	const { addToast } = useToast();
+	const { updateLogStorage } = useLog();
 
 	const handleDelete = useCallback((e) => {
 		e.preventDefault()
 		async function editFood() {
 			await api.delete(`/food/log/specific/${logData.id}`);
+
+			updateLogStorage();
 
 			addToast({
 				type: 'success',
@@ -135,7 +138,10 @@ export default function Edit(food: string) {
 	return (
 		<>
 			<Head>
-				<title>{logData && logData.name} - Corbik</title>
+				<meta name="robots" content="noindex" />
+				<meta name="googlebot" content="noindex" />
+				<meta name="description" key="description" content={`Nutrition Facts & More | Carbs: ${carbs ? carbs : '0'}, Prot: ${prots ? prots : '0'}, Fats: ${fats ? fats : '0'}, Calories: ${calories ? calories : '0'}`} />
+				<title>Nutrition Facts of {logData && logData.name} | Corbik</title>
 			</Head>
     	<AnimatePresence>
 			{showConfirmation &&
