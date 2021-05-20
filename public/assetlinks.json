@@ -1,0 +1,5 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target" : { "namespace": "android_app", "package_name": "com.corbik.app.twa",
+                   "sha256_cert_fingerprints": ["D4:86:92:75:8C:57:D8:D8:2B:F4:9D:C0:A2:0E:50:4C:6B:A1:FC:AC:BD:7D:B7:D7:8E:D0:52:6A:CD:3B:A0:1D"] }
+    }]
