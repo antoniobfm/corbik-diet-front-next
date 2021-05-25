@@ -1,5 +1,5 @@
 import Input from "@/components/FormComponents/Input";
-import api from "@/services/api";
+import { api } from '@/services/apiClient';
 import { Container, FormContainer, Icon, Menu, CreateButton } from "@/styles/pages/food/create";
 import { Floating, Header } from "@/styles/pages/food/search";
 import { Form } from "@unform/web";

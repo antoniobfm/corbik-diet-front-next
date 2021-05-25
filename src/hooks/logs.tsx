@@ -1,7 +1,9 @@
 /* eslint-disable camelcase */
+import { setupAPIClient } from '@/services/api';
 import addZeroBefore from '@/utils/addZeroBefore';
 import IndexedDb from '@/utils/Indexed';
 import paginate from '@/utils/paginate';
+import { withSSRAuth } from '@/utils/withSSRAuth';
 import { endOfDay, formatISO, isSameDay, setHours, startOfDay } from 'date-fns';
 import React, {
 	createContext,
@@ -9,9 +11,11 @@ import React, {
 	useContext,
 	useEffect,
 	useCallback,
+	useMemo,
 } from 'react';
 
-import api from '../services/api';
+import { api } from '../services/apiClient';
+import { useAuth } from './auth';
 import { useToast } from './toast';
 
 interface ILog {
@@ -70,6 +74,8 @@ interface LogContextData {
 	addLog(dataToAdd: IAddFoodLog): void;
 	updateLogStorage(): void;
 	updateLog(data: IUpdateLog): void;
+	selectedDate: Date;
+	handleSelectDate(data: Date): void;
 }
 
 const LogContext = createContext<LogContextData>({} as LogContextData);
@@ -77,11 +83,12 @@ const LogContext = createContext<LogContextData>({} as LogContextData);
 const LogProvider: React.FC = ({ children }) => {
 	const [logData, setLogData] = useState<IDayResume | null>(null);
 	const [data, setData] = useState<any[] | null>(null);
+	const [selectedDate, setSelectedDate] = useState<Date>(setHours(new Date(), 12));
 
 	const { addToast } = useToast();
+	const { isAuthenticated } = useAuth();
 
 	const handleData = useCallback(async (data) => {
-		console.log(data);
 		const indexedDb = new IndexedDb('test4');
 		await indexedDb.createObjectStore(['DayResume']);
 
@@ -104,19 +111,39 @@ const LogProvider: React.FC = ({ children }) => {
 		setLogData(newLogs);
 	}, [logData]);
 
-	const updateLogStorage = useCallback(async () => {
+	async function updateLogStorage(date?) {
 		const indexedDb = new IndexedDb('test4');
 		await indexedDb.createObjectStore(['DayResume']);
 		const items = await indexedDb.getAllValue('DayResume');
 
-		const okok = items.filter(item => isSameDay(new Date(item.id), new Date()));
-		setLogData(okok[0])
+		const okok = items.filter(item => isSameDay(new Date(item.id), date));
+		setLogData(okok[0]);
 
-		const start = formatISO(startOfDay(setHours(new Date(), 12)));
-		const end = formatISO(endOfDay(setHours(new Date(), 12)));
+		const start = formatISO(startOfDay(setHours(date, 12)));
+		const end = formatISO(endOfDay(setHours(date, 12)));
 
 		const { data } = await api.post('/food/log/day', { start, end });
 		await handleData(data);
+	};
+
+	useEffect(() => {
+		async function loadData() {
+			try {
+				const start = formatISO(startOfDay(selectedDate));
+				const end = formatISO(endOfDay(selectedDate));
+				const response = await api.post('/food/log/day', { start, end });
+
+				handleData(response.data);
+			} catch (err) {
+				// handleError(err);
+			}
+		}
+
+		loadData();
+	}, [selectedDate]);
+
+	const handleSelectDate = useCallback(async (day: Date) => {
+		setSelectedDate(day);
 	}, [])
 
 	const updateLog = useCallback(async ({id, amount, when}: IUpdateLog) => {
@@ -129,7 +156,7 @@ const LogProvider: React.FC = ({ children }) => {
 
 			await api.put(`/food/log`, log);
 
-			updateLogStorage();
+			updateLogStorage(selectedDate);
 
 			addToast({
 				type: 'success',
@@ -143,7 +170,7 @@ const LogProvider: React.FC = ({ children }) => {
 				title: 'Something went wrong',
 			});
 		}
-	}, [])
+	}, [selectedDate])
 
 	const addLog = useCallback(async (dataToAdd: IAddFoodLog) => {
 		try {
@@ -166,57 +193,61 @@ const LogProvider: React.FC = ({ children }) => {
 				title: 'Something went wrong',
 			});
 		}
-	}, [])
+	}, []);
+
+	const initialLoadSearch = useCallback(async () => {
+		const indexedDb = new IndexedDb('test2');
+		await indexedDb.createObjectStore(['search']);
+		const items = await indexedDb.getAllValue('search');
+
+		if (items.length >= 1) {
+			const cachedData = await indexedDb.getAllValue('search');
+			const paginateAll = await paginate({ arr: cachedData, size: 10 });
+			setData(paginateAll);
+		}
+
+		const {data} = await api.get(`/food-library/`);
+
+		await indexedDb.putBulkValue('search', data);
+		const paginateAll = await paginate({ arr: data, size: 10 });
+
+		// console.log(paginateAll)
+		if (isAuthenticated) {
+			// console.log('SEHLOIRO')
+			setData(paginateAll);
+		}
+	}, []);
+
+	const initialLoadDayResume = useCallback(async () => {
+		const indexedDb = new IndexedDb('test4');
+		await indexedDb.createObjectStore(['DayResume']);
+		const items = await indexedDb.getAllValue('DayResume');
+
+		const okok = items.filter(item => isSameDay(new Date(item.id), new Date()));
+		setLogData(okok[0])
+
+		const start = formatISO(startOfDay(setHours(new Date(), 12)));
+		const end = formatISO(endOfDay(setHours(new Date(), 12)));
+
+		// if (items.length >= 1) {
+		// 	const cachedData = await indexedDb.getAllValue('DayResume');
+		// 	console.log(cachedData);
+		// 	setLogData(cachedData[0]);
+		// }
+
+		const { data } = await api.post('/food/log/day', { start, end });
+		await handleData(data);
+	}, []);
 
 	useEffect(() => {
-    async function initialLoadSearch() {
-			const indexedDb = new IndexedDb('test2');
-			await indexedDb.createObjectStore(['search']);
-			const items = await indexedDb.getAllValue('search');
-
-			if (items.length >= 1) {
-				const cachedData = await indexedDb.getAllValue('search');
-				const paginateAll = await paginate({ arr: cachedData, size: 10 });
-				setData(paginateAll);
-			}
-
-      const {data} = await api.get(`/food-library/`);
-
-			await indexedDb.putBulkValue('search', data);
-			const paginateAll = await paginate({ arr: data, size: 10 });
-			// console.log(paginateAll);
-
-      setData(paginateAll);
-			// console.log(data);
-    }
-
-    async function initialLoad() {
-			const indexedDb = new IndexedDb('test4');
-			await indexedDb.createObjectStore(['DayResume']);
-			const items = await indexedDb.getAllValue('DayResume');
-
-			const okok = items.filter(item => isSameDay(new Date(item.id), new Date()));
-			setLogData(okok[0])
-
-			const start = formatISO(startOfDay(setHours(new Date(), 12)));
-			const end = formatISO(endOfDay(setHours(new Date(), 12)));
-
-			// if (items.length >= 1) {
-			// 	const cachedData = await indexedDb.getAllValue('DayResume');
-			// 	console.log(cachedData);
-			// 	setLogData(cachedData[0]);
-			// }
-
-      const { data } = await api.post('/food/log/day', { start, end });
-			await handleData(data);
-    }
-
-		initialLoadSearch();
-		initialLoad();
-  }, []);
+		if (isAuthenticated) {
+			initialLoadSearch();
+			initialLoadDayResume();
+		}
+  }, [isAuthenticated]);
 
 	return (
-		<LogContext.Provider value={{ search: data, logData: logData, updateLog, updateLogStorage, addLog }}>
+		<LogContext.Provider value={{ search: data, logData: logData, selectedDate, handleSelectDate, updateLog, updateLogStorage, addLog }}>
 			{ children }
 		</LogContext.Provider>
 	);
@@ -233,3 +264,17 @@ function useLog(): LogContextData {
 }
 
 export { LogContext, LogProvider, useLog };
+
+// export const getServerSideProps = withSSRAuth(async (ctx) => {
+// 	const apiClient = setupAPIClient(ctx);
+// 	const selectedDate = setHours(new Date(), 12);
+// 	const start = formatISO(startOfDay(selectedDate));
+// 	const end = formatISO(endOfDay(selectedDate));
+
+// 	const response = await apiClient.post('/food/log/day', { start, end });
+// 	console.log(response.data);
+
+// 	return {
+// 		props: {}
+// 	}
+// });

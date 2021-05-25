@@ -4,7 +4,7 @@ import Input from "@/components/FormComponents/Input";
 import WholePageTransition from "@/components/WholePageTransition";
 import { useAuth } from "@/hooks/auth";
 import { useToast } from "@/hooks/toast";
-import api from "@/services/api";
+import { api } from '@/services/apiClient';
 import { Details, Header } from "@/styles/pages/food/food";
 import { Calories, Macro, Macros } from "@/styles/pages/Home";
 import { Container, DeleteIcon, ConfirmDeletion, Footer } from "@/styles/pages/log/edit/edit";

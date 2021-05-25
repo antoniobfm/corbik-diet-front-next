@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import { useLog } from "@/hooks/logs";
 import { useToast } from "@/hooks/toast";
-import api from "@/services/api";
+import { api } from '@/services/apiClient';
 import { ModalContainer, ModalContent, SpecificUnit } from "@/styles/components/Modals/QuickEditModal";
 import { capitalize } from "@/utils/capitalize";
 import { isoFormat, isoParse } from "d3-time-format";

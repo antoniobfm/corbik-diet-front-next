@@ -1,32 +1,22 @@
 import dynamic from 'next/dynamic'
-import Link from 'next/link';
-import { BigCardHeader, Calendar, Calories, Container, Header, Log, Logs, Macro, Macros, WideCardContainer, CardHeader, CardContent, Mission } from "@/styles/pages/Home";
-import { createRef, useCallback, useEffect, useState } from 'react';
-import api from '@/services/api';
+import { BigCardHeader, Calendar, Calories, Container, Header, Logs, Macro, Macros, WideCardContainer, CardHeader, CardContent, Mission } from "@/styles/pages/Home";
+import { useCallback, useEffect, useState } from 'react';
 import DayPicker from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
-import { isToday, format, formatISO, setHours, startOfDay, endOfDay } from 'date-fns';
-import nookies from "nookies";
+import { isToday, format } from 'date-fns';
 import { useAuth } from '@/hooks/auth';
-import Skeleton from 'react-loading-skeleton';
 import Menu from '@/components/Menu';
-import WholePageTransition from '@/components/WholePageTransition';
-import addZeroBefore from '@/utils/addZeroBefore';
 import { useRouter } from 'next/router';
-import { FiCheck, FiChevronDown, FiList, FiSettings } from 'react-icons/fi';
+import { FiCheck, FiChevronDown, FiSettings } from 'react-icons/fi';
 import LogsHorizontalScroll from '@/components/Logs/Food/HorizontalScroll';
 import LogsVerticalScroll from '@/components/Logs/Food/VerticalScroll';
-import Chart from "chart.js";
 import { useError } from '@/hooks/errors';
-import { GetServerSidePropsContext } from 'next';
 import { AnimatePresence } from 'framer-motion';
-import * as d3 from 'd3';
-import { Chartzin } from '@/styles/pages/home/home';
-import LineChart from '@/components/Charts/LineChart';
 import CardMessage from '@/components/Card/CardMessage';
-import QuickEditModal from '@/components/Modals/QuickEditModal';
 import Head from 'next/head';
 import { useLog } from '@/hooks/logs';
+import { withSSRAuth } from '@/utils/withSSRAuth';
+import { parseCookies } from 'nookies';
 
 const LoginModal = dynamic(() => import('@/components/LoginModal'),
 	{ loading: () => <div className="blurred__background"><h1>Loading</h1></div> })
@@ -68,27 +58,25 @@ interface IDayResume {
 
 
 export default function Home() {
-	// const [logData, setLogData] = useState<IDayResume | null>(null);
 	const [chartData, setChartData] = useState<IDayResume[]>(null);
 	const [chartRawData, setChartRawData] = useState<IDayResume[]>(null);
 	const [loading, setLoading] = useState(true);
 	const [isHorizontal, setIsHorizontal] = useState(true);
 	const [showCalendar, setShowCalendar] = useState(false);
-	const [selectedDate, setSelectedDate] = useState<Date>(setHours(new Date(), 12));
 
 	const router = useRouter();
 	const {handleError} = useError();
 
-	const { logData } = useLog();
+	const { logData, selectedDate, handleSelectDate } = useLog();
 
-	let chartRef = createRef<HTMLCanvasElement>();
+	// let chartRef = createRef<HTMLCanvasElement>();
 
-	const { isAuthenticated, user, signOut } = useAuth();
-	if (!isAuthenticated) return <LoginModal />;
+	const { isAuthenticated, user } = useAuth();
+	// if (!isAuthenticated) return <LoginModal />;
 
-	const handleDateChange = useCallback((day: Date) => {
+	{/* const handleDateChange = useCallback((day: Date) => {
 		setSelectedDate(day);
-	}, []);
+	}, []); */}
 
 	const handleCalendar = useCallback((e) => {
 		e.preventDefault();
@@ -96,7 +84,7 @@ export default function Home() {
 		setShowCalendar(!showCalendar);
 	}, [showCalendar]);
 
-	const handleData = useCallback((data) => {
+	{/*const handleData = useCallback((data) => {
 		setLoading(true);
 
 		if (!data) {
@@ -116,42 +104,45 @@ export default function Home() {
 
 		setLogData(newLogs);
 		setLoading(false);
-	}, [logData]);
+	}, [logData]); */}
 
-	useEffect(() => {
-		async function loadData() {
-			try {
-				const start = formatISO(startOfDay(selectedDate));
-				const end = formatISO(endOfDay(selectedDate));
-				const response = await api.post('/food/log/day', { start, end });
+	// useEffect(() => {
+	// 	async function loadData() {
+	// 		try {
+	// 			const start = formatISO(startOfDay(selectedDate));
+	// 			const end = formatISO(endOfDay(selectedDate));
+	// 			const response = await api.post('/food/log/day', { start, end });
 
-				handleData(response.data);
+	// 			handleData(response.data);
 
-			} catch (err) {
-				handleError(err);
-			}
-		}
+	// 		} catch (err) {
+	// 			handleError(err);
+	// 		}
+	// 	}
+	// 	if (isAuthenticated) {
+	// 		loadData();
+	// 	}
+	// }, [selectedDate]);
 
-		loadData();
-	}, [selectedDate]);
+	// useEffect(() => {
+	// 	async function loadData() {
+	// 		const today = new Date();
+	// 		const start = startOfDay(today).getTime();
+	// 		const end = endOfDay(today).getTime();
+	// 		const response_chart = await api.post('/food/log/30days', {start, end});
+	// 		setChartRawData(response_chart.data);
+	// 	}
 
-	useEffect(() => {
-		async function loadData() {
-			const today = new Date();
-			const start = startOfDay(today).getTime();
-			const end = endOfDay(today).getTime();
-			const response_chart = await api.post('/food/log/30days', {start, end});
-			setChartRawData(response_chart.data);
-		}
-
-		loadData();
-	}, [logData])
+	// 	if (isAuthenticated) {
+	// 		loadData();
+	// 	}
+	// }, [logData])
 
 	const handleLogsDirection = useCallback(() => {
 		setIsHorizontal(!isHorizontal);
 	}, [isHorizontal]);
 
-	useEffect(() => {
+	{/* useEffect(() => {
 		const data4: Chart.ChartData = {
 			labels: chartRawData && chartRawData.map(item => item.day),
 			datasets: [
@@ -180,8 +171,15 @@ export default function Home() {
 		};
 
 		setChartData(data4);
-	}, [chartRawData]);
+	}, [chartRawData]); */}
 
+	useEffect(() => {
+		if (!isAuthenticated) {
+			router.push('/account/login');
+		}
+	}, []);
+
+	if(isAuthenticated) {
 	return (
 		<>
 			<Head>
@@ -206,7 +204,7 @@ export default function Home() {
 					<Calendar>
 						<button type="button" onClick={e => handleCalendar(e)} />
 							<DayPicker
-								onDayClick={handleDateChange}
+								onDayClick={handleSelectDate}
 								selectedDays={selectedDate}
 							/>
 						<button type="button" onClick={e => handleCalendar(e)} />
@@ -300,7 +298,7 @@ export default function Home() {
 						</div>
 					</CardContent>
 				</WideCardContainer>
-				<WideCardContainer>
+				{/* <WideCardContainer>
 					<CardHeader>
 						<h3>Calory intake variation</h3>
 					</CardHeader>
@@ -315,22 +313,23 @@ export default function Home() {
 					<div id="test-chart">
 						<LineChart datasets={[{extractName: "carbohydrates", baseColor: "#EB5757"}, {extractName: "proteins", baseColor: "#2D9CDB"}, {extractName: "fats", baseColor: "#F2C94C"}]} logData={chartRawData} name="macrointakevariation" />
 					</div>
-				</WideCardContainer>
+				</WideCardContainer> */}
 			</Container>
 		</>
 	)
+	} else {
+		return (
+			<h1>OK</h1>
+		)
+	}
 }
-// export async function getServerSideProps(context: GetServerSidePropsContext) {
-//   try {
-//     const cookies = nookies.get(context);
-//     console.log(cookies);
-// 		console.log('tururuu');
-//     return {
-// 			props: {tururu: ''}
-// 		};
-//   } catch (err) {
-//     context.res.writeHead(302, { Location: "/account/login" });
-//     context.res.end();
-//     return { props: {} };
-//   }
-// }
+
+export const getServerSideProps = withSSRAuth(async (ctx) => {
+	const cookies = parseCookies(ctx);
+	const token = cookies['corbik.token'];
+	console.log(token);
+
+	return {
+		props: {}
+	}
+});

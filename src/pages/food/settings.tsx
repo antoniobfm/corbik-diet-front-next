@@ -1,5 +1,5 @@
 import { useAuth } from "@/hooks/auth";
-import api from "@/services/api";
+import {api} from "@/services/apiClient";
 import { CardContent, CardHeader, Header, WideCardContainer } from "@/styles/pages/Home";
 import { Container } from "@/styles/pages/settings";
 import { useCallback, useRef } from "react";

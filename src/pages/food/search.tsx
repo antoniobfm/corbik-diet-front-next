@@ -1,6 +1,6 @@
 import BarcodeScannerComponent from "@/components/BarcodeScanner";
 import WholePageTransition from "@/components/WholePageTransition";
-import api from "@/services/api";
+import {api} from "@/services/apiClient";
 import { Container, BarcodeButton, CreateButton, Floating, Food, Foods, Header, Icon, Menu, Floating2 } from "@/styles/pages/food/search";
 import CardMessage from '@/components/Card/CardMessage';
 import handleEnter from "@/utils/blurOnEnter";

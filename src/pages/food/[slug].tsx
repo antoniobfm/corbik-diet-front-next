@@ -2,7 +2,7 @@ import Input from "@/components/FormComponents/Input";
 import WholePageTransition from "@/components/WholePageTransition";
 import { useAuth } from "@/hooks/auth";
 import { useToast } from "@/hooks/toast";
-import api from "@/services/api";
+import {api} from "@/services/apiClient";
 import { Container, Header, CreateButton, Menu } from "@/styles/pages/food/food";
 import { Details, SettingsIcon, Footer } from "@/styles/pages/log/edit/edit";
 import { Floating } from "@/styles/pages/food/search";

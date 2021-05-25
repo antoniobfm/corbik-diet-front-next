@@ -11,10 +11,12 @@ import React, {
 } from 'react';
 
 import { useToast } from '@/hooks/toast'
-import api from '../services/api';
-import nookies from "nookies";
+import { api } from '../services/apiClient';
+import nookies, { parseCookies } from "nookies";
 import { GetServerSidePropsContext } from 'next';
 import { useLog } from './logs';
+import { withSSRAuth } from '@/utils/withSSRAuth';
+import { signOut } from '@/contexts/AuthContext';
 
 export interface IUnit {
 	id: string;
@@ -64,10 +66,20 @@ interface AuthContextData {
 	loading: boolean;
 	loadingAction: boolean;
 	signIn(credentials: SignInCredentials): Promise<void>;
-	signOut(): void;
+	// signOut(): void;
 	updateUser(user: User): void;
 	forgotPassword(email: string): Promise<void>;
 	resetPassword(data: ResetPassword): Promise<void>;
+}
+
+async function loadInitialUserDataToLocalStorage() {
+	try {
+		const response = await api.get('/profile');
+		localStorage.setItem('@Corbik:User', JSON.stringify(response.data));
+		return response.data;
+	} catch (err) {
+		return;
+	}
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -76,29 +88,36 @@ const AuthProvider: React.FC = ({ children }) => {
 	const [loading, setLoading] = useState(true);
 	const [loadingAction, setLoadingAction] = useState(false);
 	const [data, setData] = useState<AuthState>({} as AuthState);
+	let isAuthenticated = !!data.user;
 
 	const { addToast } = useToast();
 	const router = useRouter();
 	const { updateLogStorage } = useLog();
 
 	useEffect(() => {
-		async function loadUserFromLocalStorageOrGetFromServer() {
-			const user = localStorage.getItem('@Corbik:User');
-			if (user) {
-				setData({ user: JSON.parse(user) });
-			} else {
-				try {
-					const response = await api.get('/profile');
+		const user = localStorage.getItem('@Corbik:User');
+		if (user) {
+			setData({ user: JSON.parse(user) });
+		} else {
+			api.get('/profile').then(response => {
 					localStorage.setItem('@Corbik:User', JSON.stringify(response.data));
 					setData({ user: response.data });
-				} catch (err) {
-					return;
-				}
-			}
+					console.log(response);
+			})
+			.catch(() => {
+				console.log('2cheguei else useeffect auth')
+				signOut();
+				router.push('/account/login');
+			})
 		}
 
-		loadUserFromLocalStorageOrGetFromServer();
+		if (!isAuthenticated) {
+			// signOut();
+			router.push('/account/login');
+		}
+
 		setLoading(false);
+
 	}, [])
 
 	const signIn = useCallback(async ({ email, password }) => {
@@ -130,23 +149,24 @@ const AuthProvider: React.FC = ({ children }) => {
 		setLoadingAction(false);
 	}, []);
 
-	const signOut = useCallback(async () => {
-		try {
-			await api.post('/sessions/logout');
+	// const signOut = useCallback(async () => {
+	// 	if (isAuthenticated) {
+	// 		try {
+	// 			await api.post('/sessions/logout');
+1
 
-			localStorage.removeItem('@Corbik:User');
+	// 			setData({} as AuthState);
 
-			setData({} as AuthState);
-
-			addToast({
-				title: 'Logged out with success',
-				type: 'success'
-			});
-		} catch (err) {
-			localStorage.removeItem('@Corbik:User');
-			router.push('/');
-		}
-	}, []);
+	// 			addToast({
+	// 				title: 'Logged out with success',
+	// 				type: 'success'
+	// 			});
+	// 		} catch (err) {
+	// 			localStorage.removeItem('@Corbik:User');
+	// 			// router.push('/');
+	// 		}
+	// 	}
+	// }, []);
 
 	const updateUser = useCallback(
 		(user: User) => {
@@ -192,7 +212,7 @@ const AuthProvider: React.FC = ({ children }) => {
 
 	return (
 		<AuthContext.Provider
-			value={{ isAuthenticated: !!data.user, user: data.user, loading, loadingAction, signIn, signOut, updateUser, forgotPassword, resetPassword }}
+			value={{ isAuthenticated: isAuthenticated, user: data.user, loading, loadingAction, signIn, updateUser, forgotPassword, resetPassword }}
 		>
 			{children}
 		</AuthContext.Provider>
@@ -211,26 +231,36 @@ function useAuth(): AuthContextData {
 
 export { AuthContext, AuthProvider, useAuth };
 
-export const ProtectRoute = ({ children }) => {
-	const router = useRouter();
-	const { isAuthenticated, loading } = useAuth();
-	if (loading || (!isAuthenticated && window.location.pathname !== '/account/login' && window.location.pathname !== '/account/forgot-password' && window.location.pathname !== '/account/reset-password')) {
-		return <Login />;
-	} else if (isAuthenticated && window.location.pathname !== '/account/login'  && window.location.pathname !== '/account/forgot-password' && window.location.pathname !== '/account/reset-password') {
-		console.log('tru');
-	}
-	return children;
-};
+// export const ProtectRoute = ({ children }) => {
+// 	const router = useRouter();
+// 	const { isAuthenticated, loading } = useAuth();
+// 	if (loading || (!isAuthenticated && window.location.pathname !== '/account/login' && window.location.pathname !== '/account/forgot-password' && window.location.pathname !== '/account/reset-password')) {
+// 		return <Login />;
+// 	} else if (isAuthenticated && window.location.pathname !== '/account/login'  && window.location.pathname !== '/account/forgot-password' && window.location.pathname !== '/account/reset-password') {
+// 		console.log('tru');
+// 	}
+// 	return children;
+// };
 
-export async function getServerSideProps(context: GetServerSidePropsContext, children) {
-  try {
-    const cookies = nookies.get(context);
-    console.log(cookies);
-		console.log('tururuu');
-    return children;
-  } catch (err) {
-    context.res.writeHead(302, { Location: "/account/login" });
-    context.res.end();
-    return { props: {} };
-  }
-}
+// export async function getServerSideProps(context: GetServerSidePropsContext, children) {
+//   try {
+//     const cookies = nookies.get(context, 'corbik.token');
+//     console.log(cookies);
+// 		console.log('tururuu');
+//     return children;
+//   } catch (err) {
+//     context.res.writeHead(302, { Location: "/account/login" });
+//     context.res.end();
+//     return { props: {} };
+//   }
+// }
+// export const getServerSideProps = withSSRAuth(async (ctx) => {
+// 	const cookies = parseCookies(ctx);
+// 	const token = cookies['corbik.token'];
+
+// 	return {
+// 		props: {
+// 			isAuthenticated: true
+// 		}
+// 	}
+// });

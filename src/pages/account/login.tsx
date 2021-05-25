@@ -19,13 +19,16 @@ import Image from 'next/image'
 import { FiCheck, FiMail } from 'react-icons/fi'
 import LoginModal from '@/components/LoginModal'
 import Loading from '@/components/Loading'
-import api from '@/services/api'
+import { api } from '@/services/apiClient';
 import InputWithIcon from '@/components/FormComponents/InputWithIcon'
 import * as Yup from 'yup';
 import { Form } from "@unform/web";
 import { FormHandles } from '@unform/core';
 import { useToast } from '@/hooks/toast'
 import Head from 'next/head'
+import { withSSRAuth } from '@/utils/withSSRAuth'
+import { setupAPIClient } from '@/services/api'
+import { withSSRGuest } from '@/utils/withSSRGuest'
 
 interface LoginFormData {
 	email: string
@@ -189,3 +192,13 @@ export default function Login() {
 		</>
 	)
 }
+export const getServerSideProps = withSSRGuest(async (ctx) => {
+	// const apiClient = setupAPIClient(ctx);
+
+	// const response = await apiClient.get('/sessions/profile');
+	// console.log(response.data);
+
+	return {
+		props: {}
+	}
+});

@@ -3,7 +3,7 @@ import WholePageTransition from "@/components/WholePageTransition";
 import ConfirmActionModal from "@/components/ConfirmActionModal";
 import { useAuth } from "@/hooks/auth";
 import { useToast } from "@/hooks/toast";
-import api from "@/services/api";
+import {api} from "@/services/apiClient";
 import { Header } from "@/styles/pages/food/food";
 import { Calories, Macro, Macros } from "@/styles/pages/Home";
 import { Container, EditButton, StaticMenu, Details, Footer, DeleteIcon, SettingsIcon } from "@/styles/pages/log/edit/edit";
@@ -39,7 +39,7 @@ export default function Edit(food: string) {
 
 	const { user, loading } = useAuth();
 
-	const { updateLog } = useLog();
+	const { updateLog, selectedDate } = useLog();
 
 	const logId = router.query.slug;
 
@@ -141,7 +141,7 @@ export default function Edit(food: string) {
 				<meta name="robots" content="noindex" />
 				<meta name="googlebot" content="noindex" />
 				<meta name="description" key="description" content={`Nutrition Facts & More | Carbs: ${carbs ? carbs : '0'}, Prot: ${prots ? prots : '0'}, Fats: ${fats ? fats : '0'}, Calories: ${calories ? calories : '0'}`} />
-				<title>Nutrition Facts of {logData && logData.name} | Corbik</title>
+				<title>Your log of {logData && logData.name} | Corbik</title>
 			</Head>
     	<AnimatePresence>
 			{showConfirmation &&

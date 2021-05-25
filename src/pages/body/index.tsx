@@ -2,7 +2,7 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link';
 import { BigCardHeader, Calories, WideCardContainer, CardContent, CardHeader, Container, Header, Log, Logs, Macro, Macros, Mission } from "@/styles/pages/Home";
 import { createRef, useCallback, useEffect, useState } from 'react';
-import api from '@/services/api';
+import { api } from '@/services/apiClient';
 import 'react-day-picker/lib/style.css';
 import { endOfDay, formatISO, setHours, startOfDay } from 'date-fns';
 import { useAuth } from '@/hooks/auth';

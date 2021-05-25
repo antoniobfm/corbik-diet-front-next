@@ -1,4 +1,5 @@
-import api from "@/services/api";
+
+import {api} from "@/services/apiClient";
 import { BackButton, Container, Icon, ModalContainer } from "@/styles/components/BarcodeScannerComponent";
 import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
