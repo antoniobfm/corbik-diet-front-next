@@ -95,30 +95,31 @@ const AuthProvider: React.FC = ({ children }) => {
 	const { updateLogStorage } = useLog();
 
 	useEffect(() => {
-		const user = localStorage.getItem('@Corbik:User');
-		if (user) {
-			setData({ user: JSON.parse(user) });
-		} else {
-			api.get('/profile').then(response => {
-					localStorage.setItem('@Corbik:User', JSON.stringify(response.data));
-					setData({ user: response.data });
-					console.log(response);
-			})
-			.catch(() => {
-				console.log('2cheguei else useeffect auth')
-				signOut();
+		async function loadInitialUserDataToLocalStorage() {
+			const user = await localStorage.getItem('@Corbik:User');
+			if (user) {
+				setData({ user: JSON.parse(user) });
+			} else {
+				api.get('/profile').then(response => {
+						localStorage.setItem('@Corbik:User', JSON.stringify(response.data));
+						setData({ user: response.data });
+						console.log(response);
+				})
+				.catch(() => {
+					console.log('2cheguei else useeffect auth')
+					signOut();
+					router.push('/account/login');
+				})
+			}
+			if (!isAuthenticated && !user) {
+				console.log('aqq')
+				// signOut();
 				router.push('/account/login');
-			})
+			}
 		}
-
-		if (!isAuthenticated && !user) {
-			console.log('aqq')
-			// signOut();
-			router.push('/account/login');
-		}
+		loadInitialUserDataToLocalStorage();
 
 		setLoading(false);
-
 	}, [])
 
 	const signIn = useCallback(async ({ email, password }) => {
