@@ -84,6 +84,29 @@ export function setupAPIClient(ctx = undefined) {
 										}
 								});
 						});
+				}	else if (error.response.data?.message === 'You are already logged in') {
+					cookies = parseCookies(ctx);
+
+					const { 'corbik.token': token } = cookies;
+					console.log(cookies);
+					const originalConfig = error.config;
+
+					if (process.browser) {
+						signOut();
+					}
+
+					return new Promise((resolve, reject) => {
+							failedRequestsQueue.push({
+									onSuccess: (token: string) => {
+											originalConfig.headers['Authorization'] = `Bearer ${token}`;
+
+											resolve(api(originalConfig));
+									},
+									onFailure: (err: AxiosError) => {
+											reject(err);
+									}
+							});
+					});
 				} else {
 						if (process.browser) {
 								signOut();
