@@ -1,6 +1,7 @@
 import { signOut } from "@/contexts/AuthContext";
 import Axios, { AxiosError } from "axios";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
+import { serialize } from "cookie";
 import { AuthTokenError } from "./errors/AuthTokenError";
 
 let urls = {
@@ -92,7 +93,8 @@ export function setupAPIClient(ctx = undefined) {
 					const originalConfig = error.config;
 
 					destroyCookie(ctx, 'corbik.token', { path: "/" });
-					ctx.res.end();
+
+					ctx.res.setHeader('Set-Cookie', serialize('corbik.token', '', { path: '/', expires: new Date("Thu, 01 Jan 1970 00:00:00 GMT")}));
 
 					if (process.browser) {
 						signOut();
