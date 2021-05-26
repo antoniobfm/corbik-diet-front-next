@@ -18,7 +18,7 @@ export function alreadyLoggedIn() {
 	if (user) {
 		// setData({ user: JSON.parse(user) });
 	} else {
-		api.get('/profile').then(response => {
+		await api.get('/profile').then(response => {
 				localStorage.setItem('@Corbik:User', JSON.stringify(response.data));
 				// setData({ user: response.data });
 				console.log(response);
