@@ -20,7 +20,7 @@ export function alreadyLoggedIn() {
 	} else {
 		api.get('/profile').then(response => {
 				localStorage.setItem('@Corbik:User', JSON.stringify(response.data));
-				setData({ user: response.data });
+				// setData({ user: response.data });
 				console.log(response);
 		})
 		.catch(() => {
