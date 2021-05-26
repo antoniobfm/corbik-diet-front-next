@@ -1,5 +1,5 @@
 import { useAuth } from "@/hooks/auth";
-import api from "@/services/api";
+import {api} from "@/services/apiClient";
 import { CardContent, CardHeader, Header, WideCardContainer } from "@/styles/pages/Home";
 import { Container } from "@/styles/pages/settings";
 import { useCallback, useRef } from "react";
@@ -113,62 +113,66 @@ export default function Settings() {
 		[],
 	);
 
-	return (
-		<WholePageTransition>
-			<GoBack />
-			<Container>
-				<Header>
-					<h1>User Settings</h1>
-				</Header>
-				<WideCardContainer>
-					<CardHeader>
-						<h2>Your account</h2>
-					</CardHeader>
-					<CardContent>
-						<Form
-							ref={formRef}
-							initialData={{ name: user.name, email: user.email }}
-							onSubmit={handleSubmit}
-						>
-							<Input
-								name="name"
-								labelName="Name"
-								type="input"
-							/>
-							<Input
-								name="email"
-								labelName="Email"
-								type="input"
-							/>
+	if (user) {
+		return (
+			<WholePageTransition>
+				<GoBack />
+				<Container>
+					<Header>
+						<h1>User Settings</h1>
+					</Header>
+					<WideCardContainer>
+						<CardHeader>
+							<h2>Your account</h2>
+						</CardHeader>
+						<CardContent>
+							<Form
+								ref={formRef}
+								initialData={{ name: user.name, email: user.email }}
+								onSubmit={handleSubmit}
+							>
+								<Input
+									name="name"
+									labelName="Name"
+									type="input"
+								/>
+								<Input
+									name="email"
+									labelName="Email"
+									type="input"
+								/>
 
-							<Input
-								containerStyle={{ marginTop: 24 }}
-								name="old_password"
-								labelName="Old password"
-								type="password"
-							/>
+								<Input
+									containerStyle={{ marginTop: 24 }}
+									name="old_password"
+									labelName="Old password"
+									type="password"
+								/>
 
-							<Input
-								name="password"
-								labelName="New password"
-								type="password"
-							/>
+								<Input
+									name="password"
+									labelName="New password"
+									type="password"
+								/>
 
-							<Input
-								name="password_confirmation"
-								labelName="Confirm new password"
-								type="password"
-							/>
-							<Button fullWidth type="submit">SAVE</Button>
-						</Form>
-					</CardContent>
-				</WideCardContainer>
-				<Footer>
-					<button type="button" onClick={signOut}>
-						Logout
-      		</button>
-				</Footer>
-			</Container>
-		</WholePageTransition>
-	)
+								<Input
+									name="password_confirmation"
+									labelName="Confirm new password"
+									type="password"
+								/>
+								<Button fullWidth type="submit">SAVE</Button>
+							</Form>
+						</CardContent>
+					</WideCardContainer>
+					<Footer>
+						<button type="button" onClick={signOut}>
+							Logout
+						</button>
+					</Footer>
+				</Container>
+			</WholePageTransition>
+		)
+	} else {
+		return <h1>Loading</h1>
+	}
 }

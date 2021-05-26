@@ -83,63 +83,67 @@ export default function DietSettings() {
 				}
 			}
 		},
-		[history],
+		[],
 	);
 
-	return (
-		<WholePageTransition>
-			<Head>
-				<title>Corbik</title>
-				<meta name="robots" content="noindex" />
-				<meta name="googlebot" content="noindex" />
-			</Head>
-			<GoBack />
-			<Container>
-				<Header>
-					<h1>Diet Settings</h1>
-				</Header>
-				<WideCardContainer>
-					<CardHeader>
-						<h2>Targets</h2>
-					</CardHeader>
-					<CardContent>
-						<Form
-							ref={formTargetsRef}
-							initialData={{ carbohydrates: user.carbohydrates, proteins: user.proteins, fats: user.fats, calories: user.calories }}
-							onSubmit={handleSubmitTargets}
-						>
-							<div className="form__three__columns">
+	if (user) {
+		return (
+			<WholePageTransition>
+				<Head>
+					<title>Corbik</title>
+					<meta name="robots" content="noindex" />
+					<meta name="googlebot" content="noindex" />
+				</Head>
+				<GoBack />
+				<Container>
+					<Header>
+						<h1>Diet Settings</h1>
+					</Header>
+					<WideCardContainer>
+						<CardHeader>
+							<h2>Targets</h2>
+						</CardHeader>
+						<CardContent>
+							<Form
+								ref={formTargetsRef}
+								initialData={{ carbohydrates: user.carbohydrates, proteins: user.proteins, fats: user.fats, calories: user.calories }}
+								onSubmit={handleSubmitTargets}
+							>
+								<div className="form__three__columns">
+									<Input
+										name="carbohydrates"
+										labelName="Carbohydrates"
+										type="number"
+										step="0.01"
+										required={true}
+									/>
+									<Input
+										name="proteins"
+										labelName="Proteins"
+										type="number"
+										step="0.01"
+									/>
+									<Input
+										name="fats"
+										labelName="Fats"
+										type="number"
+										step="0.01"
+									/>
+								</div>
 								<Input
-									name="carbohydrates"
-									labelName="Carbohydrates"
+									name="calories"
+									labelName="Calories"
 									type="number"
 									step="0.01"
-									required={true}
 								/>
-								<Input
-									name="proteins"
-									labelName="Proteins"
-									type="number"
-									step="0.01"
-								/>
-								<Input
-									name="fats"
-									labelName="Fats"
-									type="number"
-									step="0.01"
-								/>
-							</div>
-							<Input
-								name="calories"
-								labelName="Calories"
-								type="number"
-								step="0.01"
-							/>
-							<Button type="submit" style={{ width: '100%' }} fullWidth>SAVE</Button>
-						</Form>
-					</CardContent>
-				</WideCardContainer>
-			</Container>
-		</WholePageTransition>
-	)
+								<Button type="submit" style={{ width: '100%' }} fullWidth>SAVE</Button>
+							</Form>
+						</CardContent>
+					</WideCardContainer>
+				</Container>
+			</WholePageTransition>
+		)
+	} else {
+		return (<h1>Loading</h1>);
+	}
 }

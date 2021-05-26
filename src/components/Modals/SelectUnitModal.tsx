@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import { useLog } from "@/hooks/logs";
-import api from "@/services/api";
+import {api} from "@/services/apiClient";
+
 import { ModalContainer, ModalContent, Floating, SpecificUnit, BackButton } from "@/styles/components/Modals/SelectUnitModal";
 import { Food } from "@/styles/pages/food/search";
 import handleEnter from "@/utils/blurOnEnter";

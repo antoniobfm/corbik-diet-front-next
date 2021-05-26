@@ -2,7 +2,8 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link';
 import { Container, Chartzin } from "@/styles/pages/home/home";
 import { useCallback, useEffect, useState } from 'react';
-import api from '@/services/api';
+import {api} from "@/services/apiClient";
+
 import 'react-day-picker/lib/style.css';
 import { setHours } from 'date-fns';
 import { useAuth } from '@/hooks/auth';

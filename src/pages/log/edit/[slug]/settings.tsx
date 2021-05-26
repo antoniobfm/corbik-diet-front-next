@@ -3,7 +3,8 @@ import WholePageTransition from "@/components/WholePageTransition";
 import ConfirmActionModal from "@/components/ConfirmActionModal";
 import { useAuth } from "@/hooks/auth";
 import { useToast } from "@/hooks/toast";
-import api from "@/services/api";
+import {api} from "@/services/apiClient";
+
 import { Header } from "@/styles/pages/food/food";
 import { Details } from "@/styles/pages/log/edit/slug/settings";
 import { Container, Footer } from "@/styles/pages/log/edit/edit";

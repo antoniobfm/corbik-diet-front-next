@@ -69,37 +69,41 @@ export default function BodySettings() {
 				}
 			}
 		},
-		[history],
+		[],
 	);
 
-	return (
-		<WholePageTransition>
-			<GoBack />
-			<Container>
-				<Header>
-					<h1>Body Settings</h1>
-				</Header>
-				<WideCardContainer>
-					<CardHeader>
-						<h2>Targets</h2>
-					</CardHeader>
-					<CardContent>
-						<Form
-							ref={formTargetsRef}
-							initialData={{ weight: user.weight }}
-							onSubmit={handleSubmitTargets}
-						>
-							<Input
-								name="weight"
-								labelName="Weight (kg)"
-								type="number"
-								step="0.01"
-							/>
-							<Button type="submit" style={{ width: '100%' }} fullWidth>SAVE</Button>
-						</Form>
-					</CardContent>
-				</WideCardContainer>
-			</Container>
-		</WholePageTransition>
-	)
+	if (user) {
+		return (
+			<WholePageTransition>
+				<GoBack />
+				<Container>
+					<Header>
+						<h1>Body Settings</h1>
+					</Header>
+					<WideCardContainer>
+						<CardHeader>
+							<h2>Targets</h2>
+						</CardHeader>
+						<CardContent>
+							<Form
+								ref={formTargetsRef}
+								initialData={{ weight: user.weight }}
+								onSubmit={handleSubmitTargets}
+							>
+								<Input
+									name="weight"
+									labelName="Weight (kg)"
+									type="number"
+									step="0.01"
+								/>
+								<Button type="submit" style={{ width: '100%' }} fullWidth>SAVE</Button>
+							</Form>
+						</CardContent>
+					</WideCardContainer>
+				</Container>
+			</WholePageTransition>
+		)
+	} else {
+		return <h1>Loading</h1>
+	}
 }
