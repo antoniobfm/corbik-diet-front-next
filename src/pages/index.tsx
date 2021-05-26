@@ -328,6 +328,7 @@ export const getServerSideProps = withSSRAuth(async (ctx) => {
 	const cookies = parseCookies(ctx);
 	const token = cookies['corbik.token'];
 	console.log(token);
+	// ctx.res.end();
 
 	return {
 		props: {}

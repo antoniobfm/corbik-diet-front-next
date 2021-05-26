@@ -92,6 +92,7 @@ export function setupAPIClient(ctx = undefined) {
 					const originalConfig = error.config;
 
 					destroyCookie(ctx, 'corbik.token', { path: "/" });
+					ctx.res.end();
 
 					if (process.browser) {
 						signOut();
