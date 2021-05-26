@@ -13,11 +13,12 @@ export function signOut() {
 	Router.push('/account/login');
 }
 
-export function alreadyLoggedIn() {
+export async function alreadyLoggedIn() {
 	const user = localStorage.getItem('@Corbik:User');
 	if (user) {
 		// setData({ user: JSON.parse(user) });
 	} else {
+		console.log('AAAAAAA')
 		await api.get('/profile').then(response => {
 				localStorage.setItem('@Corbik:User', JSON.stringify(response.data));
 				// setData({ user: response.data });
