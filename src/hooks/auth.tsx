@@ -111,7 +111,8 @@ const AuthProvider: React.FC = ({ children }) => {
 			})
 		}
 
-		if (!isAuthenticated) {
+		if (!isAuthenticated && !user) {
+			console.log('aqq')
 			// signOut();
 			router.push('/account/login');
 		}

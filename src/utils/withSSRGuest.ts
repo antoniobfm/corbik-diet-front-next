@@ -19,7 +19,7 @@ export function withSSRGuest<P>(fn: GetServerSideProps<P>) {
             return await fn(ctx);
         } catch (err) {
             if (err instanceof AuthTokenError) {
-                destroyCookie(ctx, 'corbik.token');
+                // destroyCookie(ctx, 'corbik.token');
                 // destroyCookie(ctx, 'nextauth.refreshToken');
 
                 return {

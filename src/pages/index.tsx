@@ -17,6 +17,7 @@ import Head from 'next/head';
 import { useLog } from '@/hooks/logs';
 import { withSSRAuth } from '@/utils/withSSRAuth';
 import { parseCookies } from 'nookies';
+import { api } from '@/services/apiClient';
 
 const LoginModal = dynamic(() => import('@/components/LoginModal'),
 	{ loading: () => <div className="blurred__background"><h1>Loading</h1></div> })
@@ -173,12 +174,6 @@ export default function Home() {
 		setChartData(data4);
 	}, [chartRawData]); */}
 
-	useEffect(() => {
-		if (!isAuthenticated) {
-			router.push('/account/login');
-		}
-	}, []);
-
 	if(isAuthenticated) {
 	return (
 		<>
@@ -325,12 +320,14 @@ export default function Home() {
 }
 
 export const getServerSideProps = withSSRAuth(async (ctx) => {
-	const cookies = parseCookies(ctx);
-	const token = cookies['corbik.token'];
-	console.log(token);
-	// ctx.res.end();
+	// const cookies = parseCookies(ctx);
+	// const token = cookies['corbik.token'];
+
+	const response = await api.get('/profile');
 
 	return {
-		props: {}
+		props: {
+			teste: 'ok'
+		}
 	}
 });

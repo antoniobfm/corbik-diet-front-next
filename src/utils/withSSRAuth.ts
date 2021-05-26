@@ -17,7 +17,8 @@ export function withSSRAuth<P>(fn: GetServerSideProps<P>, options?: WithSSRAuthO
 				console.log(token);
 
         if (!token) {
-            return {
+					console.log('trye');
+				return {
                 redirect: {
                     destination: '/account/login',
                     permanent: false,
@@ -46,8 +47,9 @@ export function withSSRAuth<P>(fn: GetServerSideProps<P>, options?: WithSSRAuthO
         // };
 
         try {
-            return await fn(ctx);
+					return await fn(ctx);
         } catch (err) {
+					console.log('red111');
             if (err instanceof AuthTokenError) {
                 destroyCookie(ctx, 'corbik.token');
                 // destroyCookie(ctx, 'nextauth.refreshToken');
@@ -58,7 +60,12 @@ export function withSSRAuth<P>(fn: GetServerSideProps<P>, options?: WithSSRAuthO
                         permanent: false,
                     }
                 }
-            }
+            } else {
+							console.log('red222');
+							return {
+								props: {}
+							}
+						}
         }
     }
 }
