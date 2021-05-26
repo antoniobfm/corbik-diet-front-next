@@ -5,7 +5,7 @@ import { AuthTokenError } from "./errors/AuthTokenError";
 
 let urls = {
     test: `https://api.corbik.com/`,
-    development: `http://localhost:3333`,
+    development: `https://localhost:3333`,
     production: 'https://api.corbik.com/'
 }
 
@@ -90,6 +90,8 @@ export function setupAPIClient(ctx = undefined) {
 					const { 'corbik.token': token } = cookies;
 					console.log(cookies);
 					const originalConfig = error.config;
+
+					destroyCookie(ctx, 'corbik.token');
 
 					if (process.browser) {
 						signOut();
