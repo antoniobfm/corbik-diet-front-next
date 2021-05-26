@@ -7,6 +7,7 @@ export function signOut() {
 	console.log(parseCookies(undefined, 'corbik.token'))
 	destroyCookie(null, 'corbik.token', { path: "/" });
 
+
 	localStorage.removeItem('@Corbik:User');
 	// destroyCookie(undefined, 'nextauth.refreshToken');
 
@@ -18,7 +19,6 @@ export async function alreadyLoggedIn() {
 	if (user) {
 		// setData({ user: JSON.parse(user) });
 	} else {
-		console.log('AAAAAAA')
 		await api.get('/profile').then(response => {
 				localStorage.setItem('@Corbik:User', JSON.stringify(response.data));
 				// setData({ user: response.data });
@@ -28,6 +28,8 @@ export async function alreadyLoggedIn() {
 			console.log('2cheguei else useeffect auth')
 			signOut();
 			Router.push('/account/login');
+			return;
 		})
 	}
+	await api.post('/sessions/logout');
 }

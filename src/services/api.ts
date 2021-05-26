@@ -6,7 +6,7 @@ import { AuthTokenError } from "./errors/AuthTokenError";
 
 let urls = {
 	test: `https://api.corbik.com/`,
-	development: `https://localhost:3333`,
+	development: `http://localhost:3333`,
 	production: 'https://api.corbik.com/'
 }
 
@@ -24,6 +24,7 @@ export function setupAPIClient(ctx = undefined) {
 	});
 
 	api.interceptors.response.use(response => {
+		console.log(response);
 		return response;
 	}, (error: AxiosError) => {
 		console.log('BBBBBBBBB');
