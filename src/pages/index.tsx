@@ -319,15 +319,15 @@ export default function Home() {
 	}
 }
 
-export const getServerSideProps = withSSRAuth(async (ctx) => {
-	// const cookies = parseCookies(ctx);
-	// const token = cookies['corbik.token'];
+// export const getServerSideProps = withSSRAuth(async (ctx) => {
+// 	// const cookies = parseCookies(ctx);
+// 	// const token = cookies['corbik.token'];
 
-	const response = await api.get('/profile');
+// 	const response = await api.get('/profile');
 
-	return {
-		props: {
-			teste: 'ok'
-		}
-	}
-});
+// 	return {
+// 		props: {
+// 			teste: 'ok'
+// 		}
+// 	}
+// });

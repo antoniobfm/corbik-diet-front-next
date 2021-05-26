@@ -155,7 +155,6 @@ const AuthProvider: React.FC = ({ children }) => {
 	// 	if (isAuthenticated) {
 	// 		try {
 	// 			await api.post('/sessions/logout');
-1
 
 	// 			setData({} as AuthState);
 
