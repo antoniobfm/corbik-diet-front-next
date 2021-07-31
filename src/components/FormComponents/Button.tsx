@@ -12,7 +12,7 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 export default function Button({ children, loadingAction, color = 'green', disabled = false, fullWidth = true, ...rest }: ButtonProps) {
 	if (disabled) {
 		return (
-			<DisabledStyle type="button" {...rest} style={{width: `${fullWidth && `100%`}`}}>
+			<DisabledStyle disabled={disabled} type="button" {...rest} style={{width: `${fullWidth && `100%`}`}}>
 				{loadingAction ? 'Loading...' : children}
 			</DisabledStyle>
 		);

@@ -16,7 +16,7 @@ const Menu = ({ currentRoute }: IMenuProps) => {
 
 			<Button
 			type="button"
-			onClick={() => router.push('/')}
+			onClick={() => router.push('/diet')}
 			isSelected={'Diet' === currentRoute}>
 				<IoRestaurant />
 			</Button>

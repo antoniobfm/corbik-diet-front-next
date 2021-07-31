@@ -15,6 +15,8 @@ import { useRouter } from 'next/router'
 import { useToast } from '@/hooks/toast'
 import { FiCheck } from 'react-icons/fi'
 import { AnimatePresence, motion } from 'framer-motion'
+import { withSSRGuest } from '@/utils/withSSRGuest'
+import { api } from '@/services/apiClient'
 
 interface ForgotPasswordFormData {
 	email: string
@@ -22,7 +24,7 @@ interface ForgotPasswordFormData {
 
 export default function Login() {
 	const [emailSent, setEmailSent] = useState(false)
-	const { forgotPassword, loadingAction } = useAuth()
+	const [loadingAction, setLoadingAction] = useState(false);
 	const { addToast } = useToast()
 	const formRef = useRef<FormHandles>(null)
 
@@ -30,6 +32,8 @@ export default function Login() {
 
 	const handleRecover = useCallback(
 		async (data: ForgotPasswordFormData) => {
+			setLoadingAction(true);
+
 			try {
 				formRef.current?.setErrors({})
 
@@ -44,8 +48,9 @@ export default function Login() {
 				})
 
 				const { email } = data
-
-				await forgotPassword(email)
+					await api.post('/password/forgot', {
+							email
+					});
 
 				setEmailSent(true)
 			} catch (err) {
@@ -60,6 +65,8 @@ export default function Login() {
 					});
 				}
 			}
+
+			setLoadingAction(false);
 		}, [])
 
 	return (
@@ -113,6 +120,7 @@ export default function Login() {
 								style={{ width: '100%' }}
 								fullWidth
 								loadingAction={loadingAction}
+								disabled={loadingAction}
 							>
 								EMAIL ME A RECOVERY LINK
 							</Button>
@@ -132,3 +140,9 @@ export default function Login() {
 		</Container>
 	)
 }
+
+export const getServerSideProps = withSSRGuest(async ctx => {
+	return {
+		props: {}
+	}
+})

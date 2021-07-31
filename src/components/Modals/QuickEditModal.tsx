@@ -73,7 +73,7 @@ const QuickEditModal: React.FC<IProps> = ({
       return;
     }
 		if (amountTemp !== inputRef.current.value || `${isoFormat(new Date(`${inputDateRef.current.value}T${inputTimeRef.current.value}`))}` !== `${isoFormat(new Date(`${dateTemp}T${timeTemp}`))}`) {
-			updateLog({id: logData.id, when: `${isoFormat(new Date(`${inputDateRef.current.value}T${inputTimeRef.current.value}`))}`, amount: inputRef.current.value});
+			updateLog({log_id: logData.id, when: `${isoFormat(new Date(`${inputDateRef.current.value}T${inputTimeRef.current.value}`))}`, amount: inputRef.current.value});
 		}
     // outside click
     setState(false);

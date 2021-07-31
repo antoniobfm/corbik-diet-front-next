@@ -1,106 +1,109 @@
-import { alreadyLoggedIn, signOut } from "@/contexts/AuthContext";
-import Axios, { AxiosError } from "axios";
-import { destroyCookie, parseCookies, setCookie } from "nookies";
-import { serialize } from "cookie";
-import { AuthTokenError } from "./errors/AuthTokenError";
+import axios, { AxiosError } from 'axios'
+import { destroyCookie, parseCookies, setCookie } from 'nookies'
+import { signOut } from '@/contexts/AuthContext'
+import { AuthTokenError } from './errors/AuthTokenError'
 
-let urls = {
-	test: `https://api.corbik.com/`,
-	development: `http://localhost:3333`,
-	production: 'https://api.corbik.com/'
+const urls = {
+	test: `https://api.qualaboa.app/`,
+	development: `http://localhost:${process.env.NEXT_PUBLIC_BACK_DEV_PORT}`,
+	production: 'https://api.qualaboa.app/'
 }
 
-let isRefreshing = false;
-let failedRequestsQueue = [];
+let isRefreshing = false
+let failedRequestsQueue = []
 
 export function setupAPIClient(ctx = undefined) {
-	let cookies = parseCookies(ctx);
-	const api = Axios.create({
+	let cookies = parseCookies(ctx)
+	const api = axios.create({
 		baseURL: urls[process.env.NODE_ENV],
 		headers: {
-			'Content-Type': 'application/json'
+			Authorization: `Bearer ${cookies['corbik.token']}`
+		}
+	})
+	console.log('FFFFFFFFFF')
+
+	api.interceptors.response.use(
+		response => {
+			return response
 		},
-		withCredentials: true,
-	});
+		(error: AxiosError) => {
+			console.log('aaaaaaaaaaaaa')
+			if (error.response && error.response.status === 401) {
+				console.log('bbbbbbbbbb')
+				console.log(error.response.data.message)
+				if (error.response.data.message === 'Invalid token') {
+					cookies = parseCookies(ctx)
 
-	api.interceptors.response.use(response => {
-		console.log(response);
-		return response;
-	}, (error: AxiosError) => {
-		console.log('BBBBBBBBB');
-		if (error.response && error.response.status === 401) {
-			if (error.response.data?.message === 'You are not logged in') {
-				cookies = parseCookies(ctx);
+					const { 'corbik.refreshToken': refreshToken } = cookies
+					const originalConfig = error.config
 
-				const { 'corbik.token': token } = cookies;
-				console.log('AAAAAAAAA');
-				const originalConfig = error.config;
+					if (!isRefreshing) {
+						isRefreshing = true
 
-				if (process.browser) {
-					signOut();
-				}
+						api
+							.post('/refresh', {
+								token: refreshToken
+							})
+							.then(response => {
+								const { token } = response.data
 
-				// if (!isRefreshing) {
-				// 		isRefreshing = true;
+								setCookie(ctx, 'corbik.token', token, {
+									maxAge: 60 * 60 * 24 * 30, // 30 days
+									path: '/'
+								})
 
-				// 		api.post('/refresh', {
-				// 				refreshToken,
-				// 		}).then(response => {
-				// 				const { token } = response.data;
+								setCookie(
+									ctx,
+									'corbik.refreshToken',
+									response.data.refresh_token,
+									{
+										maxAge: 60 * 60 * 24 * 30, // 30 days
+										path: '/'
+									}
+								)
 
-				// 				setCookie(ctx, 'nextauth.token', token, {
-				// 						maxAge: 60 * 60 * 24 * 30, // 30 days
-				// 						path: '/'
-				// 				});
+								api.defaults.headers.Authorization = `Bearer ${token}`
 
-				// 				setCookie(ctx, 'nextauth.refreshToken', response.data.refreshToken, {
-				// 						maxAge: 60 * 60 * 24 * 30, // 30 days
-				// 						path: '/'
-				// 				});
+								failedRequestsQueue.forEach(request => request.onSuccess(token))
+								failedRequestsQueue = []
+							})
+							.catch(err => {
+								failedRequestsQueue.forEach(request => request.onFailure(err))
+								failedRequestsQueue = []
 
-				// 				api.defaults.headers['Authorization'] = `Bearer ${token}`;
+								if (process.browser) {
+									signOut()
+								}
+							})
+							.finally(() => {
+								isRefreshing = false
+							})
+					}
 
-				// 				failedRequestsQueue.forEach(request => request.onSuccess(token));
-				// 				failedRequestsQueue = [];
-				// 		}).catch(err => {
-				// 				failedRequestsQueue.forEach(request => request.onFailure(err));
-				// 				failedRequestsQueue = [];
+					return new Promise((resolve, reject) => {
+						failedRequestsQueue.push({
+							onSuccess: (token: string) => {
+								originalConfig.headers.Authorization = `Bearer ${token}`
 
-				// 				if (process.browser) {
-				// 						signOut();
-				// 				}
-				// 		}).finally(() => {
-				// 				isRefreshing = false;
-				// 		});
-
-				// }
-
-				return new Promise((resolve, reject) => {
-					failedRequestsQueue.push({
-						onSuccess: (token: string) => {
-							originalConfig.headers['Authorization'] = `Bearer ${token}`;
-
-							resolve(api(originalConfig));
-						},
-						onFailure: (err: AxiosError) => {
-							reject(err);
-						}
-					});
-				});
-			} else {
-				console.log('red111');
-				if (process.browser) {
-					alreadyLoggedIn();
+								resolve(api(originalConfig))
+							},
+							onFailure: (err: AxiosError) => {
+								reject(err)
+							}
+						})
+					})
 				} else {
-					console.log('red server');
-					return Promise.reject(new AuthTokenError());
+					if (process.browser) {
+						signOut()
+					} else {
+						return Promise.reject(new AuthTokenError())
+					}
 				}
 			}
+
+			return Promise.reject(error)
 		}
+	)
 
-		console.log('red serrrrrver');
-		return Promise.reject(error);
-	});
-
-	return api;
+	return api
 }

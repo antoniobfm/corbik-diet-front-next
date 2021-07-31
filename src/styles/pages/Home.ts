@@ -12,6 +12,7 @@ export const Container = styled.div`
 	background: linear-gradient(346.65deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.03) 100%), #0A0A0B;
 	min-height: 100vh;
 	padding-bottom: 80px;
+
 	::-webkit-scrollbar {
 		display: none;
 	}

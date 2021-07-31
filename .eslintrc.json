@@ -1,4 +1,3 @@
-
 {
   "env": {
     "browser": true,
@@ -7,12 +6,11 @@
     "jest": true
   },
   "extends": [
-    "plugin:react/recommended",
-    "standard",
-    "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint",
-    "prettier/standard",
-    "prettier/react"
+		"plugin:react/recommended",
+		"standard",
+		"eslint:recommended",
+		"plugin:@typescript-eslint/recommended",
+		"prettier"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -38,8 +36,10 @@
 			"warn",
 			{
 				"allowExpressions": true,
-				"allowConciseArrowFunctionExpressionsStartingWithVoid": true,
-			},
+				"allowConciseArrowFunctionExpressionsStartingWithVoid": true
+			}
 		],
+		"no-use-before-define": [0],
+    "@typescript-eslint/no-use-before-define": [1],
   }
 }

@@ -16,6 +16,7 @@ import { format } from "date-fns";
 import CardMessage from "@/components/Card/CardMessage";
 import Head from "next/head";
 import { useLog } from "@/hooks/logs";
+import { withSSRAuth } from "@/utils/withSSRAuth";
 
 interface ICreateFoodLog {
 	food_id: string;
@@ -303,3 +304,9 @@ export default function Food() {
 		return <p>Loading...</p>;
 	}
 }
+
+export const getServerSideProps = withSSRAuth(async ctx => {
+	return {
+		props: {}
+	}
+})

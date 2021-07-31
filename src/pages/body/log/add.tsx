@@ -11,6 +11,7 @@ import * as Yup from 'yup';
 import { useToast } from "@/hooks/toast";
 import addZeroBefore from "@/utils/addZeroBefore";
 import WholePageTransition from "@/components/WholePageTransition";
+import { withSSRAuth } from "@/utils/withSSRAuth";
 
 interface IBodyFormData {
 	weight: number;
@@ -160,3 +161,9 @@ export default function Create() {
 		</WholePageTransition>
 	)
 }
+
+export const getServerSideProps = withSSRAuth(async ctx => {
+	return {
+		props: {}
+	}
+})

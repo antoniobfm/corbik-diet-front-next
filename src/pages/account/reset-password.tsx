@@ -12,6 +12,8 @@ import { useRouter } from "next/router";
 import { AnimatePresence, motion } from "framer-motion";
 import { FiCheck } from "react-icons/fi";
 import { useToast } from "@/hooks/toast";
+import { withSSRGuest } from "@/utils/withSSRGuest";
+import { api } from "@/services/apiClient";
 
 interface ResetPasswordFormData {
 	password: string;
@@ -19,8 +21,8 @@ interface ResetPasswordFormData {
 }
 
 export default function ResetPassword() {
+	const [loadingAction, setLoadingAction] = useState(false);
 	const [passwordReseted, setPasswordReseted] = useState(false);
-	const { resetPassword, loadingAction } = useAuth();
 	const { addToast } = useToast()
 	const formRef = useRef<FormHandles>(null);
 
@@ -30,6 +32,7 @@ export default function ResetPassword() {
 
 	const handleReset = useCallback(
 		async (data: ResetPasswordFormData) => {
+			setLoadingAction(true);
 			try {
 				formRef.current?.setErrors({});
 
@@ -49,7 +52,14 @@ export default function ResetPassword() {
 				} = data;
 
 				if (typeof token === 'string') {
-					await resetPassword({ token, password, password_confirmation, setState: setPasswordReseted });
+					await api.post('/password/reset', {
+						token,
+						password,
+						password_confirmation
+					});
+					setPasswordReseted(true)
+
+					setTimeout(() => { router.push('/') }, 5000);
 				}
 
 			} catch (err) {
@@ -64,6 +74,7 @@ export default function ResetPassword() {
 					})
 				}
 			}
+			setLoadingAction(false);
 		},
 		[token],
 	);
@@ -127,3 +138,10 @@ export default function ResetPassword() {
 		</Container>
 	)
 }
+
+
+export const getServerSideProps = withSSRGuest(async ctx => {
+	return {
+		props: {}
+	}
+})

@@ -2,7 +2,7 @@ import { useAuth } from "@/hooks/auth";
 import { api } from '@/services/apiClient';
 import { WideCardContainer, CardContent, CardHeader, Header } from "@/styles/pages/Home";
 import { Container } from "@/styles/pages/settings";
-import { useCallback, useRef } from "react";
+import { useCallback, useContext, useRef } from "react";
 import getValidationErrors from '../../utils/getValidationErrors';
 import * as Yup from 'yup';
 import { FormHandles } from '@unform/core';
@@ -12,6 +12,8 @@ import GoBack from "@/components/GoBack";
 import Button from "@/components/FormComponents/Button";
 import { useToast } from "@/hooks/toast";
 import WholePageTransition from "@/components/WholePageTransition";
+import { withSSRAuth } from "@/utils/withSSRAuth";
+import { AuthContext } from "@/contexts/AuthContext";
 
 interface TargetsFormData {
 	weight: string;
@@ -22,7 +24,7 @@ export default function BodySettings() {
 
 	const formTargetsRef = useRef<FormHandles>(null);
 
-	const { updateUser, user } = useAuth();
+	const { update, user } = useContext(AuthContext);
 
 	const handleSubmitTargets = useCallback(
 		async (data: TargetsFormData) => {
@@ -47,7 +49,7 @@ export default function BodySettings() {
 
 				const response = await api.put('/profile/body-targets', formData);
 
-				updateUser(response.data);
+				await update();
 
 				addToast({
 					type: 'success',
@@ -72,38 +74,40 @@ export default function BodySettings() {
 		[],
 	);
 
-	if (user) {
-		return (
-			<WholePageTransition>
-				<GoBack />
-				<Container>
-					<Header>
-						<h1>Body Settings</h1>
-					</Header>
-					<WideCardContainer>
-						<CardHeader>
-							<h2>Targets</h2>
-						</CardHeader>
-						<CardContent>
-							<Form
-								ref={formTargetsRef}
-								initialData={{ weight: user.weight }}
-								onSubmit={handleSubmitTargets}
-							>
-								<Input
-									name="weight"
-									labelName="Weight (kg)"
-									type="number"
-									step="0.01"
-								/>
-								<Button type="submit" style={{ width: '100%' }} fullWidth>SAVE</Button>
-							</Form>
-						</CardContent>
-					</WideCardContainer>
-				</Container>
-			</WholePageTransition>
-		)
-	} else {
-		return <h1>Loading</h1>
-	}
+	return (
+		<WholePageTransition>
+			<GoBack />
+			<Container>
+				<Header>
+					<h1>Body Settings</h1>
+				</Header>
+				<WideCardContainer>
+					<CardHeader>
+						<h2>Targets</h2>
+					</CardHeader>
+					<CardContent>
+						<Form
+							ref={formTargetsRef}
+							initialData={{ weight: user && user.weight }}
+							onSubmit={handleSubmitTargets}
+						>
+							<Input
+								name="weight"
+								labelName="Weight (kg)"
+								type="number"
+								step="0.01"
+							/>
+							<Button type="submit" style={{ width: '100%' }} fullWidth>SAVE</Button>
+						</Form>
+					</CardContent>
+				</WideCardContainer>
+			</Container>
+		</WholePageTransition>
+	)
 }
+
+export const getServerSideProps = withSSRAuth(async ctx => {
+	return {
+		props: {}
+	}
+})

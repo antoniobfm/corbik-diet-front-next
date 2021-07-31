@@ -11,6 +11,7 @@ import { IoBarcodeOutline } from "react-icons/io5";
 import { RiAddLine } from "react-icons/ri";
 import { useLog } from "@/hooks/logs";
 import Head from "next/head";
+import { withSSRAuth } from "@/utils/withSSRAuth";
 
 interface ISearchResult {
 	own_library: any[];
@@ -200,3 +201,9 @@ export default function Search() {
 		</>
 	)
 }
+
+export const getServerSideProps = withSSRAuth(async ctx => {
+	return {
+		props: {}
+	}
+})

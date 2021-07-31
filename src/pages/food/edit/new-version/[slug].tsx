@@ -13,6 +13,7 @@ import { useToast } from "@/hooks/toast";
 import WholePageTransition from "@/components/WholePageTransition";
 import { FiSettings } from "react-icons/fi";
 import Head from "next/head";
+import { withSSRAuth } from "@/utils/withSSRAuth";
 
 interface IFoodFormData {
   name: string;
@@ -376,3 +377,9 @@ export default function Create() {
 		</WholePageTransition>
   )
 }
+
+export const getServerSideProps = withSSRAuth(async ctx => {
+	return {
+		props: {}
+	}
+})

@@ -18,6 +18,7 @@ import { FiChevronDown, FiChevronLeft } from "react-icons/fi";
 import Button from "@/components/FormComponents/Button";
 import SpecialDropdownModal from "@/components/Modals/SpecialDropdownModal";
 import Head from "next/head";
+import { withSSRAuth } from "@/utils/withSSRAuth";
 
 interface ILog {
 	id: number;
@@ -173,7 +174,7 @@ export default function EditLogSettings(food: string) {
 							<div className="Special__Select">
 								<div>
 									<h3>Version {logData && logData.foodVersion && logData.foodVersion.version}</h3>
-									<h5>{logData && logData.foodVersion.id === logData.food.food_version_default ? 'Default' : ''}</h5>
+									<h5>{logData && logData.foodVersion && logData.foodVersion.id === logData.food.food_version_default ? 'Default' : ''}</h5>
 								</div>
 								<div className="Special__Select__DropdownIndicator">
 									<FiChevronDown />
@@ -192,3 +193,9 @@ export default function EditLogSettings(food: string) {
 		</>
 	);
 }
+
+export const getServerSideProps = withSSRAuth(async ctx => {
+	return {
+		props: {}
+	}
+})

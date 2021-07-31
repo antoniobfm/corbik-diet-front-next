@@ -1,4 +1,5 @@
 /* eslint-disable camelcase */
+import { AuthContext } from '@/contexts/AuthContext';
 import { setupAPIClient } from '@/services/api';
 import addZeroBefore from '@/utils/addZeroBefore';
 import IndexedDb from '@/utils/Indexed';
@@ -63,7 +64,7 @@ interface IDayResume {
 }
 
 interface IUpdateLog {
-	id: string;
+	log_id: string;
 	amount: string;
 	when: string;
 }
@@ -71,11 +72,12 @@ interface IUpdateLog {
 interface LogContextData {
 	search: any[] | null;
 	logData: IDayResume | null;
-	addLog(dataToAdd: IAddFoodLog): void;
-	updateLogStorage(): void;
-	updateLog(data: IUpdateLog): void;
+	addLog(dataToAdd: IAddFoodLog): Promise<void>;
+	updateLogStorage(date?: Date): Promise<void>;
+	updateLog(data: IUpdateLog): Promise<void>;
+	initialLoadSearch: () => Promise<void>;
 	selectedDate: Date;
-	handleSelectDate(data: Date): void;
+	handleSelectDate(data: Date): Promise<void>;
 }
 
 const LogContext = createContext<LogContextData>({} as LogContextData);
@@ -86,9 +88,9 @@ const LogProvider: React.FC = ({ children }) => {
 	const [selectedDate, setSelectedDate] = useState<Date>(setHours(new Date(), 12));
 
 	const { addToast } = useToast();
-	const { isAuthenticated } = useAuth();
+	const { user } = useContext(AuthContext);
 
-	const handleData = useCallback(async (data) => {
+	const handleData = useCallback(async (data): Promise<void> => {
 		const indexedDb = new IndexedDb('test4');
 		await indexedDb.createObjectStore(['DayResume']);
 
@@ -111,16 +113,21 @@ const LogProvider: React.FC = ({ children }) => {
 		setLogData(newLogs);
 	}, [logData]);
 
-	async function updateLogStorage(date?) {
+	async function updateLogStorage(date?): Promise<void> {
 		const indexedDb = new IndexedDb('test4');
 		await indexedDb.createObjectStore(['DayResume']);
 		const items = await indexedDb.getAllValue('DayResume');
 
 		const okok = items.filter(item => isSameDay(new Date(item.id), date));
 		setLogData(okok[0]);
+		const d = new Date();
 
-		const start = formatISO(startOfDay(setHours(date, 12)));
-		const end = formatISO(endOfDay(setHours(date, 12)));
+		console.log(d)
+
+		const start = formatISO(startOfDay(setHours(d, 12)));
+		console.log(start)
+		const end = formatISO(endOfDay(setHours(d, 12)));
+		console.log(end)
 
 		const { data } = await api.post('/food/log/day', { start, end });
 		await handleData(data);
@@ -138,18 +145,17 @@ const LogProvider: React.FC = ({ children }) => {
 				// handleError(err);
 			}
 		}
+		user && loadData();
+	}, [user, selectedDate]);
 
-		loadData();
-	}, [selectedDate]);
-
-	const handleSelectDate = useCallback(async (day: Date) => {
+	const handleSelectDate = useCallback(async (day: Date): Promise<void> => {
 		setSelectedDate(day);
 	}, [])
 
-	const updateLog = useCallback(async ({id, amount, when}: IUpdateLog) => {
+	const updateLog = useCallback(async ({log_id, amount, when}: IUpdateLog): Promise<void> => {
 		try {
 			const log = {
-				id: id,
+				log_id,
 				amount: amount,
 				when: when,
 			};
@@ -172,7 +178,7 @@ const LogProvider: React.FC = ({ children }) => {
 		}
 	}, [selectedDate])
 
-	const addLog = useCallback(async (dataToAdd: IAddFoodLog) => {
+	const addLog = useCallback(async (dataToAdd: IAddFoodLog): Promise<void> => {
 		try {
 			await api.post(`/food/log`, dataToAdd);
 
@@ -212,22 +218,26 @@ const LogProvider: React.FC = ({ children }) => {
 		const paginateAll = await paginate({ arr: data, size: 10 });
 
 		// console.log(paginateAll)
-		if (isAuthenticated) {
 			// console.log('SEHLOIRO')
-			setData(paginateAll);
-		}
-	}, []);
+		setData(paginateAll);
+	}, [user]);
 
 	const initialLoadDayResume = useCallback(async () => {
+		const d = new Date();
+
 		const indexedDb = new IndexedDb('test4');
 		await indexedDb.createObjectStore(['DayResume']);
 		const items = await indexedDb.getAllValue('DayResume');
 
-		const okok = items.filter(item => isSameDay(new Date(item.id), new Date()));
+		const okok = items.filter(item => isSameDay(new Date(item.id), d));
 		setLogData(okok[0])
 
-		const start = formatISO(startOfDay(setHours(new Date(), 12)));
-		const end = formatISO(endOfDay(setHours(new Date(), 12)));
+		console.log(d)
+
+		const start = formatISO(startOfDay(setHours(d, 12)));
+		console.log(start)
+		const end = formatISO(endOfDay(setHours(d, 12)));
+		console.log(end)
 
 		// if (items.length >= 1) {
 		// 	const cachedData = await indexedDb.getAllValue('DayResume');
@@ -240,14 +250,15 @@ const LogProvider: React.FC = ({ children }) => {
 	}, []);
 
 	useEffect(() => {
-		if (isAuthenticated) {
-			initialLoadSearch();
-			initialLoadDayResume();
+		async function initialLoad() {
+			await initialLoadSearch();
+			await initialLoadDayResume();
 		}
-  }, [isAuthenticated]);
+		!!user && initialLoad()
+  }, [user]);
 
 	return (
-		<LogContext.Provider value={{ search: data, logData: logData, selectedDate, handleSelectDate, updateLog, updateLogStorage, addLog }}>
+		<LogContext.Provider value={{ search: data, logData: logData, selectedDate, handleSelectDate, updateLog, updateLogStorage, addLog, initialLoadSearch }}>
 			{ children }
 		</LogContext.Provider>
 	);

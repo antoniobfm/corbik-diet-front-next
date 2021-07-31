@@ -16,6 +16,7 @@ import SelectUnitModal from '@/components/Modals/SelectUnitModal';
 import Food from "@/components/Ingredients/Food";
 import Unit from '@/components/FormComponents/Unit';
 import { AnimatePresence } from "framer-motion";
+import { withSSRAuth } from "@/utils/withSSRAuth";
 
 interface IUnitFormData {
 	unit_id: string;
@@ -652,3 +653,9 @@ export default function Create() {
 		</WholePageTransition>
 	)
 }
+
+export const getServerSideProps = withSSRAuth(async ctx => {
+	return {
+		props: {}
+	}
+})

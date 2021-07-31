@@ -192,13 +192,9 @@ export default function Login() {
 		</>
 	)
 }
-export const getServerSideProps = withSSRGuest(async (ctx) => {
-	// const apiClient = setupAPIClient(ctx);
 
-	// const response = await apiClient.get('/sessions/profile');
-	// console.log(response.data);
-
+export const getServerSideProps = withSSRGuest(async ctx => {
 	return {
 		props: {}
 	}
-});
+})

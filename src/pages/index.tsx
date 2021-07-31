@@ -1,333 +1,190 @@
-import dynamic from 'next/dynamic'
-import { BigCardHeader, Calendar, Calories, Container, Header, Logs, Macro, Macros, WideCardContainer, CardHeader, CardContent, Mission } from "@/styles/pages/Home";
-import { useCallback, useEffect, useState } from 'react';
-import DayPicker from 'react-day-picker';
-import 'react-day-picker/lib/style.css';
-import { isToday, format } from 'date-fns';
-import { useAuth } from '@/hooks/auth';
-import Menu from '@/components/Menu';
-import { useRouter } from 'next/router';
-import { FiCheck, FiChevronDown, FiSettings } from 'react-icons/fi';
-import LogsHorizontalScroll from '@/components/Logs/Food/HorizontalScroll';
-import LogsVerticalScroll from '@/components/Logs/Food/VerticalScroll';
-import { useError } from '@/hooks/errors';
-import { AnimatePresence } from 'framer-motion';
-import CardMessage from '@/components/Card/CardMessage';
-import Head from 'next/head';
-import { useLog } from '@/hooks/logs';
-import { withSSRAuth } from '@/utils/withSSRAuth';
-import { parseCookies } from 'nookies';
+import Button from '@/components/FormComponents/Button'
+import { useAuth } from '@/hooks/auth'
+import {
+	ButtonLogin,
+	Container,
+	CreateAccount,
+	Footer,
+	GetNotifiedContainer,
+	Header,
+	LoginContainer,
+	MiddleContent
+} from '@/styles/pages/account/login'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import Input from '@/components/FormComponents/Input'
+import getValidationErrors from '@/utils/getValidationErrors'
+import { useRouter } from 'next/router'
+import { AnimatePresence, motion } from 'framer-motion'
+import Image from 'next/image'
+import { FiCheck, FiMail } from 'react-icons/fi'
+import LoginModal from '@/components/LoginModal'
+import Loading from '@/components/Loading'
 import { api } from '@/services/apiClient';
+import InputWithIcon from '@/components/FormComponents/InputWithIcon'
+import * as Yup from 'yup';
+import { Form } from "@unform/web";
+import { FormHandles } from '@unform/core';
+import { useToast } from '@/hooks/toast'
+import Head from 'next/head'
+import { withSSRAuth } from '@/utils/withSSRAuth'
+import { setupAPIClient } from '@/services/api'
+import { withSSRGuest } from '@/utils/withSSRGuest'
+import { LogoSvg } from '@/components/LogoSvg'
 
-const LoginModal = dynamic(() => import('@/components/LoginModal'),
-	{ loading: () => <div className="blurred__background"><h1>Loading</h1></div> })
-
-interface ILog {
-	food_id: string;
-	user_id: string;
-	id: number;
-	//
-	name: string;
-	brand?: string;
-	//
-	calories: string;
-	carbohydrates: string;
-	fats: string;
-	proteins: string;
-	//
-	amount: string;
-	unit_abbreviation: string;
-	//
-	day: string;
-	month: string;
-	year: string;
-	hour: string | number;
-	minute: string | number;
-	when: Date;
-	//
-	created_at: Date;
-	updated_at: Date;
+interface LoginFormData {
+	email: string
+	password: string
 }
 
-interface IDayResume {
-	carbohydrates: string;
-	proteins: string;
-	fats: string;
-	calories: string;
-	logs: ILog[] | undefined;
+interface WaitlistFormData {
+	email: string;
 }
 
+export default function Login() {
+	const [showLogin, setShowLogin] = useState(false);
+	const [waitlisted, setWaitlisted] = useState(false);
+	const [loading, setLoading] = useState(false);
 
-export default function Home() {
-	const [chartData, setChartData] = useState<IDayResume[]>(null);
-	const [chartRawData, setChartRawData] = useState<IDayResume[]>(null);
-	const [loading, setLoading] = useState(true);
-	const [isHorizontal, setIsHorizontal] = useState(true);
-	const [showCalendar, setShowCalendar] = useState(false);
+	const { addToast } = useToast();
 
-	const router = useRouter();
-	const {handleError} = useError();
+	const formRef = useRef<FormHandles>(null);
 
-	const { logData, selectedDate, handleSelectDate } = useLog();
-
-	// let chartRef = createRef<HTMLCanvasElement>();
-
-	const { isAuthenticated, user } = useAuth();
-	// if (!isAuthenticated) return <LoginModal />;
-
-	{/* const handleDateChange = useCallback((day: Date) => {
-		setSelectedDate(day);
-	}, []); */}
-
-	const handleCalendar = useCallback((e) => {
-		e.preventDefault();
-
-		setShowCalendar(!showCalendar);
-	}, [showCalendar]);
-
-	{/*const handleData = useCallback((data) => {
+	const handleEnterWaitlist = useCallback(async (data: WaitlistFormData) => {
 		setLoading(true);
+		try {
+			formRef.current?.setErrors({});
 
-		if (!data) {
-			setLogData(null);
-			return setLoading(false);
+			const schema = Yup.object().shape({
+				email: Yup.string().email().required('Email is required'),
+			});
+
+			await schema.validate(data, {
+				abortEarly: false,
+			});
+
+			const response = await api.post('/waitlist', {email: data.email});
+
+			setWaitlisted(true)
+		} catch (err) {
+			// const errors = getValidationErrors(err);
+
+			// formRef.current?.setErrors(errors);
+
+			addToast({
+				type: 'error',
+				title: `You need to insert a valid email`
+			});
+
+			setLoading(false);
 		}
-
-		const newLogs = {
-			...data,
-			logs: data.logs.map((item) => {
-			return {
-				...item,
-				hour: addZeroBefore(new Date(item.when).getHours()),
-				minute: addZeroBefore(new Date(item.when).getMinutes())
-			}
-		})};
-
-		setLogData(newLogs);
 		setLoading(false);
-	}, [logData]); */}
+	}, []);
 
-	// useEffect(() => {
-	// 	async function loadData() {
-	// 		try {
-	// 			const start = formatISO(startOfDay(selectedDate));
-	// 			const end = formatISO(endOfDay(selectedDate));
-	// 			const response = await api.post('/food/log/day', { start, end });
-
-	// 			handleData(response.data);
-
-	// 		} catch (err) {
-	// 			handleError(err);
-	// 		}
-	// 	}
-	// 	if (isAuthenticated) {
-	// 		loadData();
-	// 	}
-	// }, [selectedDate]);
-
-	// useEffect(() => {
-	// 	async function loadData() {
-	// 		const today = new Date();
-	// 		const start = startOfDay(today).getTime();
-	// 		const end = endOfDay(today).getTime();
-	// 		const response_chart = await api.post('/food/log/30days', {start, end});
-	// 		setChartRawData(response_chart.data);
-	// 	}
-
-	// 	if (isAuthenticated) {
-	// 		loadData();
-	// 	}
-	// }, [logData])
-
-	const handleLogsDirection = useCallback(() => {
-		setIsHorizontal(!isHorizontal);
-	}, [isHorizontal]);
-
-	{/* useEffect(() => {
-		const data4: Chart.ChartData = {
-			labels: chartRawData && chartRawData.map(item => item.day),
-			datasets: [
-				{
-					label: 'Calories',
-					fill: true,
-					lineTension: 0.1,
-					backgroundColor: 'rgba(39, 174, 96,0.3)',
-					borderColor: 'rgba(39, 174, 96,1)',
-					borderCapStyle: 'butt',
-					borderDash: [],
-					borderDashOffset: 0.0,
-					borderJoinStyle: 'miter',
-					pointBorderColor: 'rgba(39, 174, 96,1)',
-					pointBackgroundColor: '#fff',
-					pointBorderWidth: 3,
-					pointHoverRadius: 5,
-					pointHoverBackgroundColor: 'rgba(39, 174, 96,1)',
-					pointHoverBorderColor: 'rgba(220,220,220,1)',
-					pointHoverBorderWidth: 2,
-					pointRadius: 1,
-					pointHitRadius: 10,
-					data: chartRawData && chartRawData.map(item => item.calories)
-				}
-			]
-		};
-
-		setChartData(data4);
-	}, [chartRawData]); */}
-
-	if(isAuthenticated) {
 	return (
 		<>
-			<Head>
-				<title>Corbik</title>
-			</Head>
-			<Menu currentRoute="Diet" />
-			<Container>
-				<Header>
-					<button
-					id="diet--home--change--date"
-					type="button"
-					onClick={e => handleCalendar(e)}>
-						{isToday(selectedDate) ? 'Today' : format(selectedDate, 'MMM, dd')}
-					</button>
-					<button
-					id="diet--home--settings--button"
-					onClick={() => {router.push('/food/settings')}}>
-						<FiSettings />
-					</button>
-				</Header>
-				{showCalendar &&
-					<Calendar>
-						<button type="button" onClick={e => handleCalendar(e)} />
-							<DayPicker
-								onDayClick={handleSelectDate}
-								selectedDays={selectedDate}
-							/>
-						<button type="button" onClick={e => handleCalendar(e)} />
-					</Calendar>
+		<Head>
+			<title>Corbik</title>
+		</Head>
+		<AnimatePresence>
+		{showLogin && <LoginModal setState={setShowLogin} />}
+		</AnimatePresence>
+		<Container>
+			<Header>
+				<LogoSvg />
+				<button type="button" onClick={() => setShowLogin(true)}>LOGIN</button>
+			</Header>
+			<MiddleContent>
+				<h1>Own your body.</h1>
+				<h2>Lose weight without cutting the fast food, understand what is going on with your body and why so you can act uppon hard data.</h2>
+			</MiddleContent>
+			<GetNotifiedContainer>
+				{waitlisted &&
+				<motion.div id="all-set"
+					initial={{ opacity: 0 }}
+					transition={{ duration: 0.3 }}
+					animate={{ opacity: 1 }}>
+					<motion.div
+						className="is-done"
+						initial={{ opacity: 0, bottom: '-50%', rotate: '360deg', borderRadius: 30 }}
+						transition={{
+							delay: 0.3,
+							type: 'spring',
+							duration: 0.6,
+							stiffness: 150
+						}}
+						animate={{ opacity: 1, bottom: '0%', rotate: '0deg' }}
+						drag
+						dragConstraints={{ left: 0, top: 0, right: 0, bottom: 0 }}
+						dragElastic={0.5}
+					>
+						<FiCheck />
+					</motion.div>
+					<h4>You’re all set!</h4>
+					<p>We’ll send you an email when your time comes</p>
+				</motion.div>
 				}
-				<Macros>
-					<Macro macro="carb">
-						<div>
-							<h4>Carbs</h4>
-							<span>{logData ? logData.carbohydrates : `0`}{user && user.carbohydrates && <span>/{parseInt(user.carbohydrates)}</span>}</span>
-						</div>
-						<progress id="carbs" value={logData ? logData.carbohydrates : `0`} max={user && user.carbohydrates}>30%</progress>
-					</Macro>
-					<Macro macro="protein">
-						<div>
-							<h4>Prots</h4>
-							<span>{logData ? logData.proteins : `0`}{user && user.proteins && <span>/{parseInt(user.proteins)}</span>}</span>
-						</div>
-						<progress id="carbs" value={logData ? logData.proteins : `0`} max={user && user.proteins}>30%</progress>
-					</Macro>
-					<Macro macro="fat">
-						<div>
-							<h4>Fat</h4>
-							<span>{logData ? logData.fats : `0`}{user && user.fats && <span>/{parseInt(user.fats)}</span>}</span>
-						</div>
-						<progress id="carbs" value={logData ? logData.fats : `0`} max={user && user.fats}>30%</progress>
-					</Macro>
-				</Macros>
-				<Calories>
-					<div>
-						<h4>Calories</h4>
-						<span>{logData ? logData.calories : `0`}{user && user.calories && <span>/{parseInt(user.calories)}</span>}</span>
-					</div>
-					<progress id="carbs" value={logData ? logData.calories : `0`} max={user && user.calories}>30%</progress>
-				</Calories>
-				<Logs>
-					<BigCardHeader isHorizontal={isHorizontal}>
-						<h3>Logs</h3>
-						<div onClick={handleLogsDirection}>
-							<FiChevronDown />
-						</div>
-					</BigCardHeader>
-					<div>
-						<AnimatePresence>
-						{logData && logData.logs ?
-							isHorizontal ? <LogsHorizontalScroll data={logData.logs} /> : <LogsVerticalScroll data={logData.logs} />
-							:
-							<CardMessage borderBottom={false}>
-								<h4>NO LOGS TODAY</h4>
-							</CardMessage>
-						}
-						</AnimatePresence>
-					</div>
-					<div className="add-log">
-						<button onClick={() => router.push(`/food/search`)}>
-							ADD LOG
-						</button>
-					</div>
-					{/* <canvas
-						height="100px"
-						id={`background-chart`}
-						ref={chartRef}
-					/> */}
-				</Logs>
-				<WideCardContainer>
-					<CardHeader>
-						<h3>Welcome to the diet page</h3>
-						<p>Your diet is everything you eat, inside or outside of your planning.</p>
-					</CardHeader>
-					<CardContent>
-						<h4>Getting started</h4>
-						<div id="missions-container">
-							<Mission isDone={true}>
-								<div className="is-done">
-									<FiCheck />
-								</div>
-								<h5>Create your first food</h5>
-							</Mission>
-							<Mission isDone={!!user.calories && !!user.carbohydrates && !!user.proteins && !!user.carbohydrates && !!user.fats}>
-								<div className="is-done">
-									<FiCheck />
-								</div>
-								<h5>Add your first food log</h5>
-							</Mission>
-							<Mission isDone={!!user.calories && !!user.carbohydrates && !!user.proteins && !!user.carbohydrates && !!user.fats}>
-								<div className="is-done">
-									<FiCheck />
-								</div>
-								<h5>Set your macro’s target</h5>
-							</Mission>
-						</div>
-					</CardContent>
-				</WideCardContainer>
-				{/* <WideCardContainer>
-					<CardHeader>
-						<h3>Calory intake variation</h3>
-					</CardHeader>
-					<div id="test-chart">
-						<LineChart datasets={[{extractName: "calories", baseColor: "#27AE60"}]} logData={chartRawData} name="caloryintakevariation" />
-					</div>
-				</WideCardContainer>
-				<WideCardContainer>
-					<CardHeader>
-						<h3>Macros intake variation</h3>
-					</CardHeader>
-					<div id="test-chart">
-						<LineChart datasets={[{extractName: "carbohydrates", baseColor: "#EB5757"}, {extractName: "proteins", baseColor: "#2D9CDB"}, {extractName: "fats", baseColor: "#F2C94C"}]} logData={chartRawData} name="macrointakevariation" />
-					</div>
-				</WideCardContainer> */}
-			</Container>
+				<h3>Get invited to our beta</h3>
+				<Form
+					ref={formRef}
+					onSubmit={handleEnterWaitlist}
+				>
+				<div id="get-notification-container">
+					<InputWithIcon name="email" />
+				</div>
+				<button id="get-notified-button" type="submit" disabled={loading}><span>{loading ? <Loading /> : 'ENTER WAITLIST'}</span></button>
+					</Form>
+			</GetNotifiedContainer>
+			<Footer>
+				{/* <img src={'/icons/screens.png'} /> */}
+			</Footer>
+			{/* <LoginContainer>
+				<h3>Login</h3>
+				<div>
+					<Form ref={formRef} onSubmit={handleSignIn}>
+						<Input
+							name="email"
+							autoCapitalize="no"
+							labelName="Email"
+							type="email"
+							onChange={(e) => setEmailInput(e.target.value)}
+						/>
+						<Input
+							name="password"
+							labelName="Password"
+							type="password"
+							onChange={(e) => setPasswordInput(e.target.value)}
+						/>
+						<ButtonLogin
+							type="submit"
+							style={{ width: '100%' }}
+							isDisabled={isEmpty}
+							disabled={isEmpty}
+						>
+							{loadingAction ? 'Loading...' : 'SIGN IN'}
+						</ButtonLogin>
+					</Form>
+				</div>
+				<h5 onClick={() => router.push('/account/forgot-password')}>
+					Forgot password
+				</h5>
+			</LoginContainer>
+			<CreateAccount>
+				<Button
+					type="button"
+					style={{ width: '100%' }}
+					fullWidth
+					onClick={() => {}}
+				>
+					CREATE ACCOUNT
+				</Button>
+			</CreateAccount> */}
+		</Container>
 		</>
 	)
-	} else {
-		return (
-			<h1>OK</h1>
-		)
-	}
 }
 
-// export const getServerSideProps = withSSRAuth(async (ctx) => {
-// 	// const cookies = parseCookies(ctx);
-// 	// const token = cookies['corbik.token'];
-
-// 	const response = await api.get('/profile');
-
-// 	return {
-// 		props: {
-// 			teste: 'ok'
-// 		}
-// 	}
-// });
+export const getServerSideProps = withSSRGuest(async ctx => {
+	return {
+		props: {}
+	}
+})

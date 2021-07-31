@@ -13,13 +13,15 @@ import {
 	LoginContainerPopup
 } from '@/styles/pages/account/login'
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import Input from "./FormComponents/Input";
 import { Form } from "@unform/web";
 import getValidationErrors from "@/utils/getValidationErrors";
 import { FormHandles } from "@unform/core";
 import * as Yup from 'yup'
 import { motion } from "framer-motion";
+import { AuthContext } from "@/contexts/AuthContext";
+import Loading from "./Loading";
 
 interface LoginFormData {
 	email: string
@@ -35,8 +37,9 @@ const LoginModal: React.FC<IProps> = ({
 }: IProps) => {
 	const [emailInput, setEmailInput] = useState('');
 	const [isEmpty, setIsEmpty] = useState<boolean>(true);
+	const [loadingAction, setLoadingAction] = useState<boolean>(false);
 	const [passwordInput, setPasswordInput] = useState('');
-	const { signIn, loadingAction } = useAuth()
+	const { signIn } = useContext(AuthContext)
 	const router = useRouter();
 
 	const formRef = useRef<FormHandles>(null);
@@ -70,6 +73,7 @@ const LoginModal: React.FC<IProps> = ({
 	}, [open]);
 
 	const handleSignIn = useCallback(async (data: LoginFormData) => {
+		setLoadingAction(true)
 		try {
 			formRef.current?.setErrors({})
 
@@ -86,7 +90,7 @@ const LoginModal: React.FC<IProps> = ({
 
 			const { email, password } = data
 
-			signIn({ email, password })
+			await signIn({ email, password })
 		} catch (err) {
 			if (err instanceof Yup.ValidationError) {
 				const errors = getValidationErrors(err)
@@ -94,6 +98,7 @@ const LoginModal: React.FC<IProps> = ({
 				formRef.current?.setErrors(errors)
 			}
 		}
+		setLoadingAction(false)
 	}, [])
 
 	useEffect(() => {
@@ -131,10 +136,10 @@ const LoginModal: React.FC<IProps> = ({
 						<ButtonLogin
 							type="submit"
 							style={{ width: '100%' }}
-							isDisabled={isEmpty}
-							disabled={isEmpty}
+							isDisabled={isEmpty || loadingAction}
+							disabled={isEmpty || loadingAction}
 						>
-							{loadingAction ? 'Loading...' : 'SIGN IN'}
+							{loadingAction ? <Loading /> : 'SIGN IN'}
 						</ButtonLogin>
 					</Form>
 				</div>

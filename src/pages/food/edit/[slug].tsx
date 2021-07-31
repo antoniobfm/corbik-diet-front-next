@@ -18,6 +18,7 @@ import { FormHandles } from "@unform/core";
 import * as Yup from 'yup';
 import Button from "@/components/FormComponents/Button";
 import Head from "next/head";
+import { withSSRAuth } from "@/utils/withSSRAuth";
 
 interface IUpdateFood {
 	food_id: string;
@@ -197,3 +198,9 @@ export default function Food() {
 		return <p>Loading...</p>;
 	}
 }
+
+export const getServerSideProps = withSSRAuth(async ctx => {
+	return {
+		props: {}
+	}
+})

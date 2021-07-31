@@ -10,6 +10,7 @@ import { Calories, Macro, Macros } from "@/styles/pages/Home";
 import { Container, DeleteIcon, ConfirmDeletion, Footer } from "@/styles/pages/log/edit/edit";
 import addZeroBefore from "@/utils/addZeroBefore";
 import getValidationErrors from "@/utils/getValidationErrors";
+import { withSSRAuth } from "@/utils/withSSRAuth";
 import { FormHandles } from "@unform/core";
 import { Form } from "@unform/web";
 import { AnimatePresence } from "framer-motion";
@@ -267,3 +268,9 @@ export default function Edit(body: string) {
 		</>
 	);
 }
+
+export const getServerSideProps = withSSRAuth(async ctx => {
+	return {
+		props: {}
+	}
+})

@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic'
 import Link from 'next/link';
 import { BigCardHeader, Calories, WideCardContainer, CardContent, CardHeader, Container, Header, Log, Logs, Macro, Macros, Mission } from "@/styles/pages/Home";
-import { createRef, useCallback, useEffect, useState } from 'react';
+import { createRef, useCallback, useContext, useEffect, useState } from 'react';
 import { api } from '@/services/apiClient';
 import 'react-day-picker/lib/style.css';
 import { endOfDay, formatISO, setHours, startOfDay } from 'date-fns';
@@ -16,6 +16,8 @@ import LogsVerticalScroll from '@/components/Logs/Body/VerticalScroll';
 import Chart from "chart.js";
 import CardMessage from '@/components/Card/CardMessage';
 import LineChart from '@/components/Charts/LineChart';
+import { withSSRAuth } from '@/utils/withSSRAuth';
+import { AuthContext } from '@/contexts/AuthContext';
 
 const LoginModal = dynamic(() => import('@/components/LoginModal'),
 	{ loading: () => <div className="blurred__background"><h1>Loading</h1></div> })
@@ -57,8 +59,7 @@ export default function Home() {
 
 	let chartRef = createRef<HTMLCanvasElement>();
 
-	const { isAuthenticated, user } = useAuth();
-	if (!isAuthenticated) return <LoginModal />;
+	const { user } = useContext(AuthContext);
 
 	const handleDateChange = useCallback((day: Date) => {
 		setSelectedDate(day);
@@ -222,7 +223,7 @@ export default function Home() {
 									</div>
 									<h5>Add your first log</h5>
 								</Mission>
-								<Mission isDone={!!user.weight}>
+								<Mission isDone={user && !!user.weight}>
 									<div className="is-done">
 										<FiCheck />
 									</div>
@@ -251,3 +252,9 @@ export default function Home() {
 		</>
 	)
 }
+
+export const getServerSideProps = withSSRAuth(async ctx => {
+	return {
+		props: {}
+	}
+})

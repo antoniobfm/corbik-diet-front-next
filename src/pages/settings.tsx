@@ -1,8 +1,8 @@
 import { useAuth } from "@/hooks/auth";
-import {api} from "@/services/apiClient";
+import { api } from "@/services/apiClient";
 import { CardContent, CardHeader, Header, WideCardContainer } from "@/styles/pages/Home";
 import { Container } from "@/styles/pages/settings";
-import { useCallback, useRef } from "react";
+import { useCallback, useContext, useRef } from "react";
 import getValidationErrors from '../utils/getValidationErrors';
 import * as Yup from 'yup';
 import { FormHandles } from '@unform/core';
@@ -13,6 +13,8 @@ import Button from "@/components/FormComponents/Button";
 import { useToast } from "@/hooks/toast";
 import WholePageTransition from "@/components/WholePageTransition";
 import { Footer } from "@/styles/pages/log/edit/edit";
+import { withSSRAuth } from "@/utils/withSSRAuth";
+import { AuthContext, signOut } from "@/contexts/AuthContext";
 
 interface ProfileFormData {
 	name: string;
@@ -35,7 +37,7 @@ export default function Settings() {
 	const formRef = useRef<FormHandles>(null);
 	const formTargetsRef = useRef<FormHandles>(null);
 
-	const { updateUser, user, signOut } = useAuth();
+	const { update, user } = useContext(AuthContext);
 
 	const handleSubmit = useCallback(
 		async (data: ProfileFormData) => {
@@ -88,7 +90,7 @@ export default function Settings() {
 
 				const response = await api.put('/profile', formData);
 
-				updateUser(response.data);
+				await update();
 
 				addToast({
 					type: 'success',
@@ -113,66 +115,69 @@ export default function Settings() {
 		[],
 	);
 
-	if (user) {
-		return (
-			<WholePageTransition>
-				<GoBack />
-				<Container>
-					<Header>
-						<h1>User Settings</h1>
-					</Header>
-					<WideCardContainer>
-						<CardHeader>
-							<h2>Your account</h2>
-						</CardHeader>
-						<CardContent>
-							<Form
-								ref={formRef}
-								initialData={{ name: user.name, email: user.email }}
-								onSubmit={handleSubmit}
-							>
-								<Input
-									name="name"
-									labelName="Name"
-									type="input"
-								/>
-								<Input
-									name="email"
-									labelName="Email"
-									type="input"
-								/>
+	return (
+		<WholePageTransition>
+			<GoBack />
+			<Container>
+				<Header>
+					<h1>User Settings</h1>
+				</Header>
+				<WideCardContainer>
+					<CardHeader>
+						<h2>Your account</h2>
+					</CardHeader>
+					<CardContent>
+						<Form
+							ref={formRef}
+							initialData={{ name: user && user.name, email: user && user.email }}
+							onSubmit={handleSubmit}
+						>
+							<Input
+								name="name"
+								labelName="Name"
+								type="input"
+							/>
+							<Input
+								name="email"
+								labelName="Email"
+								type="input"
+							/>
 
-								<Input
-									containerStyle={{ marginTop: 24 }}
-									name="old_password"
-									labelName="Old password"
-									type="password"
-								/>
+							<Input
+								containerStyle={{ marginTop: 24 }}
+								name="old_password"
+								labelName="Old password"
+								type="password"
+							/>
 
-								<Input
-									name="password"
-									labelName="New password"
-									type="password"
-								/>
+							<Input
+								name="password"
+								labelName="New password"
+								type="password"
+							/>
 
-								<Input
-									name="password_confirmation"
-									labelName="Confirm new password"
-									type="password"
-								/>
-								<Button fullWidth type="submit">SAVE</Button>
-							</Form>
-						</CardContent>
-					</WideCardContainer>
-					<Footer>
-						<button type="button" onClick={signOut}>
-							Logout
-						</button>
-					</Footer>
-				</Container>
-			</WholePageTransition>
-		)
-	} else {
-		return <h1>Loading</h1>
-	}
+							<Input
+								name="password_confirmation"
+								labelName="Confirm new password"
+								type="password"
+							/>
+							<Button fullWidth type="submit">SAVE</Button>
+						</Form>
+					</CardContent>
+				</WideCardContainer>
+				<Footer>
+					<button type="button" onClick={signOut}>
+						Logout
+					</button>
+				</Footer>
+			</Container>
+		</WholePageTransition>
+	)
 }
+
+
+export const getServerSideProps = withSSRAuth(async ctx => {
+	return {
+		props: {}
+	}
+})

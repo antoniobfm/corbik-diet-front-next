@@ -16,6 +16,7 @@ import { FiSettings } from 'react-icons/fi';
 import { Line } from 'react-chartjs-2';
 import LineChart from '@/components/Charts/LineChart';
 import Head from 'next/head';
+import { withSSRAuth } from '@/utils/withSSRAuth';
 
 const LoginModal = dynamic(() => import('@/components/LoginModal'),
 	{ loading: () => <div className="blurred__background"><h1>Loading</h1></div> })
@@ -296,3 +297,9 @@ export default function Home() {
 		</>
 	)
 }
+
+export const getServerSideProps = withSSRAuth(async ctx => {
+	return {
+		props: {}
+	}
+})

@@ -9,7 +9,7 @@ export function withSSRGuest<P>(fn: GetServerSideProps<P>) {
         if (cookies['corbik.token']) {
             return {
                 redirect: {
-                    destination: '/',
+                    destination: '/diet',
                     permanent: false,
                 }
             }
@@ -20,7 +20,7 @@ export function withSSRGuest<P>(fn: GetServerSideProps<P>) {
         } catch (err) {
             if (err instanceof AuthTokenError) {
                 // destroyCookie(ctx, 'corbik.token');
-                // destroyCookie(ctx, 'nextauth.refreshToken');
+                // destroyCookie(ctx, 'corbik.refreshToken');
 
                 return {
                     props: {}

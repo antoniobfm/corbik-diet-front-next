@@ -19,6 +19,7 @@ import { format } from "date-fns";
 import CardMessage from "@/components/Card/CardMessage";
 import { useLog } from "@/hooks/logs";
 import Head from "next/head";
+import { withSSRAuth } from "@/utils/withSSRAuth";
 
 export default function Edit(food: string) {
 	const router = useRouter();
@@ -39,7 +40,7 @@ export default function Edit(food: string) {
 
 	const { user, loading } = useAuth();
 
-	const { updateLog, selectedDate } = useLog();
+	const { updateLog, selectedDate, updateLogStorage } = useLog();
 
 	const logId = router.query.slug;
 
@@ -105,14 +106,13 @@ export default function Edit(food: string) {
 	}, [logData, amountTemp]);
 
 	const { addToast } = useToast();
-	const { updateLogStorage } = useLog();
 
 	const handleDelete = useCallback((e) => {
 		e.preventDefault()
 		async function editFood() {
 			await api.delete(`/food/log/specific/${logData.id}`);
 
-			updateLogStorage();
+			await updateLogStorage(date);
 
 			addToast({
 				type: 'success',
@@ -127,7 +127,7 @@ export default function Edit(food: string) {
 
 	const handleEdit = useCallback((e) => {
 		e.preventDefault()
-		updateLog({id: logData.id, amount: amountTemp, when: date})
+		updateLog({log_id: logData.id, amount: amountTemp, when: date})
 	}, [logData, carbs, prots, fats, calories, date, amountTemp]);
 
 	// function getSelectedUnit() {
@@ -260,3 +260,9 @@ export default function Edit(food: string) {
 		</>
 	);
 }
+
+export const getServerSideProps = withSSRAuth(async ctx => {
+	return {
+		props: {}
+	}
+})

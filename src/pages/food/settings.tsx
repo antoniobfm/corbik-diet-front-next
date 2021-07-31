@@ -13,6 +13,7 @@ import Button from "@/components/FormComponents/Button";
 import { useToast } from "@/hooks/toast";
 import WholePageTransition from "@/components/WholePageTransition";
 import Head from "next/head";
+import { withSSRAuth } from "@/utils/withSSRAuth";
 
 interface TargetsFormData {
 	carbohydrates: string;
@@ -147,3 +148,9 @@ export default function DietSettings() {
 		return (<h1>Loading</h1>);
 	}
 }
+
+export const getServerSideProps = withSSRAuth(async ctx => {
+	return {
+		props: {}
+	}
+})
