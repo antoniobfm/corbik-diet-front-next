@@ -77,7 +77,7 @@ interface LogContextData {
 	updateLog(data: IUpdateLog): Promise<void>;
 	initialLoadSearch: () => Promise<void>;
 	selectedDate: Date;
-	handleSelectDate(data: Date): Promise<void>;
+	handleSelectDate(data: Date): void;
 }
 
 const LogContext = createContext<LogContextData>({} as LogContextData);
@@ -144,11 +144,13 @@ const LogProvider: React.FC = ({ children }) => {
 			} catch (err) {
 				// handleError(err);
 			}
+			console.log('2')
 		}
-		user && loadData();
+		console.log('ok')
+		loadData();
 	}, [user, selectedDate]);
 
-	const handleSelectDate = useCallback(async (day: Date): Promise<void> => {
+	const handleSelectDate = useCallback( (day: Date): void => {
 		setSelectedDate(day);
 	}, [])
 
