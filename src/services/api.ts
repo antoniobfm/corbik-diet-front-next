@@ -4,9 +4,9 @@ import { signOut } from '@/contexts/AuthContext'
 import { AuthTokenError } from './errors/AuthTokenError'
 
 const urls = {
-	test: `https://api.corbik.app/`,
+	test: `https://api.corbik.com/`,
 	development: `http://localhost:${process.env.NEXT_PUBLIC_BACK_DEV_PORT}`,
-	production: 'https://api.corbik.app/'
+	production: 'https://api.corbik.com/'
 }
 
 let isRefreshing = false
