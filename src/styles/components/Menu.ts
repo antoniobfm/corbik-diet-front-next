@@ -11,7 +11,7 @@ export const Container = styled.div`
 	z-index: 4;
 
 	width: 100vw;
-	height:	48px;
+	height:	56px;
 	background: rgba(11, 11, 12, 0.8);
 	/* border-top: 1px solid rgba(34, 36, 37, 0.6); */
 	backdrop-filter: blur(12px);
