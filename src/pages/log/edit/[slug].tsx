@@ -6,7 +6,7 @@ import { useToast } from "@/hooks/toast";
 import {api} from "@/services/apiClient";
 import { Header } from "@/styles/pages/food/food";
 import { Calories, Macro, Macros } from "@/styles/pages/Home";
-import { Container, EditButton, StaticMenu, Details, Footer, DeleteIcon, SettingsIcon } from "@/styles/pages/log/edit/edit";
+import { Container, EditButton, StaticMenu, Details as DetailsCard, Footer, DeleteIcon, SettingsIcon } from "@/styles/pages/log/edit/edit";
 import addZeroBefore from "@/utils/addZeroBefore";
 import toFixedNumber from "@/utils/formatNumbers";
 import { Form } from "@unform/web";
@@ -20,6 +20,7 @@ import CardMessage from "@/components/Card/CardMessage";
 import { useLog } from "@/hooks/logs";
 import Head from "next/head";
 import { withSSRAuth } from "@/utils/withSSRAuth";
+import { Details } from "@/components/Card/Details";
 
 export default function Edit(food: string) {
 	const router = useRouter();
@@ -189,7 +190,7 @@ export default function Edit(food: string) {
 						</div>
 						<progress id="calories" value={calories ? calories : '0'} max={user ? user.calories : '0'}>30%</progress>
 					</Calories>
-					<Details>
+					<DetailsCard>
 						<div className="header">
 							<h3>Summary</h3>
 							{/* <button onClick={() => {router.push('/food/create')}}>
@@ -227,8 +228,11 @@ export default function Edit(food: string) {
 								<EditButton onClick={handleEdit}>EDIT</EditButton>
 							</div>
 						</StaticMenu>
-					</Details>
-					<Details hasContent={!!ingredients}>
+					</DetailsCard>
+
+					<Details hasContent={!!ingredients} data={ingredients} name="Ingredients" dataName="name" />
+					<Details hasContent={!!foodHistory} data={foodHistory} name="History" dataName="when" />
+					{/* <Details hasContent={!!ingredients}>
 						<div className="header">
 							<h3>Ingredients</h3>
 							{!ingredients || ingredients.length === 0 && <h4>Doesn't have ingredients</h4>}
@@ -246,8 +250,8 @@ export default function Edit(food: string) {
 							)
 							}
 						</div>
-					</Details>
-					<History foodHistory={foodHistory} />
+					</Details> */}
+					{/* <History foodHistory={foodHistory} /> */}
 					<Footer>
 						<button type="button" onClick={handleConfirmation}>
 							<DeleteIcon />

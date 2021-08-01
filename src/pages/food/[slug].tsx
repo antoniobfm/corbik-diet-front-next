@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/auth";
 import { useToast } from "@/hooks/toast";
 import {api} from "@/services/apiClient";
 import { Container, Header, CreateButton, Menu } from "@/styles/pages/food/food";
-import { Details, SettingsIcon, Footer } from "@/styles/pages/log/edit/edit";
+import { Details as DetailsCard, SettingsIcon, Footer } from "@/styles/pages/log/edit/edit";
 import { Floating } from "@/styles/pages/food/search";
 import { Calories, Macro, Macros } from "@/styles/pages/Home";
 import addZeroBefore from "@/utils/addZeroBefore";
@@ -17,6 +17,7 @@ import CardMessage from "@/components/Card/CardMessage";
 import Head from "next/head";
 import { useLog } from "@/hooks/logs";
 import { withSSRAuth } from "@/utils/withSSRAuth";
+import { Details } from "@/components/Card/Details";
 
 interface ICreateFoodLog {
 	food_id: string;
@@ -215,7 +216,7 @@ export default function Food() {
 						<progress id="calories" value={calories ? calories : '0'} max={user ? user.calories : '0'}>30%</progress>
 					</Calories>
 
-					<Details>
+					<DetailsCard>
 						<div className="header">
 							<h3>Summary</h3>
 						</div>
@@ -227,46 +228,9 @@ export default function Food() {
 								value={`${date && new Date(date).getFullYear()}-${addZeroBefore(new Date(date).getMonth() + 1)}-${addZeroBefore(new Date(date).getDate())}T${addZeroBefore(new Date(date).getHours())}:${addZeroBefore(new Date(date).getMinutes())}`}
 								onChange={e => setDate(new Date(e.target.value))} />
 						</Form>
-					</Details>
-					<Details hasContent={!!ingredients}>
-						<div className="header">
-							<h3>Ingredients</h3>
-							{!ingredients || ingredients.length === 0 && <h4>Doesn't have ingredients</h4>}
-						</div>
-						<div className="history__container">
-							{ingredients && ingredients.length >= 1 && ingredients.map(ingredient =>
-								<div className="history__item">
-									<div className="history__item__title">
-										{ingredient.name}
-									</div>
-									<div className="history__item__subtitle">
-										{ingredient.amount}
-									</div>
-								</div>
-							)
-							}
-						</div>
-					</Details>
-					<Details hasContent={!!foodHistory}>
-						<div className="header">
-							<h3>History</h3>
-							{!foodHistory || foodHistory.length === 0 && <h4>You haven't logged this food yet</h4>}
-						</div>
-						<div className="history__container">
-							{foodHistory && foodHistory.length >= 1 && foodHistory.map(log =>
-								<div className="history__item">
-									<div className="history__item__title">
-										{log.when}
-									</div>
-									<div className="history__item__subtitle">
-										{log.amount}
-										{foodData.units[0].abbreviation}
-									</div>
-								</div>
-							)
-							}
-						</div>
-					</Details>
+					</DetailsCard>
+					<Details hasContent={!!ingredients} data={ingredients} name="Ingredients" dataName="name" />
+					<Details hasContent={!!foodHistory} data={foodHistory} name="History" dataName="when" />
 					<Floating>
 						<div>
 							<Menu>
