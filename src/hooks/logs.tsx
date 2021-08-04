@@ -138,9 +138,12 @@ const LogProvider: React.FC = ({ children }) => {
 			try {
 				const start = formatISO(startOfDay(selectedDate));
 				const end = formatISO(endOfDay(selectedDate));
-				const response = await api.post('/food/log/day', { start, end });
+				if (user) {
+					console.log('no user')
+					const response = await api.post('/food/log/day', { start, end });
 
-				handleData(response.data);
+					handleData(response.data);
+				}
 			} catch (err) {
 				// handleError(err);
 			}
