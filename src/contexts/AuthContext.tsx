@@ -74,7 +74,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const isAuthenticated = !!user
 
   const { addToast } = useToast()
-  const { updateLogStorage, initialLoadSearch } = useLog()
   const router = useRouter()
 
   useEffect(() => {
@@ -96,12 +95,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const { 'corbik.token': token } = parseCookies()
 
     if (token) {
+			console.log('has token')
       api
         .get('/profile')
         .then(response => {
-          setUser(response.data)
-					updateLogStorage(new Date())
-					initialLoadSearch()
+					console.log(response.data)
+					setUser(response.data.user)
           if (!response.data.email) {
             Router.push('/welcome')
           }
@@ -136,10 +135,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       const profileResponse = await api.get('/profile')
 
-      setUser(response.data)
-
-			await updateLogStorage(new Date())
-			await initialLoadSearch()
+      setUser(response.data.user)
 
       if (!profileResponse.data.email) {
         Router.push('/welcome')

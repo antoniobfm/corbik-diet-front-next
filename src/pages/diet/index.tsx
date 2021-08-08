@@ -86,7 +86,6 @@ export default function Home() {
 
 	const { logData, selectedDate, handleSelectDate } = useLog()
 
-
 	const { user } = useContext(AuthContext)
 
 	const handleCalendar = useCallback(

@@ -137,21 +137,29 @@ const LogProvider: React.FC = ({ children }) => {
 		async function loadData() {
 			try {
 				const start = formatISO(startOfDay(selectedDate));
-				const end = formatISO(endOfDay(selectedDate));
 				if (user) {
-					console.log('no user')
+					const end = formatISO(endOfDay(selectedDate));
 					const response = await api.post('/food/log/day', { start, end });
 
 					handleData(response.data);
 				}
+
 			} catch (err) {
 				// handleError(err);
 			}
-			console.log('2')
 		}
-		console.log('ok')
 		loadData();
 	}, [user, selectedDate]);
+
+	useEffect(() => {
+		async function loadData() {
+			if (user) {
+				await updateLogStorage(new Date())
+				await initialLoadSearch();
+			}
+		}
+		loadData();
+	}, [user]);
 
 	const handleSelectDate = useCallback( (day: Date): void => {
 		setSelectedDate(day);
