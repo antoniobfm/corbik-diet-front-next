@@ -47,7 +47,7 @@ export default function Login() {
 				})
 
 				const { email } = data
-					await api.post('/password/forgot', {
+					await api.post('/authentication/forgot-password', {
 							email
 					});
 
