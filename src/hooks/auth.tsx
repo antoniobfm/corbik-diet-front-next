@@ -240,26 +240,3 @@ export { AuthContext, AuthProvider, useAuth };
 // 	}
 // 	return children;
 // };
-
-// export async function getServerSideProps(context: GetServerSidePropsContext, children) {
-//   try {
-//     const cookies = nookies.get(context, 'corbik.token');
-//     console.log(cookies);
-// 		console.log('tururuu');
-//     return children;
-//   } catch (err) {
-//     context.res.writeHead(302, { Location: "/account/login" });
-//     context.res.end();
-//     return { props: {} };
-//   }
-// }
-// export const getServerSideProps = withSSRAuth(async (ctx) => {
-// 	const cookies = parseCookies(ctx);
-// 	const token = cookies['corbik.token'];
-
-// 	return {
-// 		props: {
-// 			isAuthenticated: true
-// 		}
-// 	}
-// });

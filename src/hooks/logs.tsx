@@ -4,7 +4,6 @@ import { setupAPIClient } from '@/services/api';
 import addZeroBefore from '@/utils/addZeroBefore';
 import IndexedDb from '@/utils/Indexed';
 import paginate from '@/utils/paginate';
-import { withSSRAuth } from '@/utils/withSSRAuth';
 import { endOfDay, formatISO, isSameDay, setHours, startOfDay } from 'date-fns';
 import React, {
 	createContext,
@@ -288,17 +287,3 @@ function useLog(): LogContextData {
 }
 
 export { LogContext, LogProvider, useLog };
-
-// export const getServerSideProps = withSSRAuth(async (ctx) => {
-// 	const apiClient = setupAPIClient(ctx);
-// 	const selectedDate = setHours(new Date(), 12);
-// 	const start = formatISO(startOfDay(selectedDate));
-// 	const end = formatISO(endOfDay(selectedDate));
-
-// 	const response = await apiClient.post('/food/log/day', { start, end });
-// 	console.log(response.data);
-
-// 	return {
-// 		props: {}
-// 	}
-// });

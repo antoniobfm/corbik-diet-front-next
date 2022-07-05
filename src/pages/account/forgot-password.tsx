@@ -15,7 +15,6 @@ import { useRouter } from 'next/router'
 import { useToast } from '@/hooks/toast'
 import { FiCheck } from 'react-icons/fi'
 import { AnimatePresence, motion } from 'framer-motion'
-import { withSSRGuest } from '@/utils/withSSRGuest'
 import { api } from '@/services/apiClient'
 
 interface ForgotPasswordFormData {
@@ -140,9 +139,3 @@ export default function Login() {
 		</Container>
 	)
 }
-
-export const getServerSideProps = withSSRGuest(async ctx => {
-	return {
-		props: {}
-	}
-})

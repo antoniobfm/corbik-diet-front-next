@@ -1,6 +1,6 @@
 import { useAuth } from "@/hooks/auth";
 import { api } from '@/services/apiClient';
-import { WideCardContainer, CardContent, CardHeader, Header } from "@/styles/pages/Home";
+import {  Header } from "@/styles/pages/Home";
 import { Container } from "@/styles/pages/settings";
 import { useCallback, useContext, useRef } from "react";
 import getValidationErrors from '../../utils/getValidationErrors';
@@ -12,8 +12,8 @@ import GoBack from "@/components/GoBack";
 import Button from "@/components/FormComponents/Button";
 import { useToast } from "@/hooks/toast";
 import WholePageTransition from "@/components/WholePageTransition";
-import { withSSRAuth } from "@/utils/withSSRAuth";
 import { AuthContext } from "@/contexts/AuthContext";
+import { WideCardContainer, CardHeader, CardContent } from "@/modules/diet/home/Onboarding/styles";
 
 interface TargetsFormData {
 	weight: string;
@@ -105,9 +105,3 @@ export default function BodySettings() {
 		</WholePageTransition>
 	)
 }
-
-export const getServerSideProps = withSSRAuth(async ctx => {
-	return {
-		props: {}
-	}
-})

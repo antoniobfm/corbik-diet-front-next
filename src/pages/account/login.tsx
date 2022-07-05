@@ -26,9 +26,7 @@ import { Form } from "@unform/web";
 import { FormHandles } from '@unform/core';
 import { useToast } from '@/hooks/toast'
 import Head from 'next/head'
-import { withSSRAuth } from '@/utils/withSSRAuth'
 import { setupAPIClient } from '@/services/api'
-import { withSSRGuest } from '@/utils/withSSRGuest'
 
 interface LoginFormData {
 	email: string
@@ -192,9 +190,3 @@ export default function Login() {
 		</>
 	)
 }
-
-export const getServerSideProps = withSSRGuest(async ctx => {
-	return {
-		props: {}
-	}
-})

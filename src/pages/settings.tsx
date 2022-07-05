@@ -1,6 +1,6 @@
 import { useAuth } from "@/hooks/auth";
 import { api } from "@/services/apiClient";
-import { CardContent, CardHeader, Header, WideCardContainer } from "@/styles/pages/Home";
+import { Header } from "@/styles/pages/Home";
 import { Container } from "@/styles/pages/settings";
 import { useCallback, useContext, useRef } from "react";
 import getValidationErrors from '../utils/getValidationErrors';
@@ -13,8 +13,8 @@ import Button from "@/components/FormComponents/Button";
 import { useToast } from "@/hooks/toast";
 import WholePageTransition from "@/components/WholePageTransition";
 import { Footer } from "@/styles/pages/log/edit/edit";
-import { withSSRAuth } from "@/utils/withSSRAuth";
-import { AuthContext, signOut } from "@/contexts/AuthContext";
+import { AuthContext } from "@/contexts/AuthContext";
+import { WideCardContainer, CardHeader, CardContent } from "@/modules/diet/home/Onboarding/styles";
 
 interface ProfileFormData {
 	name: string;
@@ -37,7 +37,7 @@ export default function Settings() {
 	const formRef = useRef<FormHandles>(null);
 	const formTargetsRef = useRef<FormHandles>(null);
 
-	const { update, user } = useContext(AuthContext);
+	const { update, user, signOut } = useContext(AuthContext);
 
 	const handleSubmit = useCallback(
 		async (data: ProfileFormData) => {
@@ -174,10 +174,3 @@ export default function Settings() {
 		</WholePageTransition>
 	)
 }
-
-
-export const getServerSideProps = withSSRAuth(async ctx => {
-	return {
-		props: {}
-	}
-})

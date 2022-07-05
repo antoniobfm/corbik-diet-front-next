@@ -10,13 +10,13 @@ import { useAuth } from '@/hooks/auth';
 import Menu from '@/components/Menu';
 import WholePageTransition from '@/components/WholePageTransition';
 import { endOfDay, startOfDay } from 'date-fns';
-import { CardHeader, Header, WideCardContainer } from '@/styles/pages/Home';
+import { Header } from '@/styles/pages/Home';
 import { useRouter } from 'next/router';
 import { FiSettings } from 'react-icons/fi';
 import { Line } from 'react-chartjs-2';
 import LineChart from '@/components/Charts/LineChart';
 import Head from 'next/head';
-import { withSSRAuth } from '@/utils/withSSRAuth';
+import { WideCardContainer, CardHeader } from '@/modules/diet/home/Onboarding/styles';
 
 const LoginModal = dynamic(() => import('@/components/LoginModal'),
 	{ loading: () => <div className="blurred__background"><h1>Loading</h1></div> })
@@ -297,9 +297,3 @@ export default function Home() {
 		</>
 	)
 }
-
-export const getServerSideProps = withSSRAuth(async ctx => {
-	return {
-		props: {}
-	}
-})

@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic'
 import Link from 'next/link';
-import { BigCardHeader, Calories, WideCardContainer, CardContent, CardHeader, Container, Header, Log, Logs, Macro, Macros, Mission } from "@/styles/pages/Home";
+import { BigCardHeader, Calories,  Container, Header, Log, Logs, Macro, Macros } from "@/styles/pages/Home";
 import { createRef, useCallback, useContext, useEffect, useState } from 'react';
 import { api } from '@/services/apiClient';
 import 'react-day-picker/lib/style.css';
@@ -16,8 +16,8 @@ import LogsVerticalScroll from '@/components/Logs/Body/VerticalScroll';
 import Chart from "chart.js";
 import CardMessage from '@/components/Card/CardMessage';
 import LineChart from '@/components/Charts/LineChart';
-import { withSSRAuth } from '@/utils/withSSRAuth';
 import { AuthContext } from '@/contexts/AuthContext';
+import { WideCardContainer, CardHeader, CardContent, Mission } from '@/modules/diet/home/Onboarding/styles';
 
 const LoginModal = dynamic(() => import('@/components/LoginModal'),
 	{ loading: () => <div className="blurred__background"><h1>Loading</h1></div> })
@@ -252,9 +252,3 @@ export default function Home() {
 		</>
 	)
 }
-
-export const getServerSideProps = withSSRAuth(async ctx => {
-	return {
-		props: {}
-	}
-})

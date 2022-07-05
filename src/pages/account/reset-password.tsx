@@ -12,7 +12,6 @@ import { useRouter } from "next/router";
 import { AnimatePresence, motion } from "framer-motion";
 import { FiCheck } from "react-icons/fi";
 import { useToast } from "@/hooks/toast";
-import { withSSRGuest } from "@/utils/withSSRGuest";
 import { api } from "@/services/apiClient";
 
 interface ResetPasswordFormData {
@@ -138,10 +137,3 @@ export default function ResetPassword() {
 		</Container>
 	)
 }
-
-
-export const getServerSideProps = withSSRGuest(async ctx => {
-	return {
-		props: {}
-	}
-})
