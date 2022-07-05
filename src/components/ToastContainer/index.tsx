@@ -13,7 +13,7 @@ const ToastContainer: React.FC<ToastContainerProps> = ({ messages }: ToastContai
 
 	return (
 		<Container>
-    	<AnimatePresence exitBeforeEnter>
+    	<AnimatePresence>
 				{messages.map((item) => (
 					<Toast key={item.id} message={item} />
 				))}

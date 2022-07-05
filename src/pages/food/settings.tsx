@@ -13,7 +13,10 @@ import Button from "@/components/FormComponents/Button";
 import { useToast } from "@/hooks/toast";
 import WholePageTransition from "@/components/WholePageTransition";
 import Head from "next/head";
-import { withSSRAuth } from "@/utils/withSSRAuth";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { dispatch } from "d3";
+import { updateDietTargets } from "@/redux/Authentication/authentication.actions";
 
 interface TargetsFormData {
 	carbohydrates: string;
@@ -28,7 +31,10 @@ export default function DietSettings() {
 	const formRef = useRef<FormHandles>(null);
 	const formTargetsRef = useRef<FormHandles>(null);
 
-	const { updateUser, user, signOut } = useAuth();
+	const { updateUser } = useAuth();
+
+	const user = useSelector((state: RootState) => state.user.targets);
+	const dispatch = useDispatch();
 
 	const handleSubmitTargets = useCallback(
 		async (data: TargetsFormData) => {
@@ -60,25 +66,13 @@ export default function DietSettings() {
 					calories: parseInt(calories, 10)
 				};
 
-				const response = await api.put('/profile/diet-targets', formData);
-
-				updateUser(response.data);
-
-				addToast({
-					type: 'success',
-					title: `Modified your targets with success`
-				});
+				dispatch(updateDietTargets({...formData}))
 
 			} catch (err) {
 				if (err instanceof Yup.ValidationError) {
 					const errors = getValidationErrors(err);
 
 					formTargetsRef.current?.setErrors(errors);
-
-					addToast({
-						type: 'error',
-						title: `Something went wrong`
-					});
 
 					return;
 				}
@@ -144,9 +138,3 @@ export default function DietSettings() {
 		</WholePageTransition>
 	)
 }
-
-export const getServerSideProps = withSSRAuth(async ctx => {
-	return {
-		props: {}
-	}
-})

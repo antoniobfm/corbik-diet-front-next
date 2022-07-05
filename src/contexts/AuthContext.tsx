@@ -60,14 +60,14 @@ export const AuthContext = createContext({} as AuthContextData)
 
 let authChannel: BroadcastChannel
 
-export function signOut() {
-  destroyCookie(undefined, 'corbik.token')
-  destroyCookie(undefined, 'corbik.refreshToken')
+// export function signOut() {
+//   destroyCookie(undefined, 'corbik.token')
+//   destroyCookie(undefined, 'corbik.refreshToken')
 
-  authChannel.postMessage('signOut')
+//   authChannel.postMessage('signOut')
 
-  Router.push('/')
-}
+//   Router.push('/')
+// }
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>()

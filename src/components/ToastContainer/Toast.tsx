@@ -40,6 +40,7 @@ const Toast: React.FC<ToastProps> = ({ message }) => {
         initial={{ bottom: '-100%', opacity: 0 }}
         animate={{ bottom: '0%', opacity: 1 }}
         exit={{ bottom: '-100%', opacity: 0 }}
+				onClick={() => removeToast(message.id)}
       >
         {/* {icons[message.type || 'info']} */}
 

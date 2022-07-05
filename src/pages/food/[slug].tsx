@@ -1,23 +1,23 @@
-import Input from "@/components/FormComponents/Input";
 import WholePageTransition from "@/components/WholePageTransition";
 import { useAuth } from "@/hooks/auth";
 import { useToast } from "@/hooks/toast";
 import {api} from "@/services/apiClient";
 import { Container, Header, CreateButton, Menu } from "@/styles/pages/food/food";
-import { Details as DetailsCard, SettingsIcon, Footer } from "@/styles/pages/log/edit/edit";
+import { SettingsIcon, Footer } from "@/styles/pages/log/edit/edit";
 import { Floating } from "@/styles/pages/food/search";
-import { Calories, Macro, Macros } from "@/styles/pages/Home";
 import addZeroBefore from "@/utils/addZeroBefore";
 import toFixedNumber from "@/utils/formatNumbers";
-import { Form } from "@unform/web";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 import CardMessage from "@/components/Card/CardMessage";
 import Head from "next/head";
 import { useLog } from "@/hooks/logs";
-import { withSSRAuth } from "@/utils/withSSRAuth";
 import { Details } from "@/components/Card/Details";
+import { useDispatch } from "react-redux";
+import { logFood } from "@/redux/Food/diet.actiont";
+import MacrosAndMicros from "@/modules/food/food/MacrosAndMicros";
+import Summary from "@/modules/food/food/Summary";
 
 interface ICreateFoodLog {
 	food_id: string;
@@ -74,13 +74,9 @@ export default function Food() {
 
 	const router = useRouter();
 
-	const { user } = useAuth();
-
 	const foodId = router.query.slug;
 
-	const { addToast } = useToast();
-
-	const { addLog } = useLog();
+	const dispatch = useDispatch();
 
 	const handleData = useCallback((data: any) => {
 		setFoodData(data);
@@ -133,9 +129,9 @@ export default function Food() {
 			when: date,
 		};
 
-		addLog(food)
+		dispatch(logFood(food));
 
-		router.push(`/`);
+		router.push(`/diet`);
 	}, [foodData, carbs, prots, fats, calories, date, amount]);
 
 	useEffect(() => {
@@ -185,50 +181,13 @@ export default function Food() {
 						<h3>{foodData.brand}</h3>
 						<h1>{foodData.name}</h1>
 					</Header>
-					<Macros>
-						<Macro macro="carb">
-							<div>
-								<h4>Carbs</h4>
-								<span>{carbs ? carbs : '0'}</span>
-							</div>
-							<progress id="carbs" value={carbs ? carbs : '0'} max={user ? user.carbohydrates : '0'}>30%</progress>
-						</Macro>
-						<Macro macro="protein">
-							<div>
-								<h4>Protein</h4>
-								<span>{prots ? prots : '0'}</span>
-							</div>
-							<progress id="prots" value={prots ? prots : '0'} max={user ? user.proteins : '0'}>30%</progress>
-						</Macro>
-						<Macro macro="fat">
-							<div>
-								<h4>Fat</h4>
-								<span>{fats ? fats : '0'}</span>
-							</div>
-							<progress id="fats" value={fats ? fats : '0'} max={user ? user.fats : '0'}>30%</progress>
-						</Macro>
-					</Macros>
-					<Calories>
-						<div>
-							<h4>Calories</h4>
-							<span>{calories ? calories : '0'}</span>
-						</div>
-						<progress id="calories" value={calories ? calories : '0'} max={user ? user.calories : '0'}>30%</progress>
-					</Calories>
-
-					<DetailsCard>
-						<div className="header">
-							<h3>Summary</h3>
-						</div>
-						<Form onSubmit={() => { }}>
-							<Input
-								name="when"
-								labelName="Date"
-								type="datetime-local"
-								value={`${date && new Date(date).getFullYear()}-${addZeroBefore(new Date(date).getMonth() + 1)}-${addZeroBefore(new Date(date).getDate())}T${addZeroBefore(new Date(date).getHours())}:${addZeroBefore(new Date(date).getMinutes())}`}
-								onChange={e => setDate(new Date(e.target.value))} />
-						</Form>
-					</DetailsCard>
+					<MacrosAndMicros
+						carbs={carbs}
+						prots={prots}
+						fats={fats}
+						calories={calories}
+					/>
+					<Summary setDate={setDate} date={date} />
 					<Details hasContent={!!ingredients} data={ingredients} name="Ingredients" dataName="name" />
 					<Details hasContent={!!foodHistory} data={foodHistory} name="History" dataName="when" />
 					<Floating>
@@ -268,9 +227,3 @@ export default function Food() {
 		return <p>Loading...</p>;
 	}
 }
-
-export const getServerSideProps = withSSRAuth(async ctx => {
-	return {
-		props: {}
-	}
-})

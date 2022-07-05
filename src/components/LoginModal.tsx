@@ -22,6 +22,8 @@ import * as Yup from 'yup'
 import { motion } from "framer-motion";
 import { AuthContext } from "@/contexts/AuthContext";
 import Loading from "./Loading";
+import { useDispatch } from "react-redux";
+import { signIn } from "@/redux/Authentication/authentication.actions";
 
 interface LoginFormData {
 	email: string
@@ -39,7 +41,7 @@ const LoginModal: React.FC<IProps> = ({
 	const [isEmpty, setIsEmpty] = useState<boolean>(true);
 	const [loadingAction, setLoadingAction] = useState<boolean>(false);
 	const [passwordInput, setPasswordInput] = useState('');
-	const { signIn } = useContext(AuthContext)
+	// const { signIn } = useContext(AuthContext)
 	const router = useRouter();
 
 	const formRef = useRef<FormHandles>(null);
@@ -72,6 +74,8 @@ const LoginModal: React.FC<IProps> = ({
     };
 	}, [open]);
 
+	const dispatch = useDispatch();
+
 	const handleSignIn = useCallback(async (data: LoginFormData) => {
 		setLoadingAction(true)
 		try {
@@ -90,7 +94,7 @@ const LoginModal: React.FC<IProps> = ({
 
 			const { email, password } = data
 
-			await signIn({ email, password })
+			dispatch(signIn({	email, password }))
 		} catch (err) {
 			if (err instanceof Yup.ValidationError) {
 				const errors = getValidationErrors(err)

@@ -297,10 +297,6 @@ export const Menu = styled.div`
 
 `;
 
-export const Icon = styled(FiSearch)`
-  display: block;
-  opacity: 0.4;
-`;
 
 export const CreateButtonOld = styled.button`
   width: 35%;

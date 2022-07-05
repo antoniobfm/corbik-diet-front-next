@@ -18,7 +18,6 @@ import { FiChevronDown, FiChevronLeft } from "react-icons/fi";
 import Button from "@/components/FormComponents/Button";
 import SpecialDropdownModal from "@/components/Modals/SpecialDropdownModal";
 import Head from "next/head";
-import { withSSRAuth } from "@/utils/withSSRAuth";
 
 interface ILog {
 	id: number;
@@ -193,9 +192,3 @@ export default function EditLogSettings(food: string) {
 		</>
 	);
 }
-
-export const getServerSideProps = withSSRAuth(async ctx => {
-	return {
-		props: {}
-	}
-})

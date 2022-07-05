@@ -1,7 +1,8 @@
+import { ILog } from "@/redux/Food/diet.reducer";
 import { Container } from "@/styles/components/Logs/Food/VerticalScroll/VerticalScrollCard";
 import { Log } from "@/styles/pages/Home";
+import { getHours, getMinutes, parseISO } from "date-fns";
 import { useRouter } from "next/router";
-import { ILog } from "../HorizontalScroll";
 
 interface IProps {
 	data: ILog;
@@ -9,7 +10,7 @@ interface IProps {
 
 export default function VerticalScrollCard({ data }: IProps) {
 	const router = useRouter();
-	const {carbohydrates, proteins, fats} = data;
+	const {carbohydrates, proteins, fats} = data.macros;
 
 	return (
 		<Container
@@ -17,10 +18,10 @@ export default function VerticalScrollCard({ data }: IProps) {
 		>
 			<Log key={data.id} onClick={() => router.push(`/log/edit/${data.id}`)}>
 				<div className="when">
-					<h5>{data.hour}:{data.minute}</h5>
+					<h5>{getHours(parseISO(data.date.full))}:{getMinutes(parseISO(data.date.full))}</h5>
 				</div>
 				<div className="name-and-quantity">
-					<h4>{data.name}</h4>
+					<h4>{data.food.name}</h4>
 					<h5>{data.amount}{data.unit_abbreviation}</h5>
 				</div>
 				<div className="macros">

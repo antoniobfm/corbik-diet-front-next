@@ -15,8 +15,6 @@ import { api } from '../services/apiClient';
 import nookies, { parseCookies } from "nookies";
 import { GetServerSidePropsContext } from 'next';
 import { useLog } from './logs';
-import { withSSRAuth } from '@/utils/withSSRAuth';
-import { signOut } from '@/contexts/AuthContext';
 
 export interface IUnit {
 	id: string;
@@ -107,7 +105,7 @@ const AuthProvider: React.FC = ({ children }) => {
 				})
 				.catch(() => {
 					console.log('2cheguei else useeffect auth')
-					signOut();
+					// signOut();
 					router.push('/account/login');
 				})
 			}

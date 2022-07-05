@@ -1,14 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import AppProvider from '@/hooks'
 // import { ProtectRoute } from '@/hooks/auth'
 import { SkeletonTheme } from 'react-loading-skeleton'
 import GlobalStyle from '../styles/GlobalStyle'
 import { AppProps } from 'next/dist/next-server/lib/router/router'
 import Head from 'next/head'
+import { Provider, useSelector } from 'react-redux'
+import store, { RootState } from '@/redux/store'
+import router, { useRouter } from 'next/router'
 
 const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
+
 	return (
-		<>
+		<Provider store={store}>
 			<AppProvider>
 				<GlobalStyle />
 				<SkeletonTheme color="#0A0A0B" highlightColor="#181A1B">
@@ -21,7 +25,7 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
 					<Component {...pageProps} />
 				</SkeletonTheme>
 			</AppProvider>
-		</>
+			</Provider>
 	)
 }
 

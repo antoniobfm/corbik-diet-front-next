@@ -1,8 +1,11 @@
 import useLongPress from "@/components/useLogPress";
+import { ILog } from "@/redux/Food/diet.reducer";
+import { RootState } from "@/redux/store";
 import { Container } from "@/styles/components/Logs/Food/HorizontalScroll/HorizontalScrollCards";
+import { isSameDay, parseISO } from "date-fns";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
-import { ILog } from ".";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useSelector } from "react-redux";
 
 interface IProps {
 	data: ILog;
@@ -11,17 +14,17 @@ interface IProps {
 
 export default function LogsHorizontalScrollCards({ data, handleQuickEditModal }: IProps) {
 	const router = useRouter();
-	const {carbohydrates, proteins, fats} = data;
+	const {carbohydrates, proteins, fats} = data.macros;
 
-	const total = parseInt(carbohydrates, 10) + parseInt(proteins, 10) + parseInt(fats, 10);
-	const carbPerc = (parseInt(carbohydrates, 10) / total) * 360;
-	const protsPerc = (parseInt(proteins, 10) / total) * 360 + Math.floor(carbPerc);
-	const fatPerc = (parseInt(fats, 10) / total) * 360 + Math.floor(carbPerc) + Math.floor(protsPerc);
-
+	const total = useMemo(() => parseInt(carbohydrates, 10) + parseInt(proteins, 10) + parseInt(fats, 10), []);
+	const carbPerc = useMemo(() => (parseInt(carbohydrates, 10) / total) * 360, []);
+	const protsPerc = useMemo(() => (parseInt(proteins, 10) / total) * 360 + Math.floor(carbPerc), []);
+	const fatPerc = useMemo(() => (parseInt(fats, 10) / total) * 360 + Math.floor(carbPerc) + Math.floor(protsPerc), []);
 
   const [longPressCount, setlongPressCount] = useState(0)
   const [clickCount, setClickCount] = useState(0)
 
+	const logData = useSelector((state: RootState) => state.food.logs.filter(log => isSameDay(parseISO(log.date.full), new Date())));
 
   const onLongPress = (event) => {
 		// router.push(`/log/edit/${data.id}`)
@@ -58,31 +61,6 @@ export default function LogsHorizontalScrollCards({ data, handleQuickEditModal }
 
   const longPressEvent = useLongPress(onLongPress, onClick, defaultOptions);
 
-	// const getClickPosition = useCallback(() => {
-	// 	const div: HTMLElement = document.getElementById(`${data.id}`);
-	// 	console.log('OKOKOK')
-
-	// 	if (div) {
-	// 		console.log(div.clientHeight);
-	// 	}
-
-	// 	// if (div) {
-	// 	// 	div.removeEventListener('scroll', getClickPosition, true);
-	// 	// }
-	// }, []);
-
-	// const getMovement = useCallback((e) => {
-	// 	console.log(e)
-	// }, []);
-
-	// useEffect(() => {
-	// 	const div: HTMLElement = document.getElementById(`${data.id}`);
-
-	// 	if (div) {
-  //     div.addEventListener('touchstart', getClickPosition, true);
-	// 	}
-	// }, [getClickPosition])
-
 	return (
 		<Container
 			{...longPressEvent}
@@ -93,16 +71,16 @@ export default function LogsHorizontalScrollCards({ data, handleQuickEditModal }
 			whileTap={{ scale: 0.9 }}
 		>
 			<div className="header">
-				<h1>{data.name}</h1>
-				<span>{data.hour}:{data.minute}</span>
+				<h1>{data.food.name}</h1>
+				<span>{data.date.hour}:{data.date.minute}</span>
 			</div>
 			<div className="details2">
-				<span>{data.amount}{data.unit_abbreviation} - {data.calories}kcal</span>
+				<span>{data.amount}{data.unit_abbreviation} - {data.macros.calories}kcal</span>
 			</div>
 			<div className="card--macros">
-				<h4 style={{ color: "#EB5757" }}>C{carbohydrates}</h4>
-				<h4 style={{ color: "#2D9CDB" }}>P{proteins}</h4>
-				<h4 style={{ color: "#F2C94C" }}>F{fats}</h4>
+				<h4 style={{ color: "#EB5757" }}>C{data.macros.carbohydrates}</h4>
+				<h4 style={{ color: "#2D9CDB" }}>P{data.macros.proteins}</h4>
+				<h4 style={{ color: "#F2C94C" }}>F{data.macros.fats}</h4>
 				<div className="pie"></div>
 			</div>
 		</Container>

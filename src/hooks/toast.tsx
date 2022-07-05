@@ -1,4 +1,6 @@
-import React, { createContext, useCallback, useState, useContext } from 'react';
+import { RootState } from '@/redux/store';
+import React, { createContext, useCallback, useState, useContext, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { uuid } from 'uuidv4';
 
 import ToastContainer from '../components/ToastContainer';
@@ -19,6 +21,24 @@ const ToastContext = createContext<ToastContextData>({} as ToastContextData);
 
 const ToastProvider: React.FC = ({ children }) => {
 	const [messages, setMessages] = useState<ToastMessage[]>([]);
+	const messagesUser = useSelector((state: RootState) => state.user.messages)
+	const messagesFood = useSelector((state: RootState) => state.food.messages)
+
+	useEffect(() => {
+		const message = messagesUser[messagesUser.length - 1]
+		addToast({
+			title: message.title,
+			type: message.type
+		})
+	}, [messagesUser])
+
+	useEffect(() => {
+		const message = messagesFood[messagesFood.length - 1]
+		addToast({
+			title: message.title,
+			type: message.type
+		})
+	}, [messagesFood])
 
 	const addToast = useCallback(
 		({ type, title, description }: Omit<ToastMessage, 'id'>) => {

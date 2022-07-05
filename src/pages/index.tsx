@@ -26,10 +26,10 @@ import { Form } from "@unform/web";
 import { FormHandles } from '@unform/core';
 import { useToast } from '@/hooks/toast'
 import Head from 'next/head'
-import { withSSRAuth } from '@/utils/withSSRAuth'
 import { setupAPIClient } from '@/services/api'
-import { withSSRGuest } from '@/utils/withSSRGuest'
 import { LogoSvg } from '@/components/LogoSvg'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/redux/store'
 
 interface LoginFormData {
 	email: string
@@ -48,6 +48,15 @@ export default function Login() {
 	const { addToast } = useToast();
 
 	const formRef = useRef<FormHandles>(null);
+
+	const user = useSelector((state: RootState) => state.user.info.id)
+	const router = useRouter();
+
+	useEffect(() => {
+		if (user) {
+			router.push('/diet')
+		}
+	}, [user])
 
 	const handleEnterWaitlist = useCallback(async (data: WaitlistFormData) => {
 		setLoading(true);
@@ -182,9 +191,3 @@ export default function Login() {
 		</>
 	)
 }
-
-export const getServerSideProps = withSSRGuest(async ctx => {
-	return {
-		props: {}
-	}
-})

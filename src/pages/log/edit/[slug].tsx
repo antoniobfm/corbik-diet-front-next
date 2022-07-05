@@ -19,8 +19,9 @@ import { format } from "date-fns";
 import CardMessage from "@/components/Card/CardMessage";
 import { useLog } from "@/hooks/logs";
 import Head from "next/head";
-import { withSSRAuth } from "@/utils/withSSRAuth";
 import { Details } from "@/components/Card/Details";
+import { deleteFoodLog } from "@/redux/Food/diet.actiont";
+import { useDispatch } from "react-redux";
 
 export default function Edit(food: string) {
 	const router = useRouter();
@@ -106,21 +107,14 @@ export default function Edit(food: string) {
 		}
 	}, [logData, amountTemp]);
 
-	const { addToast } = useToast();
+	const dispatch = useDispatch();
 
 	const handleDelete = useCallback((e) => {
 		e.preventDefault()
 		async function editFood() {
-			await api.delete(`/food/log/specific/${logData.id}`);
+			dispatch(deleteFoodLog(logData.id))
 
-			await updateLogStorage(date);
-
-			addToast({
-				type: 'success',
-				title: 'Deleted log with success',
-			});
-
-			router.push(`/`);
+			router.push(`/diet`);
 		}
 
 		editFood();
@@ -264,9 +258,3 @@ export default function Edit(food: string) {
 		</>
 	);
 }
-
-export const getServerSideProps = withSSRAuth(async ctx => {
-	return {
-		props: {}
-	}
-})
