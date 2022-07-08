@@ -3,9 +3,9 @@ import { destroyCookie, parseCookies, setCookie } from 'nookies'
 import { AuthTokenError } from './errors/AuthTokenError'
 
 const urls = {
-	test: `https://api.qualaboa.app/`,
+	test: `https://api.corbik.com/`,
 	development: `http://localhost:${process.env.NEXT_PUBLIC_BACK_DEV_PORT}`,
-	production: 'https://api.qualaboa.app/'
+	production: 'https://api.corbik.com/'
 }
 
 let isRefreshing = false
