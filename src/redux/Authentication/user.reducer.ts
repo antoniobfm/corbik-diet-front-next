@@ -79,7 +79,7 @@ export const userSlice = createSlice({
 
 			state.messages = [
 				...state.messages,
-				{ title: 'Conta criada com sucesso', type: 'success' }
+				{ title: 'Welcome back', type: 'success' }
 			]
 		}),
 		builder.addCase(signIn.rejected, (state, action) => {

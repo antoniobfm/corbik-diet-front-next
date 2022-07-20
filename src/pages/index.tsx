@@ -49,11 +49,11 @@ export default function Login() {
 
 	const formRef = useRef<FormHandles>(null);
 
-	const user = useSelector((state: RootState) => state.user.info.id)
+	const user = useSelector((state: RootState) => state.user.info)
 	const router = useRouter();
 
 	useEffect(() => {
-		if (user) {
+		if (user.id) {
 			router.push('/diet')
 		}
 	}, [user])

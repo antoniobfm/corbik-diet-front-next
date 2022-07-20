@@ -136,7 +136,7 @@ export const dietSlice = createSlice({
 			console.log(logs)
 
 			state.logs = logs
-
+			state.messages = [...state.messages, {title: 'Log deleted with success', type: 'success'}]
 		}),
 		builder.addCase(deleteFoodLog.rejected, (state, action) => {
 			state.pending = false
