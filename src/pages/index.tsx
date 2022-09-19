@@ -100,7 +100,7 @@ export default function Login() {
 		<Container>
 			<Header>
 				<LogoSvg />
-				<button type="button" onClick={() => setShowLogin(true)}>LOGIN</button>
+				<button type="button" onClick={() => setShowLogin(true)} data-test="login-button">LOGIN</button>
 			</Header>
 			<MiddleContent>
 				<h1>Own your body.</h1>
